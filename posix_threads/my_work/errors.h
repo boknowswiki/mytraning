@@ -1,1 +1,0 @@
-../pthread_sample_code/errors.h
