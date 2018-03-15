@@ -260,8 +260,10 @@ int start_crew (crew_t *c, char *path, char *string)
         abort();
     }
 
+    printf("path %s, string %s.\n", path, string);
     strcpy(r->path, path);
-    strcpy(r->string, string);
+    //strcpy(r->string, string);
+    r->string = string;
     r->next = NULL;
 
     if (c->head == NULL) {
@@ -322,6 +324,8 @@ int create_crew (crew_t *c, int c_size)
         return status;
 
     for (c_index = 0; c_index < c_size; c_index++) {
+        c->crew[c_index].index = c_index;
+        c->crew[c_index].crew = c;
         status = pthread_create(&(c->crew[c_index].thread_id), 
                     NULL, worker_routine, (void*)&c->crew[c_index]);
         if (status)
