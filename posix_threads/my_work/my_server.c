@@ -7,6 +7,12 @@
 #define REQ_WRITE   1
 #define REQ_QUIT    2
 
+//#define PTHREAD_ONCE    1
+#ifdef PTHREAD_ONCE
+pthread_once_t  thread_once = PTHREAD_ONCE_INIT;
+void create_server(void);
+#endif
+
 typedef struct request_s {
     pthread_cond_t          request_done;
     int                     operation;
@@ -196,20 +202,47 @@ void *client_routine(void *arg)
     char formatted[128];
     int status = 0;
 
+#ifdef PTHREAD_ONCE
+    status = pthread_once(&thread_once, create_server);
+    if (status)
+        err_abort(status, "pthread_once failed.\n");
+#endif
+
+    status = pthread_mutex_lock(&my_client.client_mutex);
+    if (status)
+        err_abort(status, "pthread_mutex_lock failed.\n");
+
+    client_running++;
+
+    status = pthread_mutex_unlock(&my_client.client_mutex);
+    if (status)
+        err_abort(status, "pthread_mutex_unlock failed.\n");
+
     sprintf(prompt, "Client %d> ", index);
     //printf("prompt %s\n", prompt);
 
     while (1) {
         server_request(REQ_READ, 1, prompt, text);
+#if 0
+        flockfile(stdout);
+        fprintf(stdout, "%s", prompt);
+        funlockfile(stdout);
+
+        flockfile(stdin);
+        if (fgets(text, sizeof(text), stdin) == NULL)
+            text[0] = '\0';
+
+        funlockfile(stdin);
+#endif
 
         if (strlen(text) == 0)
             break;
 
         for (loops = 0; loops < 4; loops++) {
             sprintf(formatted, "(client %d loops %d write %s)", 
-                    index, loops, formatted); 
+                    index, loops, text); 
             server_request(REQ_WRITE, 0, NULL, formatted);
-            sleep(1);
+            //sleep(1);
         }
     }
 
@@ -237,7 +270,7 @@ int create_client(client_t *c, int count)
     int status = 0;
     int index = 0;
 
-    client_running = count;
+    //client_running = count;
 
     status = pthread_mutex_init(&c->client_mutex, NULL);
     if (status)
@@ -259,8 +292,15 @@ int create_client(client_t *c, int count)
     return 0;
 }
 
+#ifdef PTHREAD_ONCE
+void create_server(void)
+#else
 int create_server(server_t *s)
+#endif
 {
+#ifdef PTHREAD_ONCE
+    server_t *s = &my_server;
+#endif
     int status = 0;
     pthread_attr_t  detached_attr;
 
@@ -290,16 +330,20 @@ int create_server(server_t *s)
 
     pthread_attr_destroy(&detached_attr);
 
+#ifndef PTHREAD_ONCE
     return 0;
+#endif
 }
 
 int main (int argc, char argv[])
 {
     int status = 0;
 
+#ifndef PTHREAD_ONCE
     status = create_server(&my_server);
     if (status)
         err_abort(status, "create server failed.\n");
+#endif
 
     status = create_client(&my_client, CLIENT_NUM);
     if (status)
@@ -309,12 +353,12 @@ int main (int argc, char argv[])
     if (status)
         err_abort(status, "pthread_mutex_lock failed.\n");
     
-    while (client_running > 0) {
+    //while (client_running > 0) {
         status = pthread_cond_wait(&my_client.client_done,
                 &my_client.client_mutex);
         if (status)
             err_abort(status, "pthread_cond_wait failed.\n");
-    }
+    //}
 
     status = pthread_mutex_unlock(&my_client.client_mutex);
     if (status)
