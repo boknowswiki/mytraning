@@ -22,7 +22,7 @@ int main (int argc, char *argv[])
 	while (fgets(cmd, sizeof(cmd), stdin) != NULL) {
 		//printf("gets %s\n", cmd);
 		//val = atoi(cmd);
-		if (sscanf(cmd, "%d %s", &val, message) < 2) {
+		if (sscanf(cmd, "%d %128s", &val, message) < 2) {
 			printf("bad arguments.\n");
 		} else {
 			sleep(val);
