@@ -2,7 +2,31 @@
 #include <unistd.h>
 #include <stdlib.h>
 #include <string.h>
+#include <pthread.h>
 
+
+typedef struct alarm_s {
+	char message[128];
+	int sleep_time;
+} alarm_t;
+
+void *thread_alarm_work(void *arg)
+{
+	alarm_t *new = (alarm_t*)arg;
+	int status;
+
+	status = pthread_detach(pthread_self());
+	if (status != 0) {
+		printf("Thread detached failed.\n");
+		abort();
+	}
+
+	sleep(new->sleep_time);
+	printf("%s\n", new->message);
+	free(new);
+
+	return NULL;
+}
 
 int main (int argc, char *argv[])
 {
@@ -12,6 +36,8 @@ int main (int argc, char *argv[])
 	char message[128] = "\0";
 	int val = 0;
 	pid_t pid = 0;
+	pthread_t tid;
+	alarm_t *new_alarm;
 
 	if (argc >= 2) {
 		printf("Usage: %s <alarm_in_seconds> <message>\n", argv[0]);
@@ -26,26 +52,13 @@ int main (int argc, char *argv[])
 		if (sscanf(cmd, "%d %128s", &val, message) < 2) {
 			printf("bad arguments.\n");
 		} else {
-			pid = fork();
-			if (pid == (pid_t) -1) {
-				printf("\nfork failed, aborting...\n");
+			new_alarm = (alarm_t*)malloc(sizeof(alarm_t));
+			new_alarm->sleep_time = val;
+			strcpy(new_alarm->message, message);
+			status = pthread_create(&tid, NULL, thread_alarm_work, new_alarm);
+			if (status != 0) {
+				printf("pthread create failed.\n");
 				abort();
-			}
-			else if (pid == 0) {
-				//printf("\nThis is the child process:\n");
-				sleep(val);
-				printf("slept %d, %s.\n", val, message);
-				exit(0);
-			}
-			else {
-				//let parent to collect terminated children.
-				do {
-					pid = waitpid((pid_t)-1, NULL, WNOHANG);
-					if (pid == (pid_t) -1) {
-						printf("waiting for child, aborting...\n");
-						abort();
-					}
-				} while (pid != (pid_t)0);
 			}
 		}
 		fprintf(stdout, "%s", prompt);
