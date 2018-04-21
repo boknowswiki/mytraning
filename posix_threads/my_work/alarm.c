@@ -4,11 +4,15 @@
 #include <string.h>
 #include <pthread.h>
 
-
 typedef struct alarm_s {
 	char message[128];
+	int seconds;
 	int sleep_time;
+	struct alarm_s * next;
 } alarm_t;
+
+pthread_mutex_t alarm_mutex = PTHREAD_MUTEX_INITIALIZER;
+alarm_t	alarm_list = NULL;
 
 void *thread_alarm_work(void *arg)
 {
@@ -33,9 +37,6 @@ int main (int argc, char *argv[])
 	char cmd[128] = "\0";
 	int status = 0;
 	char prompt[64] = "Enter alarm > ";
-	char message[128] = "\0";
-	int val = 0;
-	pid_t pid = 0;
 	pthread_t tid;
 	alarm_t *new_alarm;
 
@@ -44,22 +45,25 @@ int main (int argc, char *argv[])
 		return -1;
 	}
 
+	status = pthread_create(&tid, NULL, thread_alarm_work, NULL);
+	if (status != 0) {
+		printf("pthread create failed.\n");
+		abort();
+	}
+
 	fprintf(stdout, "%s", prompt);
 
 	while (fgets(cmd, sizeof(cmd), stdin) != NULL) {
-		//printf("gets %s\n", cmd);
-		//val = atoi(cmd);
-		if (sscanf(cmd, "%d %128s", &val, message) < 2) {
+		new_alarm = (alarm_t*)malloc(sizeof(alarm_t));
+		if (sscanf(cmd, "%d %128s", &new_alarm->seconds,
+				new_alarm->message) < 2) {
 			printf("bad arguments.\n");
+			free(new_alarm);
 		} else {
-			new_alarm = (alarm_t*)malloc(sizeof(alarm_t));
-			new_alarm->sleep_time = val;
-			strcpy(new_alarm->message, message);
-			status = pthread_create(&tid, NULL, thread_alarm_work, new_alarm);
-			if (status != 0) {
-				printf("pthread create failed.\n");
-				abort();
-			}
+			pthread_mutex_lock(&alarm_mutex);
+			new_alarm->sleep_time = time(NULL) + new_alarm->seconds;
+
+			
 		}
 		fprintf(stdout, "%s", prompt);
 	}
