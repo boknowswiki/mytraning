@@ -7,13 +7,15 @@
 #include <fcntl.h>
 #include <sys/wait.h>
 
+#define MAXLEN  128
+
 void client(int wr_p, int rd_p)
 {
-    char buf[128];
+    char buf[MAXLEN];
     int len;
     int n;
 
-    fgets(buf, 128, stdin);
+    fgets(buf, MAXLEN, stdin);
     len = strlen(buf);
     printf("%s get %s, len %d.\n", __func__, buf, len);
     if (buf[len-1] == '\n')
@@ -21,9 +23,10 @@ void client(int wr_p, int rd_p)
 
     write(wr_p, buf, len);
 
-    while(n = read(rd_p, buf, 128) > 0) {
-        printf("%s, read buf %s\n", __func__, buf);
-        //write(1, buf, n);
+    while((n = read(rd_p, buf, MAXLEN)) > 0) {
+        //printf("%s, read buf %s\n", __func__, buf);
+        //write(STDOUT_FILENO, buf, n);
+        write(1, buf, n);
         //write(stdout, buf, n);
         //puts(buf);
         //fprintf(stdout, "%s", buf);
@@ -32,12 +35,11 @@ void client(int wr_p, int rd_p)
 
 void server(int rd_p, int wr_p)
 {
-    char buf[128];
-    int len;
+    char buf[MAXLEN+1];
     int n;
     int fd;
 
-    if((n = read(rd_p, buf, 128)) == 0) {
+    if((n = read(rd_p, buf, MAXLEN)) == 0) {
         printf("read 0 byte\n");
     }
     printf("%s get %s, len %d.\n", __func__, buf, n);
@@ -52,9 +54,9 @@ void server(int rd_p, int wr_p)
         write(wr_p, buf, n);
     }
     else {
-        while(n = read(fd, buf, 128) > 0) {
+        while((n = read(fd, buf, MAXLEN)) > 0) {
             write(wr_p, buf, n);
-            printf("%s write buf %s\n", __func__, buf);
+            //printf("%s write buf %s\n", __func__, buf);
         }
         close(fd);
     }
