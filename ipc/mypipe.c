@@ -5,6 +5,7 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <fcntl.h>
+#include <sys/wait.h>
 
 void client(int wr_p, int rd_p)
 {
@@ -14,13 +15,19 @@ void client(int wr_p, int rd_p)
 
     fgets(buf, 128, stdin);
     len = strlen(buf);
+    printf("%s get %s, len %d.\n", __func__, buf, len);
     if (buf[len-1] == '\n')
         len--;
 
     write(wr_p, buf, len);
 
-    while(n = read(rd_p, buf, 128) > 0)
-        write(stdout, buf, n);
+    while(n = read(rd_p, buf, 128) > 0) {
+        printf("%s, read buf %s\n", __func__, buf);
+        //write(1, buf, n);
+        //write(stdout, buf, n);
+        //puts(buf);
+        //fprintf(stdout, "%s", buf);
+    }
 }
 
 void server(int rd_p, int wr_p)
@@ -33,8 +40,11 @@ void server(int rd_p, int wr_p)
     if((n = read(rd_p, buf, 128)) == 0) {
         printf("read 0 byte\n");
     }
+    printf("%s get %s, len %d.\n", __func__, buf, n);
 
     buf[n] = '\0';
+
+    printf("%s, buf is %s\n", __func__, buf);
 
     if ((fd = open(buf, O_RDONLY)) < 0) {
         snprintf(buf+n, sizeof(buf) - n, "can not open.\n");
@@ -42,8 +52,10 @@ void server(int rd_p, int wr_p)
         write(wr_p, buf, n);
     }
     else {
-        while(n = read(rd_p, buf, 128) >0)
+        while(n = read(fd, buf, 128) > 0) {
             write(wr_p, buf, n);
+            printf("%s write buf %s\n", __func__, buf);
+        }
         close(fd);
     }
 
