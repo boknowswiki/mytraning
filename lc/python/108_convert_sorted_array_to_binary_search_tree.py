@@ -17,7 +17,7 @@ class Solution(object):
             if start > end:
                 return None
             mid = (start + end)/2
-            root = ListNode(nums[mid])
+            root = TreeNode(nums[mid])
             root.left = sortedarraytobst(nums, start, mid-1)
             root.right = sortedarraytobst(nums, mid+1, end)
 
