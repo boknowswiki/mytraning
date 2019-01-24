@@ -7,6 +7,29 @@ class Solution(object):
         :rtype: bool
         """
         n = len(s)
+        start = 0
+        end = n - 1
+        lower_s = s.lower()
+        while start < end:
+            while (start < end) and (not lower_s[start].isalnum()):
+                start = start + 1
+            while (start < end) and (not lower_s[end].isalnum()):
+                end = end - 1
+            if lower_s[start] == lower_s[end]:
+                start = start + 1
+                end = end - 1
+            else:
+                return False
+            
+        return True
+
+class Solution(object):
+    def isPalindrome(self, s):
+        """
+        :type s: str
+        :rtype: bool
+        """
+        n = len(s)
         if n == 0 or n == 1:
             return True
 
@@ -30,5 +53,6 @@ class Solution(object):
 
 if __name__ =='__main__':
     s = Solution()
-    print('%s\n' % (s.isPalindrome("A man, a plan, a canal: Panama")))
+    #print('%s\n' % (s.isPalindrome("A man, a plan, a canal: Panama")))
+    print('%s\n' % (s.isPalindrome("0P")))
 
