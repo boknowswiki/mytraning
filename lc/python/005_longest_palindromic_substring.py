@@ -6,6 +6,32 @@ class Solution(object):
         :type s: str
         :rtype: str
         """
+        n = len(s)
+        max_len = 0
+        start = 0
+        end = 0
+        def expendfrom(s, l, r):
+            while(l>=0 and r < len(s) and s[l] == s[r]):
+                l = l - 1
+                r = r + 1
+            return r-l-1
+        
+        for i in range(n):
+            len1 = expendfrom(s, i, i)
+            len2 = expendfrom(s, i, i+1)
+            max_len = max(len1, len2)
+            if max_len > end - start:
+                start = i - (max_len-1)/2
+                end = i + max_len/2
+                
+        return s[start:end+1]
+
+class Solution(object):
+    def longestPalindrome(self, s):
+        """
+        :type s: str
+        :rtype: str
+        """
         def expand(s, l, r):
             while l >= 0 and r < len(s) and s[l] == s[r]:
                 l = l - 1

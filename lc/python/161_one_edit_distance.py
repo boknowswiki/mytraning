@@ -48,7 +48,7 @@ def edit_distance(s, t, m, n):
     if n == 0:
         return m
 
-    if s[m-1] = t[n-1]:
+    if s[m-1] == t[n-1]:
         return edit_distance(s, t, m-1, n-1)
 
     return 1 + min(edit_distance(s, t, m, n-1),
