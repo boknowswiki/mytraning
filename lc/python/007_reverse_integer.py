@@ -1,5 +1,28 @@
 #!/usr/bin/python -t
 
+
+class Solution(object):
+    def reverse(self, x):
+        """
+        :type x: int
+        :rtype: int
+        """
+        ret = 0
+        sign = 1
+        if x < 0:
+            sign = -1
+            x = abs(x)
+        
+        
+        while x:
+            if abs(ret) > (2**31/10):
+                return 0
+            ret = ret * 10 + x % 10
+            x = x / 10
+            
+        return ret *sign
+
+
 class Solution(object):
     def reverse(self, x):
         """
