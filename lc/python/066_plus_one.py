@@ -1,5 +1,26 @@
 #!/usr/bin/python -t
 
+#best solution
+
+class Solution(object):
+    def plusOne(self, digits):
+        """
+        :type digits: List[int]
+        :rtype: List[int]
+        """
+        n = len(digits) - 1
+        
+        while digits[n] == 9:
+            digits[n] = 0
+            n = n - 1
+            
+        if n < 0:
+            digits.insert(0, 1)
+        else:
+            digits[n] = digits[n] + 1
+            
+        return digits
+
 class Solution(object):
     def plusOne(self, digits):
         """
