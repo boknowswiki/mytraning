@@ -16,7 +16,7 @@ class Solution(object):
         buff = [''] * 4
         eof = False
 
-        while !eof and pos < n:
+        while not eof and pos < n:
             r_b = read4(buff)
             if r_b < 4:
                 eof = True

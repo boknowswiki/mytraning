@@ -21,7 +21,7 @@ class Solution(object):
         pos = 0
         eof = False
 
-        while !eof and pos < n:
+        while not eof and pos < n:
             if self.bufsize == 0:
                 self.bufsize = read4(self.buff)
                 if self.bufsize < 4:
