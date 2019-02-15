@@ -7,6 +7,36 @@
 #         self.left = None
 #         self.right = None
 
+class Solution:
+    def _iterative(self, a):
+        root, stack = None, [(0, len(a)-1, None, None)]
+        while stack:
+            lo, hi, l_parent, r_parent = stack.pop()
+            if lo > hi:
+                continue
+            mid = lo + (hi-lo)//2
+            node = TreeNode(a[mid])
+            root = root or node
+            if l_parent:
+                l_parent.left = node
+            if r_parent:
+                r_parent.right = node
+            stack.append((lo, mid-1, node, None))
+            stack.append((mid+1, hi, None, node))
+        return root
+
+    def sortedArrayToBST(self, a):
+        '''Convert a sorted array to a BST in O(n) time and O(log n) space.'''
+        return self._iterative(a)
+
+
+# Definition for a binary tree node.
+# class TreeNode(object):
+#     def __init__(self, x):
+#         self.val = x
+#         self.left = None
+#         self.right = None
+
 class Solution(object):
     def sortedArrayToBST(self, nums):
         """
