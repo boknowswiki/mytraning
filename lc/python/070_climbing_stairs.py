@@ -1,6 +1,21 @@
 #!/usr/bin/python -t
 
 class Solution(object):
+    def __init__(self):
+        self.d = {1:1, 2:2}
+    def climbStairs(self, n):
+        """
+        :type n: int
+        :rtype: int
+        """
+        def dp(n):
+            if n not in self.d:
+                self.d[n] = dp(n-1) + dp(n-2)
+            return self.d[n]
+        
+        return dp(n)
+
+class Solution(object):
     def climbStairs(self, n):
         """
         :type n: int
