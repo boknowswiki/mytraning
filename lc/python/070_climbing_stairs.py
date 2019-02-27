@@ -1,6 +1,21 @@
 #!/usr/bin/python -t
 
 class Solution(object):
+    def climbStairs(self, n):
+        """
+        :type n: int
+        :rtype: int
+        """
+        a = 1
+        b = 1
+        for i in range(2,n+1):
+            tmp = b
+            b = a + b
+            a = tmp
+            
+        return b
+
+class Solution(object):
     def __init__(self):
         self.d = {1:1, 2:2}
     def climbStairs(self, n):
