@@ -1,6 +1,35 @@
 #!/usr/bin/python -t
 
 '''
+DP
+'''
+class Solution(object):
+    def uniquePaths(self, m, n):
+        """
+        :type m: int
+        :type n: int
+        :rtype: int
+        """
+        t = [0] * n
+        for i in range(n):
+            t[i] = [0]*m
+
+        t[0][0] = 1
+        
+        for i in range(1, m):
+            t[0][i] = 1
+            
+        for j in range(1, n):
+            t[j][0] = 1
+            
+        for i in range(1, m):
+            for j in range(1, n):
+                t[j][i] = t[j-1][i] + t[j][i-1]
+                
+                
+        return t[n-1][m-1]
+
+'''
 #backtracking
 class Solution(object):
     def uniquePaths(self, m, n):
