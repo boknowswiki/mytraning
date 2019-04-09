@@ -1,6 +1,29 @@
 #!/usr/bin/python -t
 
 
+#Time O(n), space O(k)
+#from jiuzhang
+
+class Solution(object):
+    def getRow(self, rowIndex):
+        """
+        :type rowIndex: int
+        :rtype: List[int]
+        """
+        r = []
+        val = 1
+        r.append(val)
+        
+        for i in range(rowIndex, 0, -1):
+            val = val * i
+            val = val / (rowIndex -i + 1)
+            r.append(val)
+            
+        #r.append(1)
+        
+        return r
+
+
 class Solution(object):
     def getRow(self, rowIndex):
         """
