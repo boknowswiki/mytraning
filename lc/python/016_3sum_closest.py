@@ -13,7 +13,7 @@ class Solution(object):
         nums.sort()
         
         if n <= 3:
-            return sum(i for i in nums)
+            return sum(nums)
         
         ret = nums[0] + nums[1] + nums[2]
         
