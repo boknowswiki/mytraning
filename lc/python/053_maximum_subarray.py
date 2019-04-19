@@ -1,6 +1,7 @@
 #!/usr/bin/python -t
 
-#DF
+#DF time O(n) space O(1)
+
 class Solution(object):
     def maxSubArray(self, nums):
         """
