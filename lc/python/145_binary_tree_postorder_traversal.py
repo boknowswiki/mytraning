@@ -29,6 +29,8 @@ class Solution(object):
             if node.left != None:
                 stack.append(node.left)
 
+        return ret
+
 #time O(n) space O(n)
 
 # Definition for a binary tree node.
