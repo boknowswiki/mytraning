@@ -1,5 +1,7 @@
 #!/usr/bin/python -t
 
+#time O(logn) space O(1)
+
 class Solution(object):
     def findMin(self, nums):
         """
