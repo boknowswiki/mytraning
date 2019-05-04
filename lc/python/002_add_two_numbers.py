@@ -1,5 +1,7 @@
 #!/usr/bin/python -t
 
+#time O(max(m,n)) space O(max(m, n)+1)
+
 # Definition for singly-linked list.
 # class ListNode(object):
 #     def __init__(self, x):
