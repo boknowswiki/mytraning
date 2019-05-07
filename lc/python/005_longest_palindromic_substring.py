@@ -26,6 +26,7 @@ class Solution(object):
                 
         return s[start:end+1]
 
+'''
 class Solution(object):
     def longestPalindrome(self, s):
         """
@@ -85,6 +86,7 @@ class Solution(object):
                         ret = s[i:j+1] 
 
         return ret
+'''
 
 if __name__ =='__main__':
     s = Solution()
