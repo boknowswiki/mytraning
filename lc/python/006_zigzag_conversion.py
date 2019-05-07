@@ -1,5 +1,7 @@
 #!/usr/bin/python -t
 
+#time O(n) space O(n)
+
 class Solution(object):
     def convert(self, s, numRows):
         """
@@ -25,4 +27,4 @@ class Solution(object):
 
 if __name__ =='__main__':
     s = Solution()
-    print('%s\n' % (s.convert("PAYPALISHIRING")))
+    print('%s\n' % (s.convert("PAYPALISHIRING", 3)))
