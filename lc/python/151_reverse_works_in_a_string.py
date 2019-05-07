@@ -31,7 +31,6 @@ class Solution(object):
         return new_s
 
 
-
 class Solution(object):
     def reverseWords(self, s):
         """
