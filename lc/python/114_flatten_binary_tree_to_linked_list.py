@@ -1,5 +1,20 @@
 #!/usr/bin/python -t
 
+class Solution:
+    def flatten(self, root):
+        if not root:
+            return
+        self.flatten(root.right)
+        if not root.left:
+            return
+        self.flatten(root.left)
+        tail = root.left
+        while tail.right:
+            tail = tail.right
+        tail.right = root.right
+        root.right = root.left
+        root.left = None
+
 # Definition for a binary tree node.
 # class TreeNode(object):
 #     def __init__(self, x):
