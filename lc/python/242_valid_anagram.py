@@ -7,6 +7,27 @@ class Solution(object):
         :type t: str
         :rtype: bool
         """
+        n_s = len(s)
+        n_t = len(t)
+        
+        if n_s != n_t:
+            return False
+        
+        ss = sorted(s)
+        tt = sorted(t)
+        
+        if cmp(ss, tt) == 0:
+            return True
+        else:
+            return False
+
+class Solution(object):
+    def isAnagram(self, s, t):
+        """
+        :type s: str
+        :type t: str
+        :rtype: bool
+        """
         d={}
         
         for i in s:
