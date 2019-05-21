@@ -46,3 +46,37 @@ def intersection(self, nums1, nums2):
             j += 1
     
     return res
+
+#time O(nlogn) space O(1)
+
+class Solution(object):
+    def intersection(self, nums1, nums2):
+        """
+        :type nums1: List[int]
+        :type nums2: List[int]
+        :rtype: List[int]
+        """
+        def bs(nums, i):
+            n = len(nums)
+            l = 0
+            r = n - 1
+            while l <= r:
+                mid = l + (r-l)/2
+                if nums[mid] == i:
+                    return True
+                elif nums[mid] < i:
+                    l = mid+1
+                else:
+                    r = mid - 1
+                    
+            return False
+        
+        l2 = sorted(nums2)
+        s = set()
+        for i in nums1:
+            if bs(l2, i):
+                s.add(i)
+                
+        ret = list(s)
+        
+        return ret
