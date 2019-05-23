@@ -1,5 +1,33 @@
 #!/usr/bin/python -t
 
+# Definition for a binary tree node.
+# class TreeNode(object):
+#     def __init__(self, x):
+#         self.val = x
+#         self.left = None
+#         self.right = None
+
+class Solution(object):
+    def kthSmallest(self, root, k):
+        """
+        :type root: TreeNode
+        :type k: int
+        :rtype: int
+        """
+        def inorder(root, ret):
+            if root == None:
+                return
+            left = inorder(root.left, ret)
+            if left != None:
+                ret.append(left.val)
+            ret.append(root.val)
+            right = inorder(root.right, ret)
+            if right != None:
+                ret.append(right.val)
+        ret = []
+        inorder(root,ret)
+        return ret[k-1]
+
 
 #Complexity Analysis
 
