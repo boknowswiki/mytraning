@@ -51,3 +51,25 @@ class Solution(object):
                 i += 1
             j += 1
         return True if i == len(s) else False
+
+
+#Time complexity: O(T + SlogT)
+
+import collections
+class Solution(object):
+    def isSubsequence(self, s, t):
+        """
+        :type s: str
+        :type t: str
+        :rtype: bool
+        """
+        d = collections.defaultdict(list)
+        for i in xrange(0, len(t)):
+            d[t[i]].append(i)
+        start = 0
+        for c in s:
+            idx = bisect.bisect_left(d[c], start)
+            if len(d[c]) == 0 or idx >= len(d[c]):
+                return False
+            start = d[c][idx] + 1
+        return True
