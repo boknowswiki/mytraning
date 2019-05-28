@@ -1,6 +1,7 @@
 #!/usr/bin/python -t
 
 #binary search, time O(nlogn) space O(n)
+import bisect
 
 class Solution(object):
     def lengthOfLIS(self, nums):
@@ -25,6 +26,7 @@ class Solution(object):
 
 #DP, time O(n^2) space O(n)
 
+'''
 class Solution(object):
     def lengthOfLIS(self, nums):
         """
@@ -49,6 +51,7 @@ class Solution(object):
             ret = max(ret, l[i])
             
         return ret
+'''
 
 if __name__ == '__main__':
     s = Solution()
