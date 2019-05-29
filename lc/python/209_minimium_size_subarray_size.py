@@ -1,5 +1,28 @@
 #!/usr/bin/python -t
 
+class Solution(object):
+    def minSubArrayLen(self, s, nums):
+        """
+        :type s: int
+        :type nums: List[int]
+        :rtype: int
+        """
+        n = len(nums)
+        ret = n + 1
+        
+        ss = [0]*(n+1)
+        
+        for i in xrange(1, n+1):
+            ss[i] = ss[i-1] + nums[i-1]
+        
+        for i in xrange(1, n+1):
+            to_find = s + ss[i-1]
+            bound = bisect.bisect_left(ss, to_find)
+            if bound != len(ss):
+                ret = min(ret, bound-i+1)
+            
+        return 0 if ret == n+1 else ret
+
 #time O(n) space O(1)
 
 #http://www.martinbroadhurst.com/binary-search-in-python.html
