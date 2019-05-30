@@ -34,3 +34,40 @@ class Solution(object):
                 start = start + 1
                 
         return False
+
+
+class Solution(object):
+    def search(self, nums, target):
+        """
+        :type nums: List[int]
+        :type target: int
+        :rtype: bool
+        """
+        n = len(nums)
+        if n == 0:
+            return False
+        l = 0
+        r = n - 1
+        
+        while l <= r:
+            m = l + (r-l)/2
+            
+            if nums[m] == target:
+                return True
+            
+            if nums[m] > nums[l]:
+                if nums[l] <= target and target < nums[m]:
+                    r = m - 1
+                else:
+                    l = m+1
+            elif nums[m] < nums[l]:
+                if nums[m] < target and target <= nums[r]:
+                    l = m + 1
+                else:
+                    r = m -1
+            else:
+                l = l + 1
+                
+        return False
+        #return False if nums[l] != target else True
+
