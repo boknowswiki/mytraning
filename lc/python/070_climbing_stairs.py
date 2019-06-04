@@ -1,5 +1,43 @@
 #!/usr/bin/python -t
 
+#time O(n) space O(1)
+
+class Solution(object):
+    def climbStairs(self, n):
+        """
+        :type n: int
+        :rtype: int
+        """
+        if n == 1:
+            return 1
+        
+        first = 1
+        second = 1
+        
+        for i in range(2, n+1):
+            third = first + second
+            first = second
+            second = third
+            
+        return third
+
+#time O(n) space O(n)
+
+class Solution(object):
+    def climbStairs(self, n):
+        """
+        :type n: int
+        :rtype: int
+        """
+        l = [0] * (n+1)
+        l[0] = 1
+        l[1] = 1
+        
+        for i in range(2, n+1):
+            l[i] = l[i-1] + l[i-2]
+            
+        return l[n]
+
 class Solution(object):
     def climbStairs(self, n):
         """
