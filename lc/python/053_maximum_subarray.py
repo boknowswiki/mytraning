@@ -1,5 +1,23 @@
 #!/usr/bin/python -t
 
+#DP time O(n) space O(1)
+
+class Solution(object):
+    def maxSubArray(self, nums):
+        """
+        :type nums: List[int]
+        :rtype: int
+        """
+        n = len(nums)
+        max_ret = nums[0]
+        max_sofar = nums[0]
+
+        for i in range(1, n):
+            max_sofar = max(nums[i], max_sofar + nums[i])
+            max_ret = max(max_ret, max_sofar)
+            
+        return max_ret
+
 #DF time O(n) space O(1)
 
 class Solution(object):
