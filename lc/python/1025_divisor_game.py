@@ -4,6 +4,8 @@
 #For each index i, find all factors of j that divide i evenly, and see if we can guarantee a win. (That is, see if there exists dp[i-j] that is False) If so, set it to true.
 #Finally, return dp[N].
 
+#dp[i] = ~dp[i-j] for j from 1 to i//2+1
+
 class Solution(object):
     def divisorGame(self, N):
         """
