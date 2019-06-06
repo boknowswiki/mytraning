@@ -1,5 +1,27 @@
 #!/usr/bin/python -t
 
+class Solution(object):
+    def minPathSum(self, grid):
+        """
+        :type grid: List[List[int]]
+        :rtype: int
+        """
+        m = len(grid)
+        n = len(grid[0])
+        l = m*[0]
+        l[0] = grid[0][0]
+        
+        for i in range(1, m):
+            l[i] = l[i-1] + grid[i][0]
+            
+        for j in range(1, n):
+            l[0] = l[0] + grid[0][j]
+        
+            for i in range(1, m):
+                l[i] = min(l[i], l[i-1]) + grid[i][j]
+                
+        return l[m-1]
+
 #time O(mn) space O(m)
 
 class Solution(object):
