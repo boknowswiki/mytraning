@@ -73,3 +73,95 @@ class Solution(object):
                 return False
             start = d[c][idx] + 1
         return True
+
+
+#memory limit exceeded
+class Solution(object):
+    def isSubsequence(self, s, t):
+        """
+        :type s: str
+        :type t: str
+        :rtype: bool
+        """
+        if len(s) == 0:
+            return True
+        if len(t) == 0:
+            return False
+        
+        if s[-1] == t[-1]:
+            return self.isSubsequence(s[:-1], t[:-1])
+        
+        return self.isSubsequence(s, t[:-1])
+
+
+#Many coders have provided the O<N, 1> 2-pointer solution.
+#
+#I am so bored so I came up with a dynamic programming solution for this problem.
+#
+#The recurrence is:
+#
+#dp(s, t) = dp(s, t-1) or ( S[s] = T[t] and dp(s-1, t-1) )
+#
+#Base case:
+#
+#dp(0, t) = true
+#dp(s, 0) = (s == "")
+#
+#The complexity is O(N^2, N) lol
+
+public class Solution {
+    public boolean isSubsequence(String s, String t) {
+        int sl = s.length();
+        int tl = t.length();
+        boolean [] dp = new boolean[sl+1];
+        
+        for(int i = 0; i <= tl; i ++) {
+            for(int j = sl; j >= 0; j --) {
+                if(j == 0) {
+                    dp[j] = true;
+                    continue;
+                }
+                
+                if(i == 0) {
+                    dp[j] = (j == 0);
+                    continue;
+                }
+                
+                dp[j] = dp[j] || (s.charAt(j-1) == t.charAt(i-1)) && dp[j-1];
+            }
+        }
+        
+        return dp[sl];
+    }
+}
+
+
+#Dynamic Programming: O(n) space + O(m*n) time
+
+public class Solution {
+    public boolean isSubsequence(String s, String t) {
+        boolean[] mem1 = new boolean[t.length()];
+        boolean[] mem2 = new boolean[t.length()];
+        if(s.length() == 0) return true;
+        if(t.length() == 0) return false;
+        mem1[0] = (s.charAt(0) == t.charAt(0));
+        for(int j = 1; j < t.length(); j++)
+        {
+            mem1[j] = (s.charAt(0) == t.charAt(j))?true:mem1[j-1];
+        }
+
+        for(int i = 1 ; i < s.length() ; i++)
+        {
+            for(int j = 1 ; j < t.length(); j++)
+            {
+                if(s.charAt(i) == t.charAt(j))
+                    mem2[j] = mem2[j-1] || mem1[j-1];
+                else
+                    mem2[j] = mem2[j-1];
+            }
+            mem1 = mem2;
+            mem2 = new boolean[t.length()];
+        }   
+        return mem1[t.length()-1];
+    }
+}
