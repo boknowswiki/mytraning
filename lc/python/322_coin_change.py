@@ -1,5 +1,7 @@
 #!/usr/bin/python -t
 
+'''
+
 class Solution(object):
      def coinChange(self, coins, amount):
          """
@@ -50,5 +52,29 @@ class Solution(object):
                     d[i] = min(d[i], d[i-coin] + 1)
                     
         return -1 if d[amount]>amount else d[amount]
+'''
 
+import sys
+class Solution(object):
+    def coinChange(self, coins, amount):
+        """
+        :type coins: List[int]
+        :type amount: int
+        :rtype: int
+        """
+        n = len(coins)
+        dp = [sys.maxint] * (amount+1)
+        dp[0] = 0
+        
+        for i in range(1, amount+1):
+            for j in range(n):
+                if coins[j] <= i:
+                    dp[i] = min(dp[i], dp[i-coins[j]]+1)
+        
+        print dp
+        return dp[amount] if dp[amount] <= amount else -1
 
+if __name__ =='__main__':
+    c = [1,2,5]
+    ss = Solution()
+    print('answer is %d' % ss.coinChange(c, 11))  
