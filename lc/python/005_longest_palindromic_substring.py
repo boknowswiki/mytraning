@@ -7,6 +7,33 @@ class Solution(object):
         :rtype: str
         """
         n = len(s)
+        if n <= 1:
+            return s
+        
+        dp= [[0] * n for _ in xrange(n)]
+        start = 0
+        s_len = 1
+        #base case
+        for i in range(n):
+            dp[i][i] = 1
+            
+        for i in range(n-1, -1, -1):
+            for j in range(i, n):
+                dp[i][j] = s[i] == s[j] and (j-i <3 or dp[i+1][j-1])
+                if dp[i][j] and j-i+1 > s_len:
+                    s_len = j-i+1
+                    start = i
+                    
+                    
+        return s[start:start+s_len]
+
+class Solution(object):
+    def longestPalindrome(self, s):
+        """
+        :type s: str
+        :rtype: str
+        """
+        n = len(s)
         max_len = 0
         start = 0
         end = 0
@@ -86,6 +113,77 @@ class Solution(object):
                         ret = s[i:j+1] 
 
         return ret
+
+
+#Intuitively, we list all the substrings, pick those palindromic, and get the longest one. However, that causes TLE for we reach the same situations (input substrings) many times.
+#To optimize, we decompose the problem as follows
+#state variable:
+#start index and end index of a substring can identify a state, which influences our decision
+#so state variable is state(s, e) indicates whether str[s, e] is palindromic
+#goal state:
+#max(e - s + 1) that makes state(s, e) = true
+#state transition:
+#Let's observe example base cases
+#for s = e, "a" is palindromic,
+#for s + 1 = e, "aa" is palindromic (if str[s] = str[e])
+#for s + 2 = e, "aba" is palindromic (if str[s] = str[e] and "b" is palindromic)
+#for s + 3 = e, "abba" is palindromic (if str[s] = str[e] and "bb" is palindromic)
+#we realize that
+#for s + dist = e, str[s, e] is palindromic if str[s] == str[e] and str[s + 1, e - 1] is palindromic
+#state transition equation:
+#state(s, e) is true:
+#for s = e, 
+#for s + 1 = e,  if str[s] == str[e]
+#for s + 2 <= e, if str[s] == str[e] && state(s + 1, e - 1) is true
+#note:
+#state(s + 1, e - 1) should be calculated before state(s, e). That is, s is decreasing during the bottop-up dp implementation, while the dist between s and e is increasing, that's why
+#        for (int s = len - 1; s >= 0; s--) {
+#            for (int dist = 1; dist < len - i; dist++) {
+#We keep track of longestPalindromeStart, longestPalindromeLength for the final output.
+#    public String longestPalindrome(String s) {
+#        // Corner cases.
+#        if (s.length() <= 1) return s;
+#        int len = s.length(), longestPalindromeStart = 0, longestPalindromeLength = 1;
+#        // state[i][j] true if s[i, j] is palindrome.
+#        boolean[][] state = new boolean[len][len];
+#        // Base cases.
+#        for (int i = 0; i < len; i++) { 
+#            state[i][i] = true; // dist = 0.
+#        }
+#        for (int i = len - 1; i >= 0; i--) {
+#            for (int dist = 1; dist < len - i; dist++) {
+#                int j = dist + i;
+#                state[i][j] = (dist == 1) ? s.charAt(i) == s.charAt(j) : (s.charAt(i) == s.charAt(j)) && state[i + 1][j - 1];
+#                if (state[i][j] && j - i + 1 > longestPalindromeLength) {
+#                    longestPalindromeLength = j - i + 1;
+#                    longestPalindromeStart = i;
+#                }
+#            }
+#        }     
+#        return s.substring(longestPalindromeStart, longestPalindromeStart + longestPalindromeLength);
+#    }
+
+#dp(i, j) represents whether s(i ... j) can form a palindromic substring, dp(i, j) is true when s(i) equals to s(j) and s(i+1 ... j-1) is a palindromic substring. When we found a palindrome, check if it's the longest one. Time complexity O(n^2).
+#
+#public String longestPalindrome(String s) {
+#  int n = s.length();
+#  String res = null;
+#    
+#  boolean[][] dp = new boolean[n][n];
+#    
+#  for (int i = n - 1; i >= 0; i--) {
+#    for (int j = i; j < n; j++) {
+#      dp[i][j] = s.charAt(i) == s.charAt(j) && (j - i < 3 || dp[i + 1][j - 1]);
+#            
+#      if (dp[i][j] && (res == null || j - i + 1 > res.length())) {
+#        res = s.substring(i, j + 1);
+#      }
+#    }
+#  }
+#    
+#  return res;
+#}
+
 '''
 
 if __name__ =='__main__':
