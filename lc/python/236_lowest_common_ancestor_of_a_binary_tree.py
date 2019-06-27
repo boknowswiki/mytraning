@@ -1,5 +1,128 @@
 #!/usr/bin/python -t
 
+#LCA
+
+# Definition for a binary tree node.
+# class TreeNode(object):
+#     def __init__(self, x):
+#         self.val = x
+#         self.left = None
+#         self.right = None
+
+import math
+class Solution(object):
+    def lowestCommonAncestor(self, root, p, q):
+        """
+        :type root: TreeNode
+        :type p: TreeNode
+        :type q: TreeNode
+        :rtype: TreeNode
+        """
+        self.depth = {}
+        self.f = {}
+        self.maxstep = 100
+
+        self.depth[root.val] = 1
+        if root.left:
+            self.dfs(root, root.left)
+        if root.right:
+            self.dfs(root, root.right)
+            
+        c = self.lca(root.val, p.val, q.val)
+        return TreeNode(c)
+    
+    def lca(self,root,m,n):
+        if m==root or n==root:
+            return root
+        if self.depth[n]<self.depth[m]:
+            temp = m
+            m = n
+            n = temp
+        
+        for i in range(len(self.f[n])):
+            if self.depth[n]-self.depth[m]>=2**(len(self.f[n])-i-1):
+                n = self.f[n][len(self.f[n])-i-1]
+        if n==m:
+            return n
+        
+        length = len(self.f[n])
+        for i in range(length):
+            if self.f[n][length-i-1]!=self.f[m][length-i-1]:
+                n = self.f[n][length-i-1]
+                m = self.f[m][length-i-1]
+        return self.f[m][0]
+
+    def dfs(self, prev, cur):
+        self.f[cur.val] = [prev.val]
+        self.depth[cur.val] = self.depth[prev.val]+1
+        
+        for i in range(1,self.maxstep):
+            if  self.f[cur.val][i-1] in self.f.keys() and \
+                len(self.f[self.f[cur.val][i-1]])>=i :
+                self.f[cur.val].append(self.f[self.f[cur.val][i-1]][i-1])
+            else:
+                break
+        if cur.left != None:
+            self.dfs(cur, cur.left)
+        if cur.right != None:
+            self.dfs(cur, cur.right)
+
+#Bei Zeng LCA
+#from https://blog.csdn.net/weixin_42001089/article/details/83590686
+
+# Definition for a binary tree node.
+# class TreeNode(object):
+#     def __init__(self, x):
+#         self.val = x
+#         self.left = None
+#         self.right = None
+
+class Solution(object):
+    def lowestCommonAncestor(self, root, p, q):
+        """
+        :type root: TreeNode
+        :type p: TreeNode
+        :type q: TreeNode
+        :rtype: TreeNode
+        """
+        self.f = {}
+        self.vis = {}
+        self.dfs(root)
+        
+        return self.tarjan(root, p.val, q.val)
+    
+    def tarjan(self, root, p, q):
+        self.vis[root.val] = True
+        if root.left:
+            c = self.tarjan(root.left, p, q)
+            if c != None:
+                return c
+            self.f[root.left.val] = root.val
+        if root.right:
+            c = self.tarjan(root.right, p, q)
+            if c != None:
+                return c
+            self.f[root.right.val] = root.val
+            
+        if root.val == p and self.vis[q]:
+            return self.find(q)
+        if root.val == q and self.vis[p]:
+            return self.find(p)
+        
+    def find(self, n):
+        if n != self.f[n]:
+            return self.find(self.f[n])
+        else:
+            return TreeNode(n)
+        
+    def dfs(self, node):
+        if node:
+            self.f[node.val] = node.val
+            self.vis[node.val] = False
+            self.dfs(node.left)
+            self.dfs(node.right)
+            
+
 
 #time O(n) space O(n)
 
