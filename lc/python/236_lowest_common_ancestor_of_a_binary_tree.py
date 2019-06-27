@@ -1,5 +1,96 @@
 #!/usr/bin/python -t
 
+#LCA Beizeng passed on lintcode, memory limit exceed in leetcode
+
+# Definition for a binary tree node.
+# class TreeNode(object):
+#     def __init__(self, x):
+#         self.val = x
+#         self.left = None
+#         self.right = None
+
+class Solution(object):
+    def lowestCommonAncestor(self, root, p, q):
+        """
+        :type root: TreeNode
+        :type p: TreeNode
+        :type q: TreeNode
+        :rtype: TreeNode
+        """
+        self.maxd = 0
+        self.id = 0
+        self.pmap = {}
+        self.imap = {}
+        self.dmap = {}
+        self.parent = None
+        
+        if root == None:
+            return None
+        self.dfs(root, 0)
+        
+        self.parent = [[0] * (self.maxd) for _ in range(self.id)]
+        self.getParent(root)
+        
+        for i in range(1, self.maxd):
+            for j in range(self.id):
+                self.parent[j][i] = self.parent[self.parent[j][i-1]][i-1]
+                
+        if p in self.pmap and q in self.pmap:
+            return self.lca(p, q)
+        else:
+            return None
+        
+    def lca(self, p, q):
+        id_p = self.pmap[p]
+        id_q = self.pmap[q]
+        
+        if self.dmap[id_p] < self.dmap[id_q]:
+            return self.lca(q, p)
+        
+        for i in range(self.maxd-1, -1, -1):
+            if self.dmap[self.parent[id_p][i]] >= self.dmap[id_q]:
+                id_p = self.parent[id_p][i]
+                
+            if self.dmap[id_p] == self.dmap[id_q]:
+                break
+            
+        if id_p == id_q:
+            return self.imap[id_p]
+        
+        for i in range(self.maxd-1, -1, -1):
+            if self.imap[self.parent[id_p][i]] != self.imap[self.parent[id_q][i]]:
+                id_p = self.parent[id_p][i]
+                id_q = self.parent[id_q][i]
+                
+        return self.imap[self.parent[id_p][0]]
+        
+    def getParent(self, node):
+        id_node = self.pmap[node]
+        if node.left:
+            id_left = self.pmap[node.left]
+            self.parent[id_left][0] = id_node
+            self.getParent(node.left)
+            
+        if node.right:
+            id_right = self.pmap[node.right]
+            self.parent[id_right][0] = id_node
+            self.getParent(node.right)
+
+        
+    def dfs(self, node, depth):
+        self.pmap[node] = self.id
+        self.imap[self.id] = node
+        self.dmap[self.id] = depth
+        self.id = self.id + 1
+        self.maxd = max(depth, self.maxd)
+        
+        if node.left:
+            self.dfs(node.left, depth+1)
+        if node.right:
+            self.dfs(node.right, depth+1)
+            
+    
+
 #LCA
 
 # Definition for a binary tree node.
