@@ -31,10 +31,13 @@ class Solution(object):
         self.parent = [[0] * (self.maxd) for _ in range(self.id)]
         self.getParent(root)
         
-        for i in range(1, self.maxd):
-            for j in range(self.id):
-                self.parent[j][i] = self.parent[self.parent[j][i-1]][i-1]
-                
+        #for i in range(1, self.maxd):
+        #    for j in range(self.id):
+        #        self.parent[j][i] = self.parent[self.parent[j][i-1]][i-1]
+        for i in range(self.id):
+            for j in range(1, self.maxd):
+                self.parent[i][j] = self.parent[self.parent[i][j-1]][j-1]
+
         if p in self.pmap and q in self.pmap:
             return self.lca(p, q)
         else:
