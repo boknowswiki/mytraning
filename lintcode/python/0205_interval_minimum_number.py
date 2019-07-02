@@ -1,5 +1,96 @@
 #!/usr/bin/python -t
 
+#time O(logn) space O(2n)
+#segment tree solution
+# reference
+# https://blog.csdn.net/luomingjun12315/article/details/45331809
+# https://github.com/tmhm/LintCode-1/blob/master/Interval%20Minimum%20Number.py
+
+
+import sys
+min_val = sys.maxint
+
+f = lambda x, y : min(x, y)
+
+class node:
+    def __init__(self, start, end, m):
+        self.start = start
+        self.end = end
+        self.m = m
+        self.left = self.right = None
+        
+
+
+class segtree:
+    def __init__(self, a):
+        self.a = a
+        self.root = self.build(0, len(self.a))
+        
+    def build(self, start, end):
+        if start >= end:
+            return None
+            
+        if start+1 == end:
+            return node(start, end, self.a[start])
+        
+        mid = (end-start)/2 + start   
+        left = self.build(start, mid)
+        right = self.build(mid, end)
+        
+        val = min_val
+        if left:
+            val = f(left.m, val)
+        if right:
+            val = f(right.m, val)
+            
+        root = node(start, end, val)
+        root.left = left
+        root.right = right
+        return root
+        
+    def query(self, root, start, end):
+        if root == None:
+            return min_val
+            
+        if root.start >= end or root.end <= start:
+            return min_val
+            
+        if root.start == start and root.end == end:
+            return root.m
+            
+        val_l = val_r = min_val
+        
+        if root.left and start <= root.left.end:
+            if end <= root.left.end:
+                val_l = self.query(root.left, start, end)
+            else:
+                val_l = self.query(root.left, start, root.left.end)
+                
+        if root.right and end >= root.right.start:
+            if start >= root.right.start:
+                val_r = self.query(root.right, start, end)
+            else:
+                val_r = self.query(root.right, root.right.start, end)
+                
+        return f(val_l, val_r)
+        
+
+class Solution:
+    """
+    @param A: An integer array
+    @param queries: An query list
+    @return: The result list
+    """
+    def intervalMinNumber(self, A, queries):
+        # write your code here
+        ret = []
+        tree = segtree(A)
+        for q in queries:
+            #ret.append(tree.query(tree.root, q.start, q.end+1))
+            ret.append(tree.query(tree.root, q[0], q[1]+1))
+
+        return ret
+
 #time O(nlogn) for initial O(1) for query, space O(nlogn)
 
 """
