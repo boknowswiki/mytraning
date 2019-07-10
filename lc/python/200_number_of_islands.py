@@ -84,3 +84,41 @@ class Solution(object):
                     
         return my_uf.cnt
 
+
+#dfs solution
+
+class Solution(object):
+    def dfs_mark_zero(self, grid, i, j, m, n):
+        if i == m or j == n or i < 0 or j < 0:
+            return
+        
+        if grid[i][j] == '0':
+            return
+        
+        grid[i][j] = '0'
+        
+        self.dfs_mark_zero(grid, i-1, j, m, n)
+        self.dfs_mark_zero(grid, i+1, j, m, n)
+        self.dfs_mark_zero(grid, i, j-1, m, n)
+        self.dfs_mark_zero(grid, i, j+1, m, n)
+        
+        return
+        
+    def numIslands(self, grid):
+        """
+        :type grid: List[List[str]]
+        :rtype: int
+        """
+        m = len(grid)
+        ret = 0
+        if m == 0:
+            return ret
+        n = len(grid[0])
+        
+        for i in range(m):
+            for j in range(n):
+                if grid[i][j] == '1':
+                    ret = ret + 1
+                    self.dfs_mark_zero(grid, i, j, m, n)
+                    
+        return ret
