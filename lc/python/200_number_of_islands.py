@@ -122,3 +122,18 @@ class Solution(object):
                     self.dfs_mark_zero(grid, i, j, m, n)
                     
         return ret
+
+#bfs solution
+
+    def bfs(self, grid, r, c):
+        queue = collections.deque()
+        queue.append((r, c))
+        grid[r][c] = '0'
+        while queue:
+            directions = [(0,1), (0,-1), (-1,0), (1,0)]
+            r, c = queue.popleft()
+            for d in directions:
+                nr, nc = r + d[0], c + d[1]    
+                if self.is_valid(grid, nr, nc) and grid[nr][nc] == '1':
+                    queue.append((nr, nc))
+                    grid[nr][nc] = '0'
