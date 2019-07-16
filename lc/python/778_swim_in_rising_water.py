@@ -4,66 +4,31 @@
 #union find solution
 
 class uf(object):
-    def __init__(self, n):
-        self.father = [0] * (n*n)
-        self.size = [1] * (n*n)
-        
-        for i in range(n):
+    def __init__(self, m, n):
+        self.father = []
+        self.size = []
+        for i in range(m):
+            new_list = []
             for j in range(n):
-                index = i * n + j
-                self.father[index] = index
-        
-    def union(self, p, q):
-        proot = self.find(p)
-        qroot = self.find(q)
-        
-        if proot == qroot:
-            return
-        
-        if self.size[proot] < self.size[qroot]:
-            self.father[proot] = self.father[qroot]
-            self.size[qroot] = self.size[qroot] + self.size[proot]
-        else:
-            self.father[qroot] = self.father[proot]
-            self.size[proot] = self.size[proot] + self.size[qroot]
+                new_list.append((i, j))
+            self.father.append(new_list)
+            self.size.append([1]*n)
             
-        return
-        
-    def find(self, p):
-        tmp = p
-        while p != self.father[p]:
-            p = self.father[p]
-        
-        self.father[tmp] = p
-        return p
-        
-    def connected(self, p, q):
-        return self.find(p) == self.find(q)
-
-
-#class uf(object):
-#    def __init__(self, n):
-#        self.father = {i : i for i in range(n)}
-#        
-#    def find(self, p):
-#        #tmp = p
-#        if self.father[p] != p:
-#            self.father[p] = self.father[self.father[p]]
-#            p = self.father[p]
-#            
-#        #self.father[tmp] = p
-#        
-#        return p
-#    
-#    def iscon(self, p, q):
-#        return self.find(p) == self.find(q)
-#    
-#    def union(self, p, q):
-#        proot = self.find(p)
-#        qroot = self.find(q)
-#        if proot == qroot:
-#            return
-#        self.father[proot] = self.father[qroot]
+    def union(self, a, b):
+        a = self.find(a[0], a[1])
+        b = self.find(b[0], b[1])
+        if self.size[a[0]][a[1]] < self.size[b[0]][b[1]]:
+            self.father[a[0]][a[1]] = b
+            self.size[b[0]][b[1]] += self.size[a[0]][a[1]]
+        else:
+            self.father[b[0]][b[1]] = a
+            self.size[a[0]][a[1]] += self.size[b[0]][b[1]]
+    
+    def find(self, x, y):
+        if self.father[x][y] == (x, y):
+            return self.father[x][y]
+        self.father[x][y] = self.find(self.father[x][y][0], self.father[x][y][1])
+        return self.father[x][y]
         
 
 class Solution(object):
@@ -72,22 +37,29 @@ class Solution(object):
         :type grid: List[List[int]]
         :rtype: int
         """
-        n = len(grid)
-        myuf = uf(n*n)
-        time = 0
+        m = len(grid)
+        n = len(grid[0])
         
-        while not myuf.connected(0, n*n-1):
-            for i in range(n):
-                for j in range(n):
-                    if grid[i][j] > time:
-                        continue
-                    if i < n - 1 and grid[i+1][j] <= time:
-                        myuf.union(i*n+j, i*n+j+n)
-                    if j < n - 1 and grid[i][j+1] <= time:
-                        myuf.union(i*n+j, i*n+j+1)
-            time = time + 1
-            
-        return time - 1
+        myuf = uf(m, n)
+        pos = {}
+        
+        for i in range(m):
+            for j in range(n):
+                pos[grid[i][j]] = (i, j)
+                
+        moves = [[-1, 0], [0, -1], [1, 0], [0, 1]]
+        
+        for i in range(m*n):
+            x, y = pos[i]
+            for move in moves:
+                xm = x + move[0]
+                ym = y + move[1]
+                if xm >= 0 and xm < m and ym >= 0 and ym < n:
+                    if grid[xm][ym] <= i:
+                        myuf.union((x, y), (xm, ym))
+                    if myuf.find(0, 0) == myuf.find(m-1, n-1):
+                        return i
+
 
 if __name__ =='__main__':
     #s = [[0,2],[1,3]]
