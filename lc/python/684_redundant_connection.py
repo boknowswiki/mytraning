@@ -1,5 +1,40 @@
 #!/usr/bin/python -t
 
+#better union find solution
+
+class uf(object):
+    def __init__(self, n):
+        self.p = {i : i for i in range(n)}
+        
+    def find(self, x):
+        if x != self.p[x]:
+            self.p[x] = self.find(self.p[x])
+            
+        return self.p[x]
+    
+    def union(self, x, y):
+        xroot = self.find(x)
+        yroot = self.find(y)
+        
+        if xroot != yroot:
+            self.p[xroot] = yroot
+            return False
+        else:
+            return True
+
+class Solution(object):
+    def findRedundantConnection(self, edges):
+        """
+        :type edges: List[List[int]]
+        :rtype: List[int]
+        """
+        n = len(edges)
+        myuf = uf(1001)
+        
+        for e in edges:
+            if myuf.union(e[0], e[1]):
+                return e
+
 #combine union and connected to one function:
 
 class uf(object):
