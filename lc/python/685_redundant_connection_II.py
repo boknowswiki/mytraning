@@ -52,3 +52,11 @@ class Solution(object):
         self.visited = [False] *(n+1)
         (p, c) = self.detectcircle(criticalEdge[1])
         return (p, c) if p else criticalEdge
+
+if __name__ =='__main__':
+    s = [[1,2], [1,3], [2,3]]
+    s = [[1,2], [2,3], [3,4], [4,1], [1,5]]
+    s = [[2,1], [3,1], [4,2], [1,4]]
+    ss = Solution()
+    print('answer is')
+    print ss.findRedundantDirectedConnection(s)
