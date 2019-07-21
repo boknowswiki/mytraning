@@ -1,5 +1,24 @@
 #!/usr/bin/python -t
 
+class Solution:
+    """
+    @param A: A list of integers
+    @return: A boolean
+    """
+    def canJump(self, A):
+        # write your code here
+        n = len(A)
+        canjump = [False] * n
+        canjump[0] = True
+        
+        for i in range(1, n):
+            for j in range(0, i):
+                if canjump[j] and j + A[j] >= i:
+                    canjump[i] = True
+                    break
+                    
+        return canjump[n-1]
+
 #DP my own solution beat 100%
 #time O(n2), space O(n)
 
