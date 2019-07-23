@@ -1,5 +1,28 @@
 #!/usr/bin/python -t
 
+#greedy O(n)
+
+class Solution:
+    """
+    @param A: A list of integers
+    @return: A boolean
+    """
+    def canJump(self, A):
+        # write your code here
+        n = len(A)
+        if n == 0:
+            return False
+            
+        far = A[0]
+        
+        for i in range(n):
+            if i <= far and i+A[i] > far:
+                far = i+A[i]
+                
+        return far >= n-1
+
+#dp O(n2)
+
 class Solution:
     """
     @param A: A list of integers
