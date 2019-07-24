@@ -1,5 +1,62 @@
 #!/usr/bin/python -t
 
+#dp my own solution
+# time O(n^2)
+
+class Solution(object):
+    def lengthOfLIS(self, nums):
+        """
+        :type nums: List[int]
+        :rtype: int
+        """
+        n = len(nums)
+        
+        if n == 0:
+            return 0
+        
+        dp = [0] * n
+        max_val = 0
+        
+        for i in range(n):
+            local_max = 0
+            for j in range(i-1, -1, -1):
+                if nums[i] > nums[j]:
+                    local_max = max(local_max, dp[j])
+
+            dp[i] = local_max+1
+            #print dp
+            max_val = max(max_val, dp[i])
+                    
+        return max_val
+
+#other's solution
+#from http://hawstein.com/2013/03/26/dp-novice-to-advanced/
+
+class Solution(object):
+    def lengthOfLIS(self, nums):
+        """
+        :type nums: List[int]
+        :rtype: int
+        """
+        n = len(nums)
+        
+        if n == 0:
+            return 0
+        
+        dp = [0] * n
+        max_val = 1
+        
+        for i in range(n):
+            dp[i] = 1
+            for j in range(i):
+                if nums[j] < nums[i] and dp[j]+1 > dp[i]:
+                    dp[i] = dp[j]+1
+                    
+                if dp[i] > max_val:
+                    max_val = dp[i]
+                    
+        return max_val
+
 #binary search, time O(nlogn) space O(n)
 import bisect
 
