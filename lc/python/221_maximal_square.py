@@ -1,5 +1,29 @@
 #!/usr/bin/python -t
 
+#my dp solution
+
+class Solution(object):
+    def maximalSquare(self, matrix):
+        """
+        :type matrix: List[List[str]]
+        :rtype: int
+        """
+        m = len(matrix)
+        if m == 0:
+            return 0
+        n = len(matrix[0]) 
+        
+        dp = [[0]*n for i in range(m)]
+        ret = 0
+        
+        for i in range(m):
+            for j in range(n):
+                if matrix[i][j] == '1':
+                    dp[i][j] = min(dp[i-1][j], dp[i][j-1], dp[i-1][j-1]) + 1
+                    ret = max(ret, dp[i][j])
+                    
+        return ret*ret
+
 #We initialize another matrix (dp) with the same dimensions as the original one initialized with all 0’s.
 #dp(i,j) represents the side length of the maximum square whose bottom right corner is the cell with index (i,j) in the original matrix.
 #Starting from index (0,0), for every 1 found in the original matrix, we update the value of the current element as
