@@ -1,5 +1,26 @@
 #!/usr/bin/python -t
 
+#my dp solution
+#time O(n^2) space O(n)
+
+class Solution(object):
+    def wordBreak(self, s, wordDict):
+        """
+        :type s: str
+        :type wordDict: List[str]
+        :rtype: bool
+        """
+        n = len(s)
+        canbreak = [False]*(n+1)
+        canbreak[0] = True
+        
+        for i in range(n+1):
+            for j in range(i):
+                if canbreak[j] and s[j:i] in wordDict:
+                    canbreak[i] = True
+                    
+        return canbreak[n]
+
 class Solution(object):
     def wordBreak(self, s, wordDict):
         """
