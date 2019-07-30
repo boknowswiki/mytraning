@@ -72,6 +72,26 @@ class Solution(object):
             
         return ret
 
+class Solution(object):
+    def maxProduct(self, nums):
+        """
+        :type nums: List[int]
+        :rtype: int
+        """
+        n = len(nums)
+        min_dp = [1] * n
+        max_dp = [1] * n
+        
+        ret =min_dp[0] = max_dp[0] = nums[0]
+        
+        
+        for i in range(1, n):
+            min_dp[i] = min(nums[i], min(min_dp[i-1]*nums[i], max_dp[i-1]*nums[i]))
+            max_dp[i] = max(nums[i], max(max_dp[i-1]*nums[i], min_dp[i-1]*nums[i]))
+            ret = max(max_dp[i], ret)
+            
+        return ret
+
 if __name__ =='__main__':
     s = Solution()
     print('%s\n' % (s.maxProduct([-4,-3,-2])))
