@@ -79,6 +79,28 @@ class Solution(object):
         :rtype: int
         """
         n = len(nums)
+        if n == 0:
+            return 0
+        
+        ret = min_ret = max_ret = nums[0]
+        
+        for i in range(1, n):
+            if nums[i] < 0:
+                min_ret, max_ret = max_ret, min_ret
+                
+            min_ret = min(nums[i], min_ret*nums[i])
+            max_ret = max(nums[i], max_ret*nums[i])
+            ret = max(ret, max_ret)
+            
+        return ret
+
+class Solution(object):
+    def maxProduct(self, nums):
+        """
+        :type nums: List[int]
+        :rtype: int
+        """
+        n = len(nums)
         min_dp = [1] * n
         max_dp = [1] * n
         
