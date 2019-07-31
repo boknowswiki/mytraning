@@ -1,5 +1,41 @@
 #!/usr/bin/python -t
 
+#dp solution
+
+class Solution(object):
+    def maxProfit(self, prices):
+        """
+        :type prices: List[int]
+        :rtype: int
+        """
+        n = len(prices)
+        profit = 0
+        
+        for i in range(n-1):
+            diff = prices[i+1] - prices[i]
+            if diff > 0:
+                profit += diff
+                
+        return profit
+
+# one pass solution
+# time O(n) space O(1)
+
+class Solution(object):
+    def maxProfit(self, prices):
+        """
+        :type prices: List[int]
+        :rtype: int
+        """
+        n = len(prices)
+        max_val = 0
+        
+        for i in range(1, n):
+            if prices[i] > prices[i-1]:
+                max_val += prices[i] - prices[i-1]
+                
+        return max_val
+
 #time O(n) space O(1)
 
 
