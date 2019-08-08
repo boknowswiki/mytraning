@@ -43,6 +43,39 @@ class Solution(object):
         return l[n]
 '''
 
+# dp from top to bottom
+
+class Solution(object):
+    def minCostClimbingStairs(self, cost):
+        """
+        :type cost: List[int]
+        :rtype: int
+        """
+        n = len(cost)
+        
+        dp = [0] * (n+2)
+        
+        for i in range(n-1, -1, -1):
+            dp[i] = min(dp[i+1], dp[i+2]) + cost[i]
+            
+        return min(dp[0],dp[1])
+
+# dp from bottom to top
+class Solution(object):
+    def minCostClimbingStairs(self, cost):
+        """
+        :type cost: List[int]
+        :rtype: int
+        """
+        n = len(cost)
+        
+        dp = [0] * (n+1)
+        
+        for i in range(2, n+1):
+            dp[i] = min(dp[i-1]+cost[i-1], dp[i-2]+cost[i-2])
+            
+        return dp[n]
+
 if __name__ =='__main__':
     #s = [10, 15, 20]
     s = [1, 100, 1, 1, 1, 100, 1, 1, 100, 1]
