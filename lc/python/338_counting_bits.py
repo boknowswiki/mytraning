@@ -1,5 +1,28 @@
 #!/usr/bin/python -t
 
+# dp solution, time O(n) space O(n)
+
+#state: dp[i] at number i, the bits number
+#function: dp[i] = dp[i-offset] + 1
+#init: dp[0] = 0
+#ret: dp
+
+class Solution(object):
+    def countBits(self, num):
+        """
+        :type num: int
+        :rtype: List[int]
+        """
+        dp = [0] * (num+1)
+        offset = 1
+        
+        for i in range(1, num+1):
+            if offset * 2 == i:
+                offset = offset *2
+            dp[i] = dp[i-offset]+1
+                
+        return dp
+
 class Solution(object):
     def countBits(self, num):
         """
