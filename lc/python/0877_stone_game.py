@@ -1,5 +1,36 @@
 #!/usr/bin/python -t
 
+# state: dp[i][j] largest score Alex can achieve from piles[i...j]
+# function: dp[i][j] = max(piles[i]+dp[i+1][j], piles[j]+dp[i][j-1]) or 
+#                       min(-piles[i]+dp[i+1][j], -piles[j]+dp[i][j-1)
+# init: all 0
+# result: dp[0][n-1]
+
+# time O(n^2) space O(n^2)
+
+class Solution(object):
+    def stoneGame(self, piles):
+        """
+        :type piles: List[int]
+        :rtype: bool
+        """
+        n = len(piles)
+        #dp[i][j] largest score Alex can achieve from piles[i...j]
+        dp = [[0] * (n) for i in range(n)]
+        
+        for s in range(1, n):
+            for i in range(n-s):
+                j = i+s
+                parity = (j-i)%2
+                #Alex
+                if parity == 1:
+                    dp[i][j] = max(piles[i]+dp[i+1][j], piles[j]+dp[i][j-1])
+                #Lee
+                else:
+                    dp[i][j] = min(-piles[i]+dp[i+1][j], -piles[j]+dp[i][j-1])
+
+        return dp[0][n-1]>0
+
 # leetcode solution
 
 class Solution(object):
