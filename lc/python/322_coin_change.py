@@ -1,6 +1,11 @@
 #!/usr/bin/python -t
 
-# dp solution O(mn)
+# dp solution time O(mn), space O(n)
+
+# state: dp[i], with i the minimum coin we need
+# function: dp[i] = min(dp[i], dp[i-c]+1)                           
+# init: dp[0] = 0, for 0, we don't need any coin
+# result: dp[n] == sys.maxint return -1, else dp[n]
 
 class Solution(object):
     def coinChange(self, coins, amount):
