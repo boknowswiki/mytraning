@@ -1,5 +1,32 @@
 #!/usr/bin/python -t
 
+# dp solution, time O(n^2) space O(n)
+
+class Solution:
+    """
+    @param A: A list of integers
+    @return: A boolean
+    """
+    def canJump(self, A):
+        # write your code here
+        # state: dp[i], wether we can reach point i
+        # function: dp[i] = true if dp[j] == true and A[j] >= i-j, 0<=j<i
+        # init: dp[0] = true
+        # result dp[n-1]
+        
+        n = len(A)
+        dp = [False] * n
+        dp[0] = True
+        
+        for i in range(1, n):
+            for j in range(i):
+                if dp[j] and A[j] >= i-j:
+                    dp[i] = True
+                    break
+                
+        return dp[n-1]
+
+
 #greedy O(n)
 
 class Solution:
