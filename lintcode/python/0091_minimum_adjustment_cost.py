@@ -1,5 +1,7 @@
 #!/usr/bin/python -t
 
+# dp solution time O(n^3) space O(n^2)
+
 class Solution:
     """
     @param: A: An integer array
