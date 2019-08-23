@@ -11,7 +11,7 @@ class Solution:
     def backPack(self, m, A):
         # write your code here
         # state: dp[i][j], for i items, can it put into j size backpack
-        # function: dp[i][j] = true if j > A[i-1] and dp[i-1][j-A[i-1] is true
+        # function: dp[i][j] = true if j >= A[i-1] and dp[i-1][j-A[i-1] is true
         # init: dp[i][j] = false and dp[0][0] = true
         # result: ret = max(ret, dp[n][i])
         
