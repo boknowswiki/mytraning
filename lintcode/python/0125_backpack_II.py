@@ -1,5 +1,29 @@
 #!/usr/bin/python -t
 
+# time O(mn) space O(m)
+
+class Solution:
+    """
+    @param m: An integer m denotes the size of a backpack
+    @param A: Given n items with size A[i]
+    @param V: Given n items with value V[i]
+    @return: The maximum value
+    """
+    def backPackII(self, m, A, V):
+        # write your code here
+        # dp[i] the maximum value at size i
+        
+        n = len(A)
+        
+        dp = [0] * (m+1)
+        
+        for i in range(n):
+            for j in range(m, A[i]-1, -1):
+                dp[j] = max(dp[j], dp[j-A[i]]+V[i])
+                
+        return dp[m]
+
+
 # time O(mn) space O(mn) better solution belows
 
 class Solution:
