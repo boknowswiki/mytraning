@@ -1,5 +1,28 @@
 #!/usr/bin/python -t
 
+# time O(mn) space O(m)
+
+class Solution:
+    """
+    @param A: an integer array
+    @param V: an integer array
+    @param m: An integer
+    @return: an array
+    """
+    def backPackIII(self, A, V, m):
+        # write your code here
+        # dp[i], maximum value can put into size i
+        
+        n = len(A)
+        dp = [0] * (m+1)
+        
+        for i in range(n):
+            for j in range(A[i], m+1):
+                dp[j] = max(dp[j], dp[j-A[i]]+V[i])
+                
+        return dp[m]
+
+
 #比较简单的转移是直接枚举第i种物品取用多少个: f[i][j] = max{f[i - 1][j - x * A[i]] + x * V[i]}
 #
 #但是这样速度较慢, 可以优化成 f[i][j] 直接由 f[i][j - A[i]] 转移, 并且从小到大枚举 j, 这样做的含义就是在已经拿过第 i 个物品的之后还可以再拿它. 也就是说: 计算 f[i][j] 时, 初始设置为 f[i - 1][j], 然后 f[i][j] = max(f[i][j], f[i][j - A[i]] + V[i])
