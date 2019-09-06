@@ -17,6 +17,7 @@ class Solution:
         dp = [0] * (amount+1)
         dp[0] = 1
         
+        # if switch coin and amount loop it will failed because of 2+3, 3+2 will be counted, the correct way should only count 2+3 or 3+2 as the same.
         for coin in coins:
             for i in range(coin, amount+1):
                 dp[i] += dp[i-coin]
