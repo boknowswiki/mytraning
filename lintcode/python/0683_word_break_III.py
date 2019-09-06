@@ -93,3 +93,39 @@ class Solution:
                 
         return memo[index]
 
+# dp solution time O(n^2) space O(n^2)
+
+class Solution:
+    """
+    @param: : A string
+    @param: : A set of word
+    @return: the number of possible sentences.
+    """
+
+    def wordBreak3(self, s, dict):
+        # Write your code here
+        # dp[i][j] means ways from [i,j] can be found in the dictionary
+        # dp[i][j] = dp[i][k]*dp[k+1][j] i<=k<j
+        # dp[0][n-1]
+        
+        n = len(s)
+        s = s.lower()
+        new_dict = []
+        for w in dict:
+            new_dict.append(w.lower())
+        
+        dp = [[0] * n for i in range(n)]
+        
+        for i in range(n):
+            for j in range(i, n):
+                if s[i:j+1] in new_dict:
+                    dp[i][j] = 1
+                    
+                    
+        for i in range(n):
+            for j in range(i, n):
+                for k in range(i, j):
+                    dp[i][j] += dp[i][k]*dp[k+1][j]
+                    
+        return dp[0][n-1]
+
