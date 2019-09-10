@@ -1,5 +1,7 @@
 #!/usr/bin/python -t
 
+# dp solution, AC, time O(n) space O(1)
+
 class Solution:
     """
     @param n: an array consisting of n integers from 1 to n
@@ -11,17 +13,15 @@ class Solution:
         # dp[i] = (i-1)*(dp[i-1]+dp[i-2])
         # dp[1] = 0, dp[2] = 1
         # dp[n]
-        
-        if n <= 1:
-             return 0
-        
-        x, y = 0, 1
+
+        x, y = 1,0
         MOD = 10**9 + 7
         
-        for i in range(3, n+1):
+        for i in xrange(2, n+1):
             x, y = y, (i-1)*(x+y)%MOD
         #print x, y    
         return y
+
 
 # dp solution, MLE, time O(n) space O(n)
 
