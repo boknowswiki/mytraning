@@ -29,11 +29,19 @@ class Solution:
                         cnt[i] = cnt[j]
                         
             
-            if max_len == dp[i]:
-                ret += cnt[i]
             if max_len < dp[i]:
                 max_len = dp[i]
-                ret = cnt[i]
+
+        print dp
+        print cnt
+        for i in range(n):
+            if dp[i] == max_len:
+                ret += cnt[i]
                     
         return ret
 
+if __name__ == '__main__':
+    s = [1,3,5,4,7]
+    s = [2,2,2,2,2]
+    ss = Solution()
+    print "answer is %d" % ss.findNumberOfLIS(s)
