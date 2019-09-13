@@ -10,6 +10,11 @@ class Solution:
     """
     def largestSumOfAverages(self, A, K):
         # Write your code here
+
+        #分k组 要求元素个数最少为k
+        #对于已知所有的k - 1组的数据的情况下
+        #dp[k][n] = Math.max(dp[k - 1][j] + average(j + 1, n))
+
         #dp[i][j]表示前i个数分成j段的最大和
         #为了方便我们计算，我们可以加上一个sum[i], sum[i]表示其前缀和
         # state: dp[i][j] means for i numbers to splite to j groups, the max sum.
