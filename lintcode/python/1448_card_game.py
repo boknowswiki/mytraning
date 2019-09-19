@@ -34,3 +34,39 @@ class Solution:
             count = (count + dp[n][totalProfit+1][j]) % MOD 
         return count
 
+# dp solution, dfs with memo
+
+class Solution:
+    """
+    @param n: The number of cards
+    @param totalProfit: The totalProfit
+    @param totalCost: The totalCost
+    @param a: The profit of cards
+    @param b: The cost of cards
+    @return: Return the number of legal plan
+    """
+    def numOfPlan(self, n, totalProfit, totalCost, a, b):
+        # Write your code here
+        return self.dfs(0, n, totalProfit, totalCost, a, b, {})
+        
+    def dfs(self, index, n, profit, cost, a, b, memo):
+        MOD = 1000000007
+        if profit < 0:
+            profit = -1
+        if cost < 0:
+            return 0
+            
+        if index == n:
+            if 0>profit and cost>0:
+                return 1
+            return 0
+            
+        if (index, profit, cost) in memo:
+            return memo[(index, profit, cost)]
+            
+        select = self.dfs(index+1, n, profit-a[index], cost-b[index], a, b, memo)
+        unselect = self.dfs(index+1, n, profit, cost, a, b, memo)
+        val = (select+unselect)%MOD
+        memo[(index, profit, cost)] = val
+        
+        return val
