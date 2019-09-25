@@ -197,6 +197,33 @@ class Solution:
 
         return self.ret
 
+#TLE
+
+"""
+Definition of Interval.
+class Interval(object):
+    def __init__(self, start, end):
+        self.start = start
+        self.end = end
+"""
+
+class Solution:
+    """
+    @param A: An integer array
+    @param queries: An query list
+    @return: The result list
+    """
+    def intervalMinNumber(self, A, queries):
+        # write your code here
+        ret = []
+        for q in queries:
+            l, r = q.start, q.end
+            nums = A[l:r+1]
+            nums.sort()
+            ret.append(nums[0])
+            
+        return ret
+
 if __name__ == '__main__':
     #s = [1,2,7,8,5]
     #q = [(1,2),(0,4),(2,4)]
