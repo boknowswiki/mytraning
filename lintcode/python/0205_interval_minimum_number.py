@@ -1,5 +1,62 @@
 #!/usr/bin/python -t
 
+# segment tree and binary search solution
+
+"""
+Definition of Interval.
+class Interval(object):
+    def __init__(self, start, end):
+        self.start = start
+        self.end = end
+"""
+
+class sgtree(object):
+    def __init__(self, start, end, min_val=0):
+        self.start = start
+        self.end = end
+        self.min_val = min_val
+        self.left, self.right = None, None
+        
+    @classmethod
+    def build(self, start, end, s):
+        if start > end:
+            return None
+        if start == end:
+            return sgtree(start, end, s[start])
+        
+        node = sgtree(start, end, s[start])
+        mid = (start+end)/2
+        node.left = self.build(start, mid, s)
+        node.right = self.build(mid+1, end, s)
+        node.min_val = min(node.left.min_val, node.right.min_val)
+        
+        return node
+        
+    @classmethod    
+    def query(self, root, start, end):
+        if root.start > end or root.end < start:
+            return 0x7fffff
+            
+        if start <= root.start and root.end <= end:
+            return root.min_val
+            
+        return min(self.query(root.left, start, end), self.query(root.right, start, end))
+
+class Solution:
+    """
+    @param A: An integer array
+    @param queries: An query list
+    @return: The result list
+    """
+    def intervalMinNumber(self, A, queries):
+        # write your code here
+        root = sgtree.build(0, len(A)-1, A)
+        ret = []
+        for query in queries:
+            ret.append(sgtree.query(root, query.start, query.end))
+
+        return ret
+
 #time O(logn) space O(2n)
 #segment tree solution
 # reference
