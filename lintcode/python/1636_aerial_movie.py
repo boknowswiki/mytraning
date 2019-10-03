@@ -1,5 +1,50 @@
 #!/usr/bin/python -t
 
+# binary search solution
+
+import bisect
+
+class Solution:
+    """
+    @param t: the length of the flight
+    @param dur: the length of movies 
+    @return: output the lengths of two movies
+    """
+    def aerial_Movie(self, t, dur):
+        # Write your code here
+        dur.sort()
+        targetSum = t - 30
+        
+        minDelta = sys.maxsize
+        bestPair = []
+        
+        longerDuration = targetSum - dur[0]
+        right = bisect.bisect_right(dur, longerDuration)
+        print(right)
+        if not right:
+            return []
+        left, right = 0, right - 1 
+            
+        while left < right:
+            
+            shorterDuration = targetSum - dur[right]
+            left = bisect.bisect_left(dur, shorterDuration)
+            if left > right:
+                left = right
+            if dur[left] != shorterDuration or left == right:
+                left -= 1 
+            
+            delta = targetSum - dur[left] - dur[right]
+            if delta < minDelta:
+                if delta == 0:
+                    return [dur[left], dur[right]]
+                minDelta = delta 
+                bestPair = [dur[left], dur[right]]
+            
+            right -= 1 
+                
+        return bestPair
+
 # binary search
 
 class Solution:
