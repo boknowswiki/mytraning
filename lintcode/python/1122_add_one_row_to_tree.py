@@ -1,5 +1,46 @@
 #!/usr/bin/python -t
 
+# bfs solution
+
+"""
+Definition of TreeNode:
+class TreeNode:
+    def __init__(self, val):
+        self.val = val
+        self.left, self.right = None, None
+"""
+
+class Solution:
+    """
+    @param root: the root of binary tree
+    @param v: a integer
+    @param d: a integer
+    @return: return a TreeNode
+    """
+    def addOneRow(self, root, v, d):
+        # write your code here
+        st=[(root,1)]
+        self.d=d
+        if self.d==1:
+            newRoot=TreeNode(v)
+            newRoot.left=root
+            return newRoot
+        while st:
+            node, lvl=st.pop()
+            if lvl==self.d-1:
+                temp1=node.left
+                temp2=node.right
+                node.left=TreeNode(v)
+                node.right=TreeNode(v)
+                node.left.left=temp1
+                node.right.right=temp2
+            if node.left:
+                st.append((node.left, lvl+1))
+            if node.right:
+                st.append((node.right, lvl+1))
+        return root
+
+
 # dfs, divid and conquer with traversal
 
 """
