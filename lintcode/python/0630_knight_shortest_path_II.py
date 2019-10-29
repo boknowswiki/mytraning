@@ -1,5 +1,55 @@
 #!/usr/bin/python -t
 
+# BFS 
+
+
+from collections import deque
+
+class Solution:
+    """
+    @param grid: a chessboard included 0 and 1
+    @return: the shortest path
+    """
+    def shortestPath2(self, grid):
+        # write your code here
+        if not grid or not grid[0]:
+            return -1
+            
+        m = len(grid)
+        n = len(grid[0])
+        
+        if grid[0][0] or grid[m-1][n-1]:
+            return -1
+            
+        v = set()
+        q = deque()
+        q.append((0, 0))
+        v.add((0, 0))
+        
+        dx = [1, -1, 2, -2]
+        dy = [2, 2, 1, 1]
+        ret = 0
+        while len(q) > 0:
+            l = len(q)
+            ret += 1
+            
+            for i in range(l):
+                cx, cy = q.popleft()
+                for j in range(4):
+                    nx = cx+dx[j]
+                    ny = cy+dy[j]
+                    
+                    if nx == m-1 and ny == n-1:
+                        return ret
+                        
+                    if 0<=nx<m and 0<=ny<n and grid[nx][ny] == 0 and (nx, ny) not in v:
+                        q.append((nx, ny))
+                        v.add((nx, ny))
+            
+        return -1
+        
+          
+
 # dp solution, time O(mn) space(mn)
 
 class Solution:
