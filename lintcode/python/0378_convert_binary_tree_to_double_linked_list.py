@@ -1,6 +1,7 @@
 #!/usr/bin/python -t
 
 # linked list
+# non-recursive way
 
 """
 Definition of Doubly-ListNode
@@ -44,4 +45,50 @@ class Solution:
         
         return dummy.next
         
+
+# recursive way
         
+
+"""
+Definition of Doubly-ListNode
+class DoublyListNode(object):
+    def __init__(self, val, next=None):
+        self.val = val
+        self.next = self.prev = nextDefinition of TreeNode:
+class TreeNode:
+    def __init__(self, val):
+        self.val = val
+        self.left, self.right = None, None
+"""
+
+class Solution:
+    """
+    @param root: The root of tree
+    @return: the head of doubly list node
+    """
+    def bstToDoublyList(self, root):
+        # write your code here
+        dummy = DoublyListNode(0)
+        
+        self.cur = dummy
+        self.helper(root)
+        
+        return dummy.next 
+        
+    
+    def helper(self, node):
+        if node is None:
+            return 
+        
+        self.helper(node.left)
+        
+        newListNode = DoublyListNode(node.val)
+        self.cur.next = newListNode 
+        newListNode.prev = self.cur
+        self.cur = newListNode
+
+        self.helper(node.right)
+            
+        return
+    
+    
