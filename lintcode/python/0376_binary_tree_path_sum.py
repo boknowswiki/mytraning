@@ -129,3 +129,52 @@ class Solution:
         
         return
 
+
+
+"""
+Definition of TreeNode:
+class TreeNode:
+    def __init__(self, val):
+        self.val = val
+        self.left, self.right = None, None
+"""
+
+
+class Solution:
+    """
+    @param: root: the root of binary tree
+    @param: target: An integer
+    @return: all valid paths
+    """
+    def binaryTreePathSum(self, root, target):
+        # write your code here
+        if not root:
+            return []
+            
+        ret = []
+        path = [root.val]
+        self.dfs(root, target-root.val, path, ret)
+        
+        return ret
+        
+    def dfs(self, root, target, path, ret):
+        if root == None:
+            return
+        
+        if not root.left and not root.right:
+            if target == 0:
+                ret.append(list(path))
+                return
+            
+        if root.left:
+            path.append(root.left.val)
+            self.dfs(root.left, target-root.left.val, path, ret)
+            path.pop()
+        if root.right:
+            path.append(root.right.val)
+            self.dfs(root.right, target-root.right.val, path, ret)
+            path.pop()
+        
+        return
+    
+    
