@@ -90,3 +90,52 @@ class Solution:
         #print len(v)            
         return len(v) == n
         
+
+# dfs
+
+class Solution:
+    """
+    @param n: An integer
+    @param edges: a list of undirected edges
+    @return: true if it's a valid tree, or false
+    """
+    def validTree(self, n, edges):
+        # write your code here
+        if n == 0:
+            return False
+            
+        if len(edges) != n-1:
+            return False
+            
+        self.graph = self.buildGraph(n, edges)
+        v = set()
+        
+        self.dfs(0, edges, v)
+        
+        return len(v) == n
+        
+    def buildGraph(self, n, edges):
+        ret = {}
+        
+        for i in range(n):
+            ret[i] = []
+            
+        for e in edges:
+            ret[e[0]].append(e[1])
+            ret[e[1]].append(e[0])
+            
+        return ret
+            
+    def dfs(self, start, edges, v):
+        if start in v:
+            return
+        
+        v.add(start)
+        
+        for e in self.graph[start]:
+            if e in v:
+                continue
+            self.dfs(e, edges, v)
+            
+        return
+    
