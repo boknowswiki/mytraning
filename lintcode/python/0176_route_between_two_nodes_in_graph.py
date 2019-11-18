@@ -53,6 +53,15 @@ class DirectedGraphNode:
 
 # DFS
 
+"""
+Definition for a Directed graph node
+class DirectedGraphNode:
+    def __init__(self, x):
+        self.label = x
+        self.neighbors = []
+"""
+
+
 class Solution:
     """
     @param: graph: A list of Directed graph node
@@ -62,16 +71,22 @@ class Solution:
     """
     def hasRoute(self, graph, s, t):
         # write your code here
-        visited = set()
-        return self.dfs(graph, s, t, s, visited)
+        v = set()
         
-    def dfs(self, graph, s, t, cur, visited):
-        if cur in visited:
+        return self.dfs(graph, s, t, v)
+        
+    def dfs(self, graph, s, t, v):
+        if s in v:
             return False
-        if cur == t:
+            
+        if s == t:
             return True
-        visited.add(cur)
-        for nei in graph[cur.label].neighbors:
-            if self.dfs(graph, s, t, nei, visited):
+            
+        v.add(s)    
+        for nei in graph[s.label].neighbors:
+            if self.dfs(graph, nei, t, v):
                 return True
+            
         return False
+        
+
