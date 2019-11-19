@@ -55,4 +55,46 @@ class Solution:
         
         return
     
+
+# dfs
+
         
+"""
+Definition for a undirected graph node
+class UndirectedGraphNode:
+    def __init__(self, x):
+        self.label = x
+        self.neighbors = []
+"""
+
+
+class Solution:
+    """
+    @param {UndirectedGraphNode[]} nodes a array of undirected graph node
+    @return {int[][]} a connected set of a undirected graph
+    """
+    def connectedSet(self, nodes):
+        # write your code here
+        self.v = set()
+        
+        ret = []
+        
+        for node in nodes:
+            if node not in self.v:
+                level = []
+                self.dfs(node, level)
+                level.sort()
+                ret.append(list(level))
+                
+        return ret
+        
+    def dfs(self, node, level):
+        self.v.add(node)
+        level.append(node.label)
+        for nei in node.neighbors:
+            if nei not in self.v:
+                self.dfs(nei, level)
+                
+        return
+    
+    
