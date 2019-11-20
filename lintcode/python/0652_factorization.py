@@ -1,5 +1,25 @@
 #!/usr/bin/python -t
 
+from math import sqrt
+class Solution:
+    """
+    @param n: An integer
+    @return: a list of combination
+    """
+    def getFactors(self, num):
+        res = []
+        def dfs(start, n, tmp):
+
+            for i in range(start, int(sqrt(n))+1):
+                if n % i == 0:
+                    dfs(i, n/i, tmp + [i])
+
+            res.append(tmp + [n])
+
+        dfs(2, num, [])
+        res.pop()
+        return res
+
 # dfs
 
 import math
