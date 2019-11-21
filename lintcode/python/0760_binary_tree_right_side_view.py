@@ -46,3 +46,41 @@ class Solution:
         return ret
         
 
+# dfs
+
+"""
+Definition of TreeNode:
+class TreeNode:
+    def __init__(self, val):
+        self.val = val
+        self.left, self.right = None, None
+"""
+
+class Solution:
+    """
+    @param root: the root of the given tree
+    @return: the values of the nodes you can see ordered from top to bottom
+    """
+    def rightSideView(self, root):
+        # write your code here
+        if not root:
+            return []
+            
+        self.ret = []
+        
+        self.dfs(root, 0)
+        
+        return self.ret
+        
+    def dfs(self, root, depth):
+        if not root:
+            return
+        if depth == len(self.ret):
+            self.ret.append(root.val)
+
+        self.dfs(root.right, depth+1)
+        self.dfs(root.left, depth+1)
+            
+        return
+    
+    
