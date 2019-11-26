@@ -48,3 +48,44 @@ class Solution:
         return ret
         
         
+
+# dfs
+
+"""
+Definition of TreeNode:
+class TreeNode:
+    def __init__(self, val):
+        self.val = val
+        self.left, self.right = None, None
+"""
+
+class Solution:
+    """
+    @param root: the root
+    @return: the maximum width of the given tree
+    """
+    def widthOfBinaryTree(self, root):
+        # Write your code here
+        if not root:
+            return 0
+        
+        self.ret = 1
+        self.level = []
+        self.dfs(root, 0, 1)
+        
+        return self.ret
+        
+    def dfs(self, node, depth, index):
+        if not node:
+            return
+        
+        if len(self.level) == depth:
+            self.level.append(index)
+            
+        self.ret = max(self.ret, index - self.level[depth]+1)
+        self.dfs(node.left, depth+1, index*2)
+        self.dfs(node.right, depth+1, index*2+1)
+        
+        return
+    
+    
