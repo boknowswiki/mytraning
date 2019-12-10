@@ -43,3 +43,49 @@ class Solution:
                     
         return dp[n] - 1
 
+
+# my solution
+
+
+class Solution:
+    """
+    @param s: A string
+    @return: An integer
+    """
+    def minCut(self, s):
+        # write your code here
+        # dp[i] is the min cuts for the first ith items
+        # dp[i] = min(dp[j]+1, dp[i]) s[j:i] is palindrome
+        # dp[0] = dp[1] = 0
+        # return dp[n]
+        
+        n = len(s)
+        if self.isPalindrome(s):
+            return 0
+            
+        if n > 1000:
+            return 1
+        
+        dp = [sys.maxint] * (n+1)
+        
+        dp[0] = 0
+        
+        for i in range(1, n+1):
+            for j in range(i):
+                if dp[j] != sys.maxint and self.isPalindrome(s[j:i]):
+                    dp[i] = min(dp[j]+1, dp[i])
+                    
+        return dp[n]-1
+        
+    def isPalindrome(self, s):
+        l = 0
+        r = len(s)-1
+        
+        while l < r:
+            if s[l] != s[r]:
+                return False
+            l += 1
+            r -= 1
+            
+        return True
+        
