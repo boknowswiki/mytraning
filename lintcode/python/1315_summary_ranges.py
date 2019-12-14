@@ -1,5 +1,45 @@
 #!/usr/bin/python -t
 
+# array no duplicated number case
+
+
+class Solution:
+    """
+    @param nums:  a sorted integer array without duplicates
+    @return: the summary of its ranges
+    """
+    def summaryRanges(self, nums):
+        # Write your code here
+        n = len(nums)
+        ret = []
+        
+        if n == 0:
+            return ret
+            
+        if n == 1:
+            ret.append(str(nums[0]))
+            return ret
+        
+        i = 0
+        
+        while i < n:
+            start = nums[i]
+            
+            while i +1 < n and nums[i+1]-nums[i] == 1:
+                i += 1
+                
+            if nums[i] != start:
+                ret.append(str(start) + "->" + str(nums[i]))
+            
+            else:
+                ret.append(str(start))
+                
+            i += 1
+                
+        return ret
+        
+        
+
 # array
 # cover duplicated numbers
 
@@ -64,6 +104,51 @@ class Solution:
                 else:
                     tmp = start + "->" + str(un_dup_l[i])
                     ret.append(tmp)
+        return ret
+        
+        
+
+# cover duplicated case
+
+class Solution:
+    """
+    @param nums:  a sorted integer array without duplicates
+    @return: the summary of its ranges
+    """
+    def summaryRanges(self, nums):
+        # Write your code here
+        n = len(nums)
+        ret = []
+        
+        if n == 0:
+            return ret
+            
+        if n == 1:
+            ret.append(str(nums[0]))
+            return ret
+        
+        i = 0
+        
+        while i < n:
+            start = nums[i]
+            
+            while i+1 < n and nums[i+1] == nums[i]:
+                i += 1
+                
+            while i +1 < n and nums[i+1]-nums[i] == 1:
+                i += 1
+                
+            while i+1 < n and nums[i+1] == nums[i]:
+                i += 1
+                
+            if nums[i] != start:
+                ret.append(str(start) + "->" + str(nums[i]))
+            
+            else:
+                ret.append(str(start))
+                
+            i += 1
+                
         return ret
         
         
