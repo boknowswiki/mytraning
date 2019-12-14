@@ -2,6 +2,37 @@
 
 # array no duplicated number case
 
+class Solution:
+    """
+    @param nums:  a sorted integer array without duplicates
+    @return: the summary of its ranges
+    """
+    def summaryRanges(self, nums):
+        # Write your code here
+        n = len(nums)
+        ret = []
+        if n == 0:
+            return ret
+        index = 0
+        i = 0
+        
+        while i < n:
+            start = i
+            end = i
+            
+            while end < n -1 and (nums[end]+1 == nums[end+1]):
+                end = end + 1
+                
+            if end > start:
+                s = str(nums[start]) + "->" + str(nums[end])
+                #ret.append(s)
+            else:
+                s = str(nums[start])
+            ret.append(s)
+            i = end + 1
+                
+        return ret
+
 
 class Solution:
     """
