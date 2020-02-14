@@ -63,4 +63,38 @@ class Solution:
             
         return dummy.next
         
+
+# heap solution
         
+"""
+Definition of ListNode
+class ListNode(object):
+
+    def __init__(self, val, next=None):
+        self.val = val
+        self.next = next
+"""
+class Solution:
+    """
+    @param lists: a list of ListNode
+    @return: The head of one sorted list.
+    """
+    def mergeKLists(self, lists):
+        # write your code here
+        from heapq import heappush, heappop
+        heap = []
+        for node in lists:
+            if node:
+                heappush(heap, (node.val, node))
+        dummy = ListNode(0)
+        head = dummy
+        while len(heap) > 0:
+            val, node = heappop(heap)
+            head.next = node
+            head = head.next
+            if node.next != None:
+                heappush(heap, (node.next.val, node.next))
+        head.next = None
+        return dummy.next  
+
+
