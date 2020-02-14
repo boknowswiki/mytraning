@@ -1,5 +1,42 @@
 #!/usr/bin/python -t
 
+# heap
+# heap the smallest at the beginning.
+# https://docs.python.org/2/library/heapq.html
+
+
+import heapq
+
+class Solution:
+    """
+    @param words: an array of string
+    @param k: An integer
+    @return: an array of string
+    """
+    def topKFrequentWords(self, words, k):
+        # write your code here
+        n = len(words)
+        d = {}
+        
+        for w in words:
+            d[w] = d.get(w, 0) + 1
+            
+        l = []
+        
+        for key, v in d.items():
+            heapq.heappush(l, (-v, key))
+        
+        ret = []
+        
+        while k > 0:
+            cnt, word = heapq.heappop(l)
+            ret.append(word)
+            k -= 1
+            
+        return ret
+            
+            
+
 # hash table
 #欲记录单词出现的次数, 首选是哈希表. 大多高级语言内置相关的数据结构, 编码简单.
 #
