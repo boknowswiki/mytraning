@@ -30,7 +30,7 @@ class Solution:
         
 
 # dfs
-# time O(n!*n)
+# time O(n!)
 
 class Solution:
     """
