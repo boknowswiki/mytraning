@@ -1,6 +1,6 @@
 #!/usr/bin/python -t
 
-# BFS
+# BFS and heapq
 
 
 import heapq
