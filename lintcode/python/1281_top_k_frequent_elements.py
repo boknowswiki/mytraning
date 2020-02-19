@@ -1,5 +1,37 @@
 #!/usr/bin/python -t
 
+# heap
+
+
+import heapq
+
+class Solution:
+    """
+    @param nums: the given array
+    @param k: the given k
+    @return: the k most frequent elements
+    """
+    def topKFrequent(self, nums, k):
+        # Write your code here
+        n = len(nums)
+        d = {}
+        ret = []
+        
+        for num in nums:
+            d[num] = d.get(num, 0) + 1
+            
+        heap = []
+        
+        for key, v in d.items():
+            heapq.heappush(heap, (-v, key))
+            
+        for _ in range(k):
+            v, key = heapq.heappop(heap)
+            ret.append(key)
+            
+        return ret
+        
+
 # hash table
 
 
