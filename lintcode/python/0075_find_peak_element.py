@@ -1,6 +1,33 @@
 #!/usr/bin/python -t
 
 # binary search solution
+# better and cleaner
+
+class Solution:
+    """
+    @param A: An integers array.
+    @return: return any of peek positions.
+    """
+    def findPeak(self, A):
+        # write your code here
+        n = len(A)
+        l = 0
+        r = n-1
+        
+        while l+1 < r:
+            mid = (r+l)/2
+            if A[mid] > A[mid-1] and A[mid] > A[mid+1]:
+                return mid
+            elif A[mid] > A[mid+1]:
+                r = mid
+            else:
+                l = mid
+                
+        if A[l] > A[r]:
+            return l
+        else:
+            return r
+
 
 class Solution:
     """
