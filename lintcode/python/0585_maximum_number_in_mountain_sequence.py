@@ -2,6 +2,32 @@
 
 # binary search same as 0075
 
+# better and cleaner
+
+class Solution:
+    """
+    @param nums: a mountain sequence which increase firstly and then decrease
+    @return: then mountain top
+    """
+    def mountainSequence(self, nums):
+        # write your code here
+        n = len(nums)
+        if n == 0:
+            return 0
+            
+        l = 0
+        r = n-1
+        
+        while l+1 < r:
+            mid = (l+r)/2
+            if nums[mid] < nums[mid+1]:
+                l = mid
+            else:
+                r = mid
+                
+        return max(nums[l], nums[r])
+        
+
 class Solution:
     """
     @param nums: a mountain sequence which increase firstly and then decrease
