@@ -2,6 +2,53 @@
 
 # binary tree postorder, iteration way
 
+
+"""
+Definition of TreeNode:
+class TreeNode:
+    def __init__(self, val):
+        self.val = val
+        self.left, self.right = None, None
+"""
+
+class Solution:
+    """
+    @param root: A Tree
+    @return: Postorder in ArrayList which contains node values.
+    """
+    def postorderTraversal(self, root):
+        # write your code here
+        if not root:
+            return []
+            
+        ret = []
+        stack = []
+        cur = root
+        
+        while cur:
+            stack.append(cur)
+            if cur.left:
+                cur = cur.left
+            else:
+                cur = cur.right
+                
+        while len(stack) != 0:
+            cur = stack.pop()
+            ret.append(cur.val)
+            
+            if stack and stack[-1].left == cur:
+                cur = stack[-1].right
+                while cur:
+                    stack.append(cur)
+                    if cur.left:
+                        cur = cur.left
+                    else:
+                        cur = cur.right
+                        
+        return ret
+        
+
+
 """
 Definition of TreeNode:
 class TreeNode:
