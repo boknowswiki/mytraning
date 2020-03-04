@@ -1,5 +1,66 @@
 #!/usr/bin/python -t
 
+# Method 1 (By Storing root to n1 and root to n2 paths)
+
+#Following is simple O(n) algorithm to find LCA of n1 and n2.
+#1) Find path from root to n1 and store it in a vector or array.
+#2) Find path from root to n2 and store it in another vector or array.
+#3) Traverse both paths till the values in arrays are same. Return the common element just before the mismatch.
+
+"""
+Definition of TreeNode:
+class TreeNode:
+    def __init__(self, val):
+        self.val = val
+        self.left, self.right = None, None
+"""
+
+
+class Solution:
+    """
+    @param: root: The root of the binary search tree.
+    @param: A: A TreeNode in a Binary.
+    @param: B: A TreeNode in a Binary.
+    @return: Return the least common ancestor(LCA) of the two nodes.
+    """
+    def lowestCommonAncestor(self, root, A, B):
+        # write your code here
+        if not root:
+            return root
+            
+        path_a = []
+        path_b = []
+            
+        if not self.findNode(root, A, path_a) or not self.findNode(root, B, path_b):
+            return None
+            
+        i = 0
+        
+        while i < len(path_a) and i < len(path_b):
+            if path_a[i] != path_b[i]:
+                break
+            i += 1
+            
+        return path_a[i-1]
+        
+    def findNode(self, root, node, path):
+        if root == None:
+            return False
+                
+        path.append(root)
+            
+        if root == node:
+            return True
+                
+        if (root.left and self.findNode(root.left, node, path)) or (root.right and self.findNode(root.right, node, path)):
+            return True
+            
+        path.pop()
+        
+        return False
+            
+        
+
 # dfs, divid and conquer solution
 
 """
