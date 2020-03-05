@@ -94,3 +94,50 @@ class Solution:
         if root.right:
             self.traverse(root.right, target - root.val, temp)
             temp.pop()
+
+
+"""
+Definition of TreeNode:
+class TreeNode:
+    def __init__(self, val):
+        self.val = val
+        self.left, self.right = None, None
+"""
+
+
+class Solution:
+    def __init__(self):
+        self.ret = []
+    """
+    @param: root: the root of binary tree
+    @param: target: An integer
+    @return: all valid paths
+    """
+    def binaryTreePathSum2(self, root, target):
+        # write your code here
+        if not root:
+            return []
+        
+        self.dfs(root, target, [])
+        self.binaryTreePathSum2(root.left, target)
+        self.binaryTreePathSum2(root.right, target)
+        
+        return self.ret
+        
+    def dfs(self, node, target, path):
+            if node == None:
+                return
+            
+            path.append(node.val)
+            if target-node.val == 0:
+                self.ret.append(list(path))
+
+            if node.left:
+                self.dfs(node.left, target-node.val, path)
+                path.pop()
+            if node.right:
+                self.dfs(node.right, target-node.val, path)
+                path.pop()
+                
+            return
+        
