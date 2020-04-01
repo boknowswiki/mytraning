@@ -11,6 +11,38 @@ class Solution:
     def twoSum6(self, nums, target):
         # write your code here
         n = len(nums)
+        if n == 0:
+            return 0
+            
+        nums.sort()
+        
+        l = 0
+        r = n-1
+        cnt = 0
+        
+        while l < r:
+            while l < r and nums[l] + nums[r] < target:
+                l += 1
+                
+            if l != r and nums[l] + nums[r] == target:
+                cnt += 1
+                while l < r and nums[r] == nums[r-1]:
+                    r -= 1
+                    
+            r -= 1
+            
+        return cnt
+        
+
+class Solution:
+    """
+    @param nums: an array of integer
+    @param target: An integer
+    @return: An integer
+    """
+    def twoSum6(self, nums, target):
+        # write your code here
+        n = len(nums)
         nums.sort()
         
         l = 0
