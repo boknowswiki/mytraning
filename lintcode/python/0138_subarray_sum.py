@@ -55,6 +55,37 @@ class Solution:
             record[sum_val] = i
             
         return ret
+
+
+# myself solution
+
+class Solution:
+    """
+    @param nums: A list of integers
+    @return: A list of integers includes the index of the first number and the index of the last number
+    """
+    def subarraySum(self, nums):
+        # write your code here
+        n = len(nums)
+        if n == 0:
+            return [-1, -1]
+            
+        total = 0
+        d = {0: -1}
+        
+        for i in range(n):
+            total += nums[i]
+            #print total, nums[i]
+            if total in d:
+                #print "got it"
+                #print d, total, i
+                ret = [d[total]+1, i]
+                return ret
+                
+            d[total] = i
+            #print d
+                
+        return [-1, -1]
         
                 
         
