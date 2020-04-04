@@ -1,0 +1,24 @@
+syntax = "proto3";
+package main;
+
+import "google/protobuf/timestamp.proto";
+
+message Obj {
+    // name of the obj
+    string name = 1;
+    // string of json format
+    string val = 2;
+    // obj type
+    /*
+    enum ObjType {
+        INT = 0;
+        STR = 1;
+        LIST = 2;
+        DICT = 3;
+    }
+
+    ObjType type = 3;
+    */
+
+    google.protobuf.Timestamp last_updated = 5;
+}
