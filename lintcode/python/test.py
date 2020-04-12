@@ -1,45 +1,41 @@
 #!/usr/bin/python -t
 
 class sort():
-    def __init__(self, l):
-        self.l = l
-    def mergesort(self):
-        ll = self.helper(self.l, 0, len(self.l)-1)
-        return ll
-    def helper(self, l, start, end):
-        if start == end:
-            return [l[start]]
+    def mergesort(self, l):
+        if len(l) > 1:
+            mid = len(l)/2
 
-        mid = (start+end)/2
+            left = l[:mid]
+            right = l[mid:]
 
-        l1 = self.helper(l, start, mid)
-        l2 = self.helper(l, mid+1, end)
+            self.mergesort(left)
+            self.mergesort(right)
 
-        return self.merge(l1, l2)
+            i = j = k = 0
+            while i < len(left) and j < len(right):
+                if left[i] < right[j]:
+                    l[k] = left[i]
+                    i += 1 
+                else:
+                    l[k] = right[j]
+                    j += 1
+                k += 1
 
-    def merge(self, l1, l2):
-        n1 = len(l1)
-        n2 = len(l2)
-        i1 = i2 = 0
-        ret = []
-        while i1 < n1 and i2 < n2:
-            if l1[i1] < l2[i2]:
-                ret.append(l1[i1])
-                i1 += 1 
-            else:
-                ret.append(l2[i2])
-                i2 += 1
+            if i < len(left):
+                l[k] = left[i]
+                k += 1
+                i += 1
+            if j < len(right):
+                l[k] = right[j]
+                k += 1
+                j += 1
 
-        if i1 < n1:
-            ret.extend(l1[i1:])
-        if i2 < n2:
-            ret.extend(l2[i2:])
+        return
 
-        return ret
 
 if __name__ == "__main__":
     l = [3, 2, 2, 1, 4]
-    s = sort(l)
-    ss = s.mergesort()
     print l
-    print ss
+    s = sort()
+    s.mergesort(l)
+    print l
