@@ -1,5 +1,54 @@
 #!/usr/bin/python -t
 
+# quick select
+# my version
+
+class Solution:
+    """
+    @param k: An integer
+    @param nums: An integer array
+    @return: kth smallest element
+    """
+    def kthSmallest(self, k, nums):
+        # write your code here
+        n = len(nums)
+        if k > n:
+            return 0
+            
+        ret = self.quickselect(nums, 0, n-1, k-1)
+        
+        return ret
+        
+    def quickselect(self, nums, start, end, k):
+        if start == end:
+            return nums[start]
+            
+        part = self.partition(nums, start, end)
+        
+        if part == k:
+            return nums[part]
+        elif part < k:
+            return self.quickselect(nums, part+1, end, k)
+        else:
+            return self.quickselect(nums, start, part-1, k)
+        
+        
+    def partition(self, nums, start, end):
+        pivot = nums[end]
+        i = start
+        
+        while start < end:
+            if nums[start] <= pivot:
+                nums[i], nums[start] = nums[start], nums[i]
+                i += 1
+            start += 1
+            
+        nums[i], nums[end] = nums[end], nums[i]
+        
+        return i
+
+        
+
 # two pointers
 # quickselect
 # time O(n), worse case O(n^2)
