@@ -1,24 +1,17 @@
 
-import "fmt"
-
-/**
- * @param nums: A set of numbers
- * @return: A list of lists
- */
-func subsets (nums []int) [][]int {
-    // write your code here
+func subsets(nums []int) [][]int {
     ret := make([][]int, 0)
     fmt.Println(ret)
-    if len(nums) == 0 {
-        return ret
-    }
+    //ret = append(ret, []int{})
+    //if len(nums) == 0 {
+    //    return ret
+    //}
     
     
     path := make([]int, 0)
+    //fmt.Println(path)
     
     helper(nums, 0, path, &ret)
-    
-    
     
     return ret
 }
@@ -34,3 +27,4 @@ func helper(nums []int, index int, path []int, ret *[][]int) {
         path = path[:len(path)-1]
     }
 }
+
