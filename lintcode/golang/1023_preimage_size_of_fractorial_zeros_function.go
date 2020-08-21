@@ -1,3 +1,5 @@
+//末尾为0即找5的个数。
+//二分查找末尾零的个数为k的第一个数和k + 1的第一个数，相减
 /**
  * @param K: an integer
  * @return: how many non-negative integers x have the property that f(x) = K
