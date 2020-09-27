@@ -48,8 +48,10 @@ func dfs(node *TreeNode) {
         if first == nil {
             first = pre
         }
-        second = pre
+        second = node
     }
+    
+    pre = node
     
     dfs(node.Right)
     
