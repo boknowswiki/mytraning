@@ -2,6 +2,59 @@
 
 # binary search solution
 
+class Solution:
+    """
+    @param a: array a
+    @param b: the query array
+    @return: Output an array of length `b.length` to represent the answer
+    """
+    def minimalDistance(self, a, b):
+        # Write your code here 
+        self.quicksort(a, 0, len(a)-1)
+        ret = []
+        
+        print a
+        for c in b:
+            ret.append(self.lower(a, c))
+            
+        return ret
+        
+    def quicksort(self, a, start, end):
+        if start < end:
+            part = self.partition(a, start, end)
+            self.quicksort(a, start, part-1)
+            self.quicksort(a, part+1, end)
+            
+            return
+        
+    def partition(self, a, start, end):
+        pivot = a[end]
+        i = start
+        
+        for j in range(start, end):
+            if a[j] <= pivot:
+                a[i], a[j] = a[j], a[i]
+                i += 1
+        a[i], a[end] = a[end], a[i]
+        return i
+        
+    def lower(self, a, c):
+        l = 0
+        r = len(a)-1
+        
+        while l +1 < r:
+            mid = l + (r-l)/2
+            if a[mid] == c:
+                return a[mid]
+            elif a[mid] < c:
+                l = mid
+            else:
+                r = mid
+                
+        if abs(a[l]-c) <= abs(a[r]-c):
+            return a[l]
+        
+        return a[r]
 
 class Solution:
     """
