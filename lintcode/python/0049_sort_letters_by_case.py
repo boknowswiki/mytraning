@@ -30,3 +30,30 @@ class Solution:
         #print chars        
         return chars
     
+
+class Solution:
+    """
+    @param: chars: The letter array you should sort by Case
+    @return: nothing
+    """
+    def sortLetters(self, chars):
+        # write your code here
+        n = len(chars)
+        
+        left, right = 0, n-1
+        
+        while left < right:
+            while left < right and (chars[left].islower()):
+                print chars[left], left
+                left += 1
+            while left < right and (chars[right].isupper()):
+                right -= 1
+                
+            #print left, right
+            if left < right:
+                chars[left], chars[right] = chars[right], chars[left]
+                left += 1
+                right -= 1
+                
+        return
+
