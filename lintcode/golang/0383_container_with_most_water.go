@@ -56,10 +56,10 @@ func maxArea (heights []int) int {
     
     for l < r {
         if heights[l] < heights[r] {
-            val = (r-l)*(heights[r]-heights[l])
+            val = (r-l)* heights[l]
             l++
         } else {
-            val = (r-l)*(heights[l] - heights[r])
+            val = (r-l)* heights[r]
             r--
         }
         
