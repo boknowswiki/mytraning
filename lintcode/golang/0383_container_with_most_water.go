@@ -40,3 +40,38 @@ func max (a, b int) int {
     
     return b
 }
+
+
+/**
+ * @param heights: a vector of integers
+ * @return: an integer
+ */
+func maxArea (heights []int) int {
+    // write your code here
+    n := len(heights)
+    ret := 0
+    val := 0
+    l := 0
+    r := n-1
+    
+    for l < r {
+        if heights[l] < heights[r] {
+            val = (r-l)* heights[l]
+            l++
+        } else {
+            val = (r-l)* heights[r]
+            r--
+        }
+        
+        ret = max(ret, val)
+    }
+    
+    return ret
+}
+
+func max(a, b int) int {
+    if a > b {
+        return a
+    }
+    return b
+}
