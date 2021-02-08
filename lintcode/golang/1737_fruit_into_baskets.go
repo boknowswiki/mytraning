@@ -1,17 +1,38 @@
-        l = r = 0
-        n = len(tree)
-        cnt = {}
-        ret = 0
+/**
+ * @param tree: The type of fruit
+ * @return: The total amount of fruit you can collect.
+ */
+func totalFruit (tree []int) int {
+    // write your code here
+    m := make(map[int]int)
+    n := len(tree)
+    if n <= 2 {
+        return n
+    }
+    
+    l := 0
+    ret := 0
+    
+    for r := 0; r < n; r++ {
+        m[tree[r]] += 1
         
-        for r in range(n):
-            cnt[tree[r]] = cnt.get(tree[r], 0) + 1
-            
-            while l <= r and len(cnt) > 2:
-                cnt[tree[l]] -= 1
-                if cnt[tree[l]] == 0:
-                    del cnt[tree[l]]
-                l += 1
-                
-            ret = max(ret, r - l + 1)
-            
-        return ret
+        for l <= r && len(m) > 2 {
+            m[tree[l]]--
+            if m[tree[l]] == 0 {
+                delete(m, tree[l])
+            }
+            l++
+        }
+        
+        ret = max(ret, r-l+1)
+    }
+    
+    return ret
+}
+
+func max(a, b int) int {
+    if a > b {
+        return a
+    }
+    return b
+}
