@@ -14,9 +14,16 @@ type EventBusTopicType int
 const (
 	// EventBusTopicAdd adds subscription type.
 	EventBusTopicAdd EventBusTopicType = iota
+	// EventBusTopicUpdate updates subscription type.
+	EventBusTopicUpdate
 	// EventBusTopicDelete deletes subscription type.
 	EventBusTopicDelete
 )
+
+// EventBusSubMessage defines service name needs to be subscribed.
+type EventBusSubMessage struct {
+	ServiceName string
+}
 
 // EventBusTopicMessage defines the message format.
 type EventBusTopicMessage struct {
@@ -46,9 +53,20 @@ func NewChannel(conn *amqp.Connection) (*amqp.Channel, error) {
 }
 
 // BuildMessage build a topic message for sub.
-func BuildMessage(rk string) []byte {
+func BuildMessage(op string, rk string) []byte {
+	topicType := EventBusTopicAdd
+	switch op {
+	case "add":
+		topicType = EventBusTopicAdd
+	case "update":
+		topicType = EventBusTopicUpdate
+	case "delete":
+		topicType = EventBusTopicDelete
+	default:
+		log.Fatalf("unsupported topic type %v", op)
+	}
 	msg := EventBusTopicMessage{
-		EventBusTopicType: EventBusTopicAdd,
+		EventBusTopicType: topicType,
 		Message:           rk,
 	}
 

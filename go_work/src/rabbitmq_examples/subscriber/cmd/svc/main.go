@@ -19,10 +19,10 @@ func main() {
 	app := &cli.App{
 		Flags: []cli.Flag{
 			&cli.StringFlag{
-				Name: "operate",
+				Name: "exchange",
 				//Value:       "english",
-				Aliases: []string{"o"},
-				Usage:   "add or delete a topic",
+				Aliases: []string{"e"},
+				Usage:   "send message to this exchange",
 			},
 			&cli.StringFlag{
 				Name:    "service",
@@ -43,8 +43,8 @@ func main() {
 }
 
 func topicHandler(c *cli.Context) error {
-	op := c.String("operate")
-	log.Printf("get operation %v", op)
+	ex := c.String("exchange")
+	log.Printf("get operation %v", ex)
 	s := c.String("service")
 	log.Printf("get service %v", s)
 
@@ -54,22 +54,22 @@ func topicHandler(c *cli.Context) error {
 	defer ch.Close()
 
 	err := ch.ExchangeDeclare(
-		"sub_topic", // name
-		"topic",     // type
-		true,        // durable
-		false,       // auto-deleted
-		false,       // internal
-		false,       // no-wait
-		nil,         // arguments
+		ex,       // name
+		"direct", // type
+		true,     // durable
+		false,    // auto-deleted
+		false,    // internal
+		false,    // no-wait
+		nil,      // arguments
 	)
 	failOnError(err, "Failed to declare an exchange")
 
-	body := mq.BuildMessage(op, s)
+	body := mq.BuildMessage("add", s)
 	err = ch.Publish(
-		"sub_topic", // exchange
-		"service",   // routing key
-		false,       // mandatory
-		false,       // immediate
+		ex,    // exchange
+		s,     // routing key
+		false, // mandatory
+		false, // immediate
 		amqp.Publishing{
 			ContentType: "text/plain",
 			Body:        body,

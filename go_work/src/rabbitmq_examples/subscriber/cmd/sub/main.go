@@ -4,6 +4,7 @@ import (
 	"log"
 	"os"
 	"os/signal"
+	"strings"
 	"sync"
 	"syscall"
 
@@ -63,15 +64,14 @@ func main() {
 
 	shutdown := make(chan os.Signal, 1)
 	signal.Notify(shutdown, os.Interrupt, syscall.SIGTERM)
-	/*
-		for i := 0; i < goRoutineCnt; i++ {
-			wg.Add(1)
-			go worker(i, &wg, subWorkerChan, goRoutineStopChan)
-		}
-	*/
+
+	for i := 0; i < goRoutineCnt; i++ {
+		wg.Add(1)
+		go worker(i, &wg, subWorkerChan, goRoutineStopChan)
+	}
 
 	wg.Add(1)
-	go listenToTopic(&wg, ch, subTopicStop)
+	go listenToTopic(&wg, ch, subTopicStop, subWorkerChan, subStop)
 	/*
 		wg.Add(1)
 		go addSub(&wg, ch, subWorkerChan, subStop)
@@ -96,7 +96,7 @@ func main() {
 	log.Println("Shutdown main.")
 }
 
-func listenToTopic(wg *sync.WaitGroup, ch *amqp.Channel, stop chan int) {
+func listenToTopic(wg *sync.WaitGroup, ch *amqp.Channel, stop chan int, subWorkerChan chan SubWorkerChan, subStop chan int) {
 	defer wg.Done()
 
 	err := ch.ExchangeDeclare(
@@ -141,12 +141,46 @@ func listenToTopic(wg *sync.WaitGroup, ch *amqp.Channel, stop chan int) {
 		nil,    // args
 	)
 
+	subToChan := make(map[string]chan int)
+
 	for {
 		select {
 		case d := <-msgs:
-			log.Printf(" [x] %s", d.Body)
+			//log.Printf(" [x] %s", d.Body)
 			msg := mq.GetMessage(d.Body)
-			log.Printf("msg %#v", msg)
+			log.Printf("get topic msg %#v", msg)
+			subMsg := mq.EventBusSubMessage{ServiceName: msg.Message}
+			qName := "serviceQueue"
+			log.Printf("get qname %v", qName)
+			switch t := msg.EventBusTopicType; t {
+			case mq.EventBusTopicAdd:
+				deleteChan := make(chan int)
+				//log.Printf("deleteChan addr %v", &deleteChan)
+				subToChan[qName] = deleteChan
+				go addSub(wg, ch, qName, subMsg, subWorkerChan, subStop, deleteChan)
+			case mq.EventBusTopicUpdate:
+				log.Println("need to update service go routine queue binding.")
+				newS := strings.Split(subMsg.ServiceName, ",")
+				log.Printf("get old binding key %v, new binding key %v", newS[0], newS[1])
+				err = ch.QueueUnbind(
+					qName,         //queue name
+					newS[0],       // binding key
+					"sub_service", //exchange
+					nil)
+				err = ch.QueueBind(
+					qName,         // queue name
+					newS[1],       // binding key
+					"sub_service", // exchange
+					false,
+					nil)
+				log.Println("finish unbind and bind.")
+			case mq.EventBusTopicDelete:
+				log.Println("need to delete service go routine.")
+				del := subToChan[qName]
+				//log.Printf("del addr %v", del)
+				close(del)
+				log.Printf("%v should be deleted.", qName)
+			}
 		case <-stop:
 			log.Println("stopping listenToTopic goroutine.")
 			return
@@ -154,11 +188,13 @@ func listenToTopic(wg *sync.WaitGroup, ch *amqp.Channel, stop chan int) {
 	}
 }
 
-func addSub(wg *sync.WaitGroup, ch *amqp.Channel, workerChan chan SubWorkerChan, stop chan int) {
+func addSub(wg *sync.WaitGroup, ch *amqp.Channel, qName string, msg mq.EventBusSubMessage, workerChan chan SubWorkerChan, stop chan int, del chan int) {
+	wg.Add(1)
 	defer wg.Done()
 
+	//log.Printf("sub get del addr %v", del)
 	err := ch.ExchangeDeclare(
-		"logs_direct", // name
+		"sub_service", // name
 		"direct",      // type
 		true,          // durable
 		false,         // auto-deleted
@@ -169,7 +205,7 @@ func addSub(wg *sync.WaitGroup, ch *amqp.Channel, workerChan chan SubWorkerChan,
 	failOnError(err, "Failed to declare an exchange")
 
 	q, err := ch.QueueDeclare(
-		"",    // name
+		qName, // name
 		false, // durable
 		false, // delete when unused
 		true,  // exclusive
@@ -178,22 +214,16 @@ func addSub(wg *sync.WaitGroup, ch *amqp.Channel, workerChan chan SubWorkerChan,
 	)
 	failOnError(err, "Failed to declare a queue")
 
-	if len(os.Args) < 2 {
-		log.Printf("Usage: %s [info] [warning] [error]", os.Args[0])
-		os.Exit(0)
-	}
-	for _, s := range os.Args[1:] {
-		log.Printf("Binding queue %s to exchange %s with routing key %s",
-			q.Name, "logs_direct", s)
-		err = ch.QueueBind(
-			q.Name,        // queue name
-			s,             // routing key
-			"logs_direct", // exchange
-			false,
-			nil)
-		failOnError(err, "Failed to bind a queue")
-	}
+	err = ch.QueueBind(
+		q.Name,
+		msg.ServiceName,
+		"sub_service",
+		false,
+		nil,
+	)
+	failOnError(err, "Failed to bind a queue")
 
+	log.Printf("bind to exchange sub_service binding key %v on %v.", msg.ServiceName, q.Name)
 	msgs, err := ch.Consume(
 		q.Name, // queue
 		"",     // consumer
@@ -211,6 +241,9 @@ func addSub(wg *sync.WaitGroup, ch *amqp.Channel, workerChan chan SubWorkerChan,
 			workerChan <- SubWorkerChan{mqChan: ch, message: d.Body}
 		case <-stop:
 			log.Println("stopping sub func.")
+			return
+		case <-(del):
+			log.Println("got delete sub signal.")
 			return
 		}
 	}
