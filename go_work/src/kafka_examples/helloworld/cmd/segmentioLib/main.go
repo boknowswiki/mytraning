@@ -7,7 +7,6 @@ import (
 	"time"
 
 	kafka "github.com/segmentio/kafka-go"
-	//"github.com/confluentinc/confluent-kafka-go/kafka"
 )
 
 // the topic and broker address are initialized as constants
