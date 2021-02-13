@@ -6,20 +6,15 @@ import (
 	"strconv"
 	"time"
 
-	"gopkg.in/confluentinc/confluent-kafka-go.v1/kafka"
+	"github.com/confluentinc/confluent-kafka-go/kafka"
 )
 
-// the topic and broker address are initialized as constants
-const (
-	topic          = "helloworld"
-	broker1Address = "localhost:9092"
-	//broker2Address = "localhost:9094"
-	//broker3Address = "localhost:9095"
-)
+var topic string
 
 func produce(ctx context.Context) {
 	// initialize a counter
 	i := 0
+	topic = "helloworld"
 
 	p, err := kafka.NewProducer(&kafka.ConfigMap{
 		"bootstrap.servers": "localhost",
@@ -38,7 +33,7 @@ func produce(ctx context.Context) {
 			return
 		default:
 			p.Produce(&kafka.Message{
-				TopicPartition: kafka.TopicPartition{Topic: topic, Partition: kafka.PartitionAny},
+				TopicPartition: kafka.TopicPartition{Topic: &topic, Partition: kafka.PartitionAny},
 				Key:            []byte(strconv.Itoa(i)),
 				Value:          []byte("this is message" + strconv.Itoa(i)),
 			}, nil)
@@ -59,17 +54,22 @@ func consume(ctx context.Context) {
 	// initialize a new reader with the brokers and topic
 	// the groupID identifies the consumer and prevents
 	// it from receiving duplicate messages
-	c, err := kafka.NewConsumer(&kafka.ConfigMap{
-		"bootstrap.servers": "localhost",
-		"group.id":          "myGroup",
-		"auto.offset.reset": "latest",
-	})
+	cm := kafka.ConfigMap{
+		"bootstrap.servers":  "localhost",
+		"group.id":           "myGroup",
+		"auto.offset.reset":  "earliest",
+		"enable.auto.commit": false,
+	}
+	c, err := kafka.NewConsumer(&cm)
 
 	if err != nil {
 		panic(err)
 	}
 
-	c.SubscribeTopics(topic, nil)
+	//fmt.Printf("configmap is %#v\n", cm)
+	//fmt.Println("auto commit enable: ", cm.Get("auto.commit.enable"))
+
+	c.Subscribe(topic, nil)
 	defer c.Close()
 
 	for {
@@ -80,6 +80,12 @@ func consume(ctx context.Context) {
 			msg, err := c.ReadMessage(-1)
 			if err == nil {
 				fmt.Printf("Message on %s: %s\n", msg.TopicPartition, string(msg.Value))
+				offset, err := c.Commit()
+				if err != nil {
+					fmt.Printf("commit error %v\n", err)
+				} else {
+					fmt.Printf("commit to offset %v\n", offset)
+				}
 			} else {
 				// The client will automatically try to recover from all errors.
 				fmt.Printf("Consumer error: %v (%v)\n", err, msg)
@@ -96,6 +102,6 @@ func main() {
 	// produce messages in a new go routine, since
 	// both the produce and consume functions are
 	// blocking
-	//go produce(ctx)
+	go produce(ctx)
 	consume(ctx)
 }
