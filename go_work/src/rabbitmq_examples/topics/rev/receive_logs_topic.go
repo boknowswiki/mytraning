@@ -1,28 +1,12 @@
 package main
 
 import (
-	"encoding/json"
 	"log"
 	"os"
+	"time"
 
 	"github.com/streadway/amqp"
 )
-
-// EventBusTopicType has the eventbus topic type for adding or deleting subscription.
-type EventBusTopicType int
-
-const (
-	// EventBusTopicAdd adds subscription type.
-	EventBusTopicAdd EventBusTopicType = iota
-	// EventBusTopicDelete deletes subscription type.
-	EventBusTopicDelete
-)
-
-// EventBusTopicMessage defines the message format.
-type EventBusTopicMessage struct {
-	EventBusTopicType EventBusTopicType
-	Message           string
-}
 
 func failOnError(err error, msg string) {
 	if err != nil {
@@ -31,15 +15,6 @@ func failOnError(err error, msg string) {
 }
 
 func main() {
-	if len(os.Args) < 2 {
-		log.Println("need a binding key for this topic")
-		return
-	}
-
-	run()
-}
-
-func run() {
 	conn, err := amqp.Dial("amqp://guest:guest@localhost:5672/")
 	failOnError(err, "Failed to connect to RabbitMQ")
 	defer conn.Close()
@@ -60,12 +35,12 @@ func run() {
 	failOnError(err, "Failed to declare an exchange")
 
 	q, err := ch.QueueDeclare(
-		"",    // name
-		false, // durable
-		false, // delete when unused
-		true,  // exclusive
-		false, // no-wait
-		nil,   // arguments
+		"logs_queue", // name
+		true,         // durable
+		false,        // delete when unused
+		false,        // exclusive
+		false,        // no-wait
+		nil,          // arguments
 	)
 	failOnError(err, "Failed to declare a queue")
 
@@ -88,7 +63,7 @@ func run() {
 	msgs, err := ch.Consume(
 		q.Name, // queue
 		"",     // consumer
-		true,   // auto ack
+		false,  // auto ack
 		false,  // exclusive
 		false,  // no local
 		false,  // no wait
@@ -101,19 +76,21 @@ func run() {
 	go func() {
 		for d := range msgs {
 			log.Printf(" [x] %s", d.Body)
-			msg := getMessage(d.Body)
-			log.Printf("msg %#v", msg)
+			//log.Println("closing channel")
+			//ch.Close()
+			//ch, err = conn.Channel()
+			log.Println("start sleep")
+			time.Sleep(5 * time.Second)
+			log.Println("finish sleep")
+			err = d.Ack(false)
+			log.Println("acked message")
+			if err != nil {
+				log.Printf("got err %v\n", err)
+			}
+
 		}
 	}()
 
 	log.Printf(" [*] Waiting for logs. To exit press CTRL+C")
 	<-forever
-}
-
-func getMessage(b []byte) EventBusTopicMessage {
-	var msg EventBusTopicMessage
-
-	json.Unmarshal(b, &msg)
-
-	return msg
 }

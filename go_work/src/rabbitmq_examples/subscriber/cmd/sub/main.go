@@ -34,22 +34,30 @@ func worker(id int, wg *sync.WaitGroup, subWorkerChan chan SubWorkerChan, stop c
 
 	for {
 		select {
+		// get our eventbus customized struct with callback url and eventbusMsg struct {body: from rmq/kafka, connectorType: "rmq/kafka"}
 		case msg := <-subWorkerChan:
 			log.Printf("worker %v gets message %v", id, string(msg.message))
-
+			// send to callback url 1 success: nack, 2 failed(retries): ack.
+			// eventbusMsg {
+			// body message rmq/kafka
+			// connector type
+			// }
 		case <-stop:
 			log.Printf("stoping worker %v.", id)
 			return
 		}
 	}
 
-	log.Println("worker should not be here.")
+	//log.Println("worker should not be here.")
 }
 
 func main() {
 	var wg sync.WaitGroup
 	goRoutineCnt := DEFAULTGOROUTINECNT
+	// dispatch the service message from the service queues.
 	subWorkerChan := make(chan SubWorkerChan, goRoutineCnt)
+	//finish := make(chan struct{})
+	// declaring finish to be of type chan struct{} says that the channel contains no value; we’re only interested in its closed property.
 	goRoutineStopChan := make(chan int)
 	subStop := make(chan int)
 	subTopicStop := make(chan int)
@@ -59,6 +67,9 @@ func main() {
 
 	conn, _ := mq.NewConn()
 	defer conn.Close()
+	// one channel per go routine.
+	// check best practice for creating channel/connection to rabbitmq.
+	// ans: use one connection and separate channels for different go-routine.
 	ch, _ := mq.NewChannel(conn)
 	defer ch.Close()
 
@@ -72,10 +83,6 @@ func main() {
 
 	wg.Add(1)
 	go listenToTopic(&wg, ch, subTopicStop, subWorkerChan, subStop)
-	/*
-		wg.Add(1)
-		go addSub(&wg, ch, subWorkerChan, subStop)
-	*/
 
 	select {
 	case sig := <-shutdown:
@@ -84,6 +91,9 @@ func main() {
 		//case <-ctx.Done():
 		//log.Println("get ctx done.")
 		close(subTopicStop)
+		// maybe need to stop all the subscriber go routine before close this channel.
+		// need to think a logic to do this close channel right.
+		// doesn't nee to do it that way.
 		close(subWorkerChan)
 		close(subStop)
 		log.Printf("shuting down all %v goroutines.", goRoutineCnt)
@@ -237,8 +247,12 @@ func addSub(wg *sync.WaitGroup, ch *amqp.Channel, qName string, msg mq.EventBusS
 
 	for {
 		select {
+		// get the message from rmq service queue.
 		case d := <-msgs:
+			// build callback url
+			// form a message struct {body: d, connectorType: "rmq/kafka",....}
 			workerChan <- SubWorkerChan{mqChan: ch, message: d.Body}
+
 		case <-stop:
 			log.Println("stopping sub func.")
 			return
@@ -247,5 +261,5 @@ func addSub(wg *sync.WaitGroup, ch *amqp.Channel, qName string, msg mq.EventBusS
 			return
 		}
 	}
-	log.Println("sub should not be here.")
+	//log.Println("sub should not be here.")
 }

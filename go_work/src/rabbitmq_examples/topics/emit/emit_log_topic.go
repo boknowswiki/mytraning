@@ -1,29 +1,12 @@
 package main
 
 import (
-	"encoding/json"
 	"log"
 	"os"
 	"strings"
 
 	"github.com/streadway/amqp"
 )
-
-// EventBusTopicType has the eventbus topic type for adding or deleting subscription.
-type EventBusTopicType int
-
-const (
-	// EventBusTopicAdd adds subscription type.
-	EventBusTopicAdd EventBusTopicType = iota
-	// EventBusTopicDelete deletes subscription type.
-	EventBusTopicDelete
-)
-
-// EventBusTopicMessage defines the message format.
-type EventBusTopicMessage struct {
-	EventBusTopicType EventBusTopicType
-	Message           string
-}
 
 func failOnError(err error, msg string) {
 	if err != nil {
@@ -51,8 +34,7 @@ func main() {
 	)
 	failOnError(err, "Failed to declare an exchange")
 
-	//body := bodyFrom(os.Args)
-	body := getMessage(os.Args)
+	body := bodyFrom(os.Args)
 	err = ch.Publish(
 		"logs_topic",          // exchange
 		severityFrom(os.Args), // routing key
@@ -60,8 +42,7 @@ func main() {
 		false,                 // immediate
 		amqp.Publishing{
 			ContentType: "text/plain",
-			//Body:        []byte(body),
-			Body: body,
+			Body:        []byte(body),
 		})
 	failOnError(err, "Failed to publish a message")
 
@@ -85,16 +66,5 @@ func severityFrom(args []string) string {
 	} else {
 		s = os.Args[1]
 	}
-	return s
-}
-
-func getMessage(args []string) []byte {
-	msg := EventBusTopicMessage{
-		EventBusTopicType: EventBusTopicAdd,
-		Message:           "adding message",
-	}
-
-	s, _ := json.Marshal(msg)
-
 	return s
 }

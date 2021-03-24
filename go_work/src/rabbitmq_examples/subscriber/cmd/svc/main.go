@@ -54,13 +54,13 @@ func topicHandler(c *cli.Context) error {
 	defer ch.Close()
 
 	err := ch.ExchangeDeclare(
-		ex,       // name
-		"direct", // type
-		true,     // durable
-		false,    // auto-deleted
-		false,    // internal
-		false,    // no-wait
-		nil,      // arguments
+		ex,      // name
+		"topic", // type
+		true,    // durable
+		false,   // auto-deleted
+		false,   // internal
+		false,   // no-wait
+		nil,     // arguments
 	)
 	failOnError(err, "Failed to declare an exchange")
 
