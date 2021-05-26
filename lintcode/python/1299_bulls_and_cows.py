@@ -31,3 +31,26 @@ class Solution:
         return str(a) + "A" + str(b-a) + "B"
         
             
+
+class Solution:
+    
+    def getHint(self, secret, guess):
+        number_count = {}
+        for i in range(len(secret)):
+            number_count[secret[i]] = number_count.get(secret[i], 0) + 1
+            
+        bulls, cows = 0, 0
+        for i in range(len(guess)):
+            if guess[i] != secret[i] and guess[i] not in number_count:
+                continue
+            
+            if number_count[guess[i]] == 0:
+                continue
+            
+            if guess[i] == secret[i]:
+                bulls += 1
+            elif guess[i] in number_count and number_count[guess[i]] > 0:
+                cows += 1
+            number_count[guess[i]] -= 1
+           
+        return "{0}A{1}B".format(bulls, cows)
