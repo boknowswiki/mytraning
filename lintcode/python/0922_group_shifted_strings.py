@@ -2,6 +2,19 @@
 
 # hash table
 
+class Solution:
+    """
+    @param strings: a string array
+    @return: return a list of string array
+    """
+    def groupStrings(self, strings):
+        # write your code here
+        ret = {}
+        for word in strings:
+            key = tuple([(ord(c)-ord(word[0]))%26 for c in word])
+            ret[key] = ret.get(key, []) + [word]
+        return list(ret.values())
+
 # 把每个字符串平移到第一个字母为A，就用这个字符串作为KEY。随后用HASHMAP进行归类
 
 class Solution:
