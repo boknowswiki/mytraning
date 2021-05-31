@@ -11,6 +11,32 @@ class Solution:
     def maxSubArrayLen(self, nums, k):
         # Write your code here
         n = len(nums)
+        if n == 0:
+            return 0
+
+        pre_d = {0:0}
+        pre_sum = 0
+        ret = 0
+
+        for i in range(n):
+            pre_sum += nums[i]
+            if pre_sum - k in pre_d:
+                ret = max(ret, i- pre_d[pre_sum-k]+1)
+            
+            if pre_sum not in pre_d:
+                pre_d[pre_sum] = i+1
+
+        return ret
+
+class Solution:
+    """
+    @param nums: an array
+    @param k: a target value
+    @return: the maximum length of a subarray that sums to k
+    """
+    def maxSubArrayLen(self, nums, k):
+        # Write your code here
+        n = len(nums)
         prev_sum = 0
         d = {}
         d[0] = -1
