@@ -1,5 +1,8 @@
 #!/usr/bin/python -t
 
+
+# can check 0130 heapify code
+
 class heap_sort:
     def sort(self, l):
         n = len(l)
