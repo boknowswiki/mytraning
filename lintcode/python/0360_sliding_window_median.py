@@ -248,3 +248,68 @@ class Solution:
                 
         return ret
             
+
+
+from heapq import heappush,heappop
+
+class Solution:
+    """
+    @param nums: A list of integers
+    @param k: An integer
+    @return: The median of the element inside the window at each moving
+    """
+    def medianSlidingWindow(self, nums, k):
+        # write your code here
+        if not nums or k == 0:
+            return []
+        
+        max_heap = []
+        min_heap = []
+        res = []
+        
+        for i in range(k):
+            heappush(max_heap, (-nums[i], i))
+        
+        for _ in range(k // 2):
+            num, index = heappop(max_heap)
+            heappush(min_heap, (-num, index))
+        res.append(-max_heap[0][0])
+        
+        # ***max_heap*** median ***min_heap***
+        
+        for i in range(k, len(nums)):
+            # insert the num into max_heap if num < last_median
+            # insert the num into min_heap if num >= last_median
+            last_median = res[-1]
+            if nums[i] >= last_median:
+                heappush(min_heap, (nums[i], i))
+                # since add the new num into the min_heap
+                # if nums[i - k] in max_heap
+                # then need to move one num from min_heap to max_heap
+                if nums[i - k] <= last_median:
+                    val, index = heappop(min_heap)
+                    heappush(max_heap, (-val, index))
+            else:
+                heappush(max_heap, (-nums[i], i))
+                # since add the new num into the max_heap
+                # if nums[i - k] in min_heap
+                # then need to move one num from max_heap to min_heap
+                if nums[i - k] >= last_median:
+                    val, index = heappop(max_heap)
+                    heappush(min_heap, (-val, index))
+            #print('max_heap1: ' + str(max_heap))
+            #print('min_heap1: ' + str(min_heap))
+            #print('------------------------')
+            
+            # maintain heap 
+            while max_heap and i - k >= max_heap[0][1]:
+                heappop(max_heap)
+            while min_heap and i - k >= min_heap[0][1]:
+                heappop(min_heap)
+            
+            #print('max_heap2: ' + str(max_heap))
+            #print('min_heap2: ' + str(min_heap))
+            #print('------------------------')
+                
+            res.append(-max_heap[0][0])
+        return res
