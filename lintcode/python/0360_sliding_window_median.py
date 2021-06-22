@@ -189,6 +189,7 @@ class Solution:
 
 
 # don't know which part is wrong, not AC
+# this is because list remove breaks heap queue features, we need to call heapify again after that, but it will hit time limit exceeded after the fix the code below this one.
 
 import heapq
 
@@ -248,6 +249,67 @@ class Solution:
                 
         return ret
             
+
+# time limit exceeded
+
+import heapq
+
+class Solution:
+    """
+    @param nums: A list of integers
+    @param k: An integer
+    @return: The median of the element inside the window at each moving
+    """
+    def medianSlidingWindow(self, nums, k):
+        # write your code here
+        n = len(nums)
+        if n == 0 or k == 0:
+            return []
+            
+        if n < k:
+            return []
+            
+        ret = []
+        maxhq = []
+        minhq = []
+        mid = 0
+        
+        if k > 1:
+            maxhq.append(-nums[0])
+            for i in range(1, k-1):
+                num = nums[i]
+                if num > -maxhq[0]:
+                    heapq.heappush(minhq, num)
+                else:
+                    heapq.heappush(maxhq, -num)
+                mid = -maxhq[0]
+        else:
+            return nums
+            
+        for i in range(k-1, n):
+            num = nums[i]
+            if num > mid:
+                heapq.heappush(minhq, num)
+            else:
+                heapq.heappush(maxhq, -num)
+
+            while len(maxhq) > len(minhq) + 1:
+                heapq.heappush(minhq, -heapq.heappop(maxhq))
+            while len(maxhq) < len(minhq):
+                heapq.heappush(maxhq, -heapq.heappop(minhq))
+
+            
+            mid = -maxhq[0]
+            ret.append(mid)
+            
+            if nums[i-k+1] > mid:
+                minhq.remove(nums[i-k+1])
+                heapq.heapify(minhq)
+            else:
+                maxhq.remove(-nums[i-k+1])
+                heapq.heapify(maxhq)
+                
+        return ret
 
 
 from heapq import heappush,heappop
@@ -313,3 +375,51 @@ class Solution:
                 
             res.append(-max_heap[0][0])
         return res
+
+
+import heapq
+class Solution:
+    """
+    @param nums: A list of integers
+    @param k: An integer
+    @return: The median of the element inside the window at each moving
+    """
+    def medianSlidingWindow(self, nums, k):
+        # write your code here
+        self.leftMaxHeap = []
+        self.rightMinHeap = []
+        result = []
+        for i in range(len(nums)):
+            # insert new num 
+            if len(self.leftMaxHeap) == 0 or nums[i] <= -self.leftMaxHeap[0]:
+                heapq.heappush(self.leftMaxHeap, -nums[i])
+            else:
+                heapq.heappush(self.rightMinHeap, nums[i])
+
+            self.balance()
+            
+            # delete old num 
+            if i - k >= 0:
+                if nums[i - k] <= -self.leftMaxHeap[0]:
+                    self.leftMaxHeap.remove(-nums[i - k])
+                    #heapq doesn't provide remove() function, we use the list.remove()
+                    #but the list.remove() it will break the heap, so we need heapify the list again.
+                    heapq.heapify(self.leftMaxHeap)
+                else:
+                    self.rightMinHeap.remove(nums[i - k])
+                    heapq.heapify(self.rightMinHeap)
+                    
+            self.balance()
+            
+            if i >= k - 1:
+                result.append(-self.leftMaxHeap[0])
+                #print("max: " + str(self.leftMaxHeap) + " min: " + str(self.rightMinHeap))
+        
+        return result
+    
+    def balance(self):
+        while len(self.leftMaxHeap) < len(self.rightMinHeap):
+            heapq.heappush(self.leftMaxHeap, -heapq.heappop(self.rightMinHeap))
+            
+        while len(self.rightMinHeap) < len(self.leftMaxHeap) - 1:
+            heapq.heappush(self.rightMinHeap, -heapq.heappop(self.leftMaxHeap))
