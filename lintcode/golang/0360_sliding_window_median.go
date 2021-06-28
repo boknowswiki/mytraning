@@ -1,6 +1,8 @@
 
 // heap, not ac, but should correct.
 
+
+
 import (
 	"container/heap"
 	"fmt"
@@ -46,6 +48,24 @@ func printHeap(h *NodeHeap) {
 	}
 }
 
+func getIndex(h *NodeHeap, max bool, target int) int {
+
+	for i := 0; i < h.Len(); i++ {
+
+		if max {
+			if -[]*Node(*h)[i].val == target {
+				return i
+			}
+		} else {
+			if []*Node(*h)[i].val == target {
+				return i
+			}
+		}
+	}
+
+	return -1
+}
+
 /**
  * @param nums: A list of integers
  * @param k: An integer
@@ -53,7 +73,7 @@ func printHeap(h *NodeHeap) {
  */
 func medianSlidingWindow (nums []int, k int) []int {
     // write your code here
-    n := len(nums)
+	n := len(nums)
 	if n == 0 || n < k || k == 0 {
 		return []int{}
 	}
@@ -66,6 +86,7 @@ func medianSlidingWindow (nums []int, k int) []int {
 	for index, val := range nums[:k] {
 		heap.Push(maxH, newNode(-val, index))
 	}
+	//fmt.Println("max:")
 	//printHeap(maxH)
 
 	for i := k/2 - 1; i >= 0; i-- {
@@ -74,36 +95,66 @@ func medianSlidingWindow (nums []int, k int) []int {
 		node.(*Node).val = -node.(*Node).val
 		heap.Push(minH, node)
 	}
+	//fmt.Println("min:")
 	//printHeap(minH)
+	//fmt.Println("max:")
+	//printHeap(maxH)
 
-	//fmt.Printf("max %#v, min %#v\n", maxH, minH)
 	ret = append(ret, -[]*Node(*maxH)[0].val)
 	//fmt.Println("start ret is ", ret)
 
 	for i := k; i < n; i++ {
 		mid = ret[len(ret)-1]
 		//fmt.Println("mid is ", mid, "at index: ", i)
-		if nums[i] >= mid {
+		if nums[i] > mid {
 			heap.Push(minH, newNode(nums[i], i))
-			if nums[i-k] <= mid {
-				node := heap.Pop(minH)
-				node.(*Node).val = -node.(*Node).val
-				heap.Push(maxH, node)
-			}
+			/*
+				if nums[i-k] <= mid {
+					node := heap.Pop(minH)
+					node.(*Node).val = -node.(*Node).val
+					heap.Push(maxH, node)
+				}
+			*/
 		} else {
 			heap.Push(maxH, newNode(-nums[i], i))
-			if nums[i-k] >= mid {
-				node := heap.Pop(maxH)
-				node.(*Node).val = -node.(*Node).val
-				heap.Push(minH, node)
-			}
+			/*
+				if nums[i-k] >= mid {
+					node := heap.Pop(maxH)
+					node.(*Node).val = -node.(*Node).val
+					heap.Push(minH, node)
+				}
+			*/
 		}
 
-		for maxH.Len() > 0 && (i-k >= []*Node(*maxH)[0].index) {
-			heap.Pop(maxH)
+		//fmt.Println("loop min:")
+		//printHeap(minH)
+		//fmt.Println("loop max:")
+		//printHeap(maxH)
+		//fmt.Println("finding: ", nums[i-k])
+
+		if nums[i-k] <= mid {
+			hIndex := getIndex(maxH, true, nums[i-k])
+			if hIndex == -1 {
+				panic("max find num error")
+			}
+			heap.Remove(maxH, hIndex)
+		} else {
+			hIndex := getIndex(minH, false, nums[i-k])
+			if hIndex == -1 {
+				panic("min find num error")
+			}
+			heap.Remove(minH, hIndex)
 		}
-		for minH.Len() > 0 && (i-k >= []*Node(*minH)[0].index) {
-			heap.Pop(minH)
+
+		for maxH.Len() > minH.Len()+1 {
+			node := heap.Pop(maxH)
+			node.(*Node).val = -node.(*Node).val
+			heap.Push(minH, node)
+		}
+		for minH.Len() > maxH.Len() {
+			node := heap.Pop(minH)
+			node.(*Node).val = -node.(*Node).val
+			heap.Push(maxH, node)
 		}
 		ret = append(ret, -[]*Node(*maxH)[0].val)
 	}
