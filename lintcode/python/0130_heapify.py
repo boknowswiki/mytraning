@@ -69,3 +69,32 @@ class Solution:
                 break
                 
         return
+
+
+class Solution:
+    """
+    @param: A: Given an integer array
+    @return: nothing
+    """
+    def heapify(self, A):
+        # write your code here
+        n = len(A)
+        if n < 2:
+            return
+        
+        for i in range(n):
+            self.shift_up(A, i)
+
+        return
+
+    def shift_up(self, a, child):
+        while True:
+            parent = (child-1)//2
+            if parent >= 0:
+                if a[child] < a[parent]:
+                    a[child], a[parent] = a[parent], a[child]
+
+                child = parent
+            else:
+                break
+        return
