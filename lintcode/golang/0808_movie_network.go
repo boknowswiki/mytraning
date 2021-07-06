@@ -1,8 +1,8 @@
-package main
+
+// heap + bfs + sort
 
 import (
 	"container/heap"
-	"fmt"
 	"sort"
 )
 
@@ -56,11 +56,11 @@ func topKMovie(rating []int, G [][]int, S int, K int) []int {
 		return []*Node(*minHeap)[i].rate < []*Node(*minHeap)[j].rate
 	})
 
-	fmt.Println([]*Node(*minHeap))
-
 	for _, node := range []*Node(*minHeap) {
 		ret = append(ret, node.num)
 	}
+
+    sort.Ints(ret)
 	return ret
 }
 
@@ -86,18 +86,4 @@ func getRelated(g [][]int, s int) []int {
 	}
 
 	return ret
-}
-
-func main() {
-	r := []int{10, 20, 30, 40}
-	g := [][]int{
-		[]int{1, 3},
-		[]int{0, 2},
-		[]int{1},
-		[]int{0},
-	}
-	s := 0
-	k := 2
-
-	fmt.Println(topKMovie(r, g, s, k))
 }
