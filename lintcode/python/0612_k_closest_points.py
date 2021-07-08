@@ -1,5 +1,45 @@
 #!/usr/bin/python -t
 
+
+"""
+Definition for a point.
+class Point:
+    def __init__(self, a=0, b=0):
+        self.x = a
+        self.y = b
+"""
+
+import heapq
+
+class Solution:
+    """
+    @param points: a list of points
+    @param origin: a point
+    @param k: An integer
+    @return: the k closest points
+    """
+    def kClosest(self, points, origin, k):
+        # write your code here
+        hq = []
+        for p in points:
+            dist = self.get_dist(p, origin)
+            heapq.heappush(hq, (-dist, -p.x, -p.y))
+            if len(hq) > k:
+                heapq.heappop(hq)
+
+        ret = []
+        while len(hq) > 0:
+            dist, x, y = heapq.heappop(hq)
+            ret.append(Point(-x, -y))
+
+        #print(ret)
+        ret.reverse()
+
+        return ret
+
+    def get_dist(self, p, o):
+        return (p.x - o.x)**2 + (p.y-o.y)**2
+
 # heap
 # 基于 PriorityQueue 的方法
 # PriorityQueue 里从远到近排序。当 PQ 里超过 k 个的时候，就 pop 掉一个。
