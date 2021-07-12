@@ -93,3 +93,78 @@ class Solution:
         return ans
 
 
+
+
+# divid and conqur
+
+"""
+Definition of Interval.
+class Interval(object):
+    def __init__(self, start, end):
+        self.start = start
+        self.end = end
+"""
+
+class Solution:
+    """
+    @param intervals: the given k sorted interval lists
+    @return:  the new sorted interval list
+    """
+    def mergeKSortedIntervalLists(self, intervals):
+        # write your code here
+        n = len(intervals)
+        if n == 0:
+            return []
+        if n == 1:
+            return self.mergeTwoLists(intervals[0], intervals[0])
+        start = 0
+        end = n-1
+        mid = (end-start)//2+start
+
+        l = self.mergeKSortedIntervalLists(intervals[:mid])
+        r = self.mergeKSortedIntervalLists(intervals[mid:])
+
+        
+        return self.mergeTwoLists(l, r)
+
+    def mergeTwoLists(self, list1, list2):
+        if not list1:
+            return list2
+        if not list2:
+            return list1
+
+        m = len(list1)
+        n = len(list2)
+        i = j = 0
+        ret = []
+
+        while i < m and j < n:
+            if list1[i].start <= list2[j].start:
+                self.merge(ret, list1[i])
+                i += 1
+            else:
+                self.merge(ret, list2[j])
+                j += 1
+
+        while i < m:
+            self.merge(ret, list1[i])
+            i += 1
+
+        while j < n:
+            self.merge(ret, list2[j])
+            j += 1
+
+        return ret
+
+    def merge(self, ret, inter):
+        if not ret:
+            ret.append(inter)
+            return
+
+        if ret[-1].end < inter.start:
+            ret.append(inter)
+            return
+        else:
+            ret[-1].end = max(ret[-1].end, inter.end)
+
+        return
