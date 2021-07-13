@@ -2,6 +2,32 @@
 
 # heap
 
+# time O(nklogn)
+
+import heapq
+
+class Solution:
+    """
+    @param n: a positive integer
+    @param primes: the given prime list
+    @return: the nth super ugly number
+    """
+    def nthSuperUglyNumber(self, n, primes):
+        # write your code here
+        hq = [1]
+        v = set()
+
+        for i in range(1, n):
+            multi = heapq.heappop(hq)
+            for num in primes:
+                new_val = multi * num
+                if new_val not in v:
+                    v.add(new_val)
+                    heapq.heappush(hq, new_val)
+
+        return hq[0]
+
+
 # 做法1:
 # 
 # 使用小根堆, 初始将1放入堆, 循环 n-1 次, 每次取出堆顶, 然后将该值与素数列表每个数的乘积再次放入堆.
