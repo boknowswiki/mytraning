@@ -1,3 +1,63 @@
+
+package main
+
+import (
+	"fmt"
+)
+
+// two pionters
+
+const MaxUint = ^uint(0)
+const MinUint = 0
+const MaxInt = int(MaxUint >> 1)
+const MinInt = -MaxInt - 1
+
+/**
+ * @param nums: an array of integers
+ * @param s: An integer
+ * @return: an integer representing the minimum size of subarray
+ */
+func minimumSize(nums []int, s int) int {
+	// write your code here
+	n := len(nums)
+	if n == 0 {
+		return -1
+	}
+
+	ret := MaxInt
+	left := 0
+	sum := 0
+	for right := 0; right < n; right++ {
+		sum += nums[right]
+
+		for sum >= s {
+			ret = min(ret, right-left+1)
+			sum -= nums[left]
+			left++
+		}
+	}
+
+	if ret == MaxInt {
+		return -1
+	}
+	return ret
+}
+
+func min(a, b int) int {
+	if a < b {
+		return a
+	}
+	return b
+}
+
+func main() {
+	a := []int{2, 3, 1, 2, 4, 3}
+	b := 7
+	fmt.Println(minimumSize(a, b))
+}
+
+
+
 /**
  * @param nums: an array of integers
  * @param s: An integer
