@@ -1,52 +1,57 @@
+package main
+
+import (
+	"fmt"
+)
+
+// dp
+
+const MaxUint = ^uint(0)
+const MinUint = 0
+const MaxInt = int(MaxUint >> 1)
+const MinInt = -MaxInt - 1
+
 /**
  * @param nums: An integer array
  * @return: The length of LIS (longest increasing subsequence)
  */
- 
-//import "fmt"
+func longestIncreasingSubsequence(nums []int) int {
+	// dp[i] means the longest increasing subsequence at ith number..
+	// dp[i] = dp[j]+1 if num[i] > nums[j]+1 for j from [0, i-1]
+	// ret = max(ret, dp[i]) for i [0, n]
 
-func longestIncreasingSubsequence (nums []int) int {
-    // write your code here
-    n := len(nums)
-    if n == 0 || (n == 1 && nums[0] == 0){
-        return 0
-    }
-    
-    //fmt.Println(nums, n, cap(nums))
-    
-    ret := make([]int, 0)
-    ret = append(ret, nums[0])
+	n := len(nums)
+	if n == 0 {
+		return 0
+	}
+	dp := make([]int, n)
 
-    for _, val := range nums[1:] {
-        if val > ret[len(ret)-1] {
-            ret = append(ret, val)
-        } else {
-            index := findLower(ret, val)
-            //fmt.Println(ret, val, index)
-            ret[index] = val
-        }
-    }
-    
-    return len(ret)
+	for i := 0; i < n; i++ {
+		dp[i] = 1
+	}
+
+	ret := 1
+	for i := 1; i < n; i++ {
+		for j := i - 1; j >= 0; j-- {
+			if nums[i] > nums[j] {
+				dp[i] = max(dp[i], dp[j]+1)
+			}
+			ret = max(ret, dp[i])
+		}
+	}
+
+	return ret
 }
 
-func findLower(nums []int, val int) int {
-    l := 0
-    r := len(nums)
-    
-    for l + 1 < r {
-        mid := (l+r)/2
-        if nums[mid] >= val {
-            r = mid
-        } else {
-            l = mid
-        }
-    }
-    
-    if val > nums[l] {
-        return r
-    }
-    
-    return l
+func max(a, b int) int {
+	if a > b {
+		return a
+	}
+	return b
 }
 
+func main() {
+	a := []int{5, 4, 1, 2, 3}
+	//a := []int{9, 3, 6, 2, 7}
+	fmt.Println(longestIncreasingSubsequence(a))
+}
