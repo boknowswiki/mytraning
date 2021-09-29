@@ -1,4 +1,5 @@
 
+// two pointers
 /**
  * @param s: a string
  * @return: an integer
@@ -33,6 +34,7 @@ func lengthOfLongestSubstring (s string) int {
         if val, ok := m[c]; !ok {
             m[c] = 1
         } else {
+            panic("should not be here")
             m[c] = val+1
         }
         ret = max(ret, r-l+1)
