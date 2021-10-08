@@ -1,89 +1,115 @@
 package main
 
-import (
-	"container/heap"
-	"fmt"
-	"sort"
-)
+import "fmt"
 
-type Point struct {
-	X, Y int
-}
+// segment tree
 
-type Node struct {
-	val int
-	X   int
-	Y   int
-}
+const MaxUint = ^uint(0)
+const MaxInt = int(MaxUint >> 1)
 
-type IntHeap []*Node
-
-func (h IntHeap) Len() int           { return len(h) }
-func (h IntHeap) Less(i, j int) bool { return h[i].val < h[j].val }
-func (h IntHeap) Swap(i, j int)      { h[i], h[j] = h[j], h[i] }
-
-func (h *IntHeap) Push(x interface{}) {
-	// Push and Pop use pointer receivers because they modify the slice's length,
-	// not just its contents.
-	*h = append(*h, x.(*Node))
-}
-
-func (h *IntHeap) Pop() interface{} {
-	old := *h
-	n := len(old)
-	x := old[n-1]
-	*h = old[0 : n-1]
-	return x
+type segNode struct {
+	Start, End, Min int
+	Left, Right     *segNode
 }
 
 /**
- * @param points: a list of points
- * @param origin: a point
- * @param k: An integer
- * @return: the k closest points
+ * Definition of Interval:
+ * type Interval struct {
+ *     Start, End int
+ * }
  */
-func kClosest(points []*Point, origin *Point, k int) []*Point {
+type Interval struct {
+	Start, End int
+}
+
+/**
+ * @param A: An integer array
+ * @param queries: An query list
+ * @return: The result list
+ */
+func intervalMinNumber(A []int, queries []*Interval) []int {
 	// write your code here
-	maxHeap := &IntHeap{}
+	segTree := build(A)
 
-	for _, p := range points {
-		dist := getDist(p, origin)
-		heap.Push(maxHeap, &Node{val: -dist, X: p.X, Y: p.Y})
-		if maxHeap.Len() > k {
-			heap.Pop(maxHeap)
-		}
+	ret := []int{}
+
+	for i := range queries {
+		ret = append(ret, query(segTree, queries[i].Start, queries[i].End))
 	}
-
-	ret := []*Point{}
-	for maxHeap.Len() > 0 {
-		node := heap.Pop(maxHeap).(*Node)
-		ret = append(ret, &Point{X: node.X, Y: node.Y})
-		//ret = append([]*Point{&Point{X: node.X, Y: node.Y}}, ret...)
-	}
-
-	sort.Slice(ret, func(i, j int) bool {
-		d1 := (ret[i].X-0)*(ret[i].X-0) + (ret[i].Y-0)*(ret[i].Y-0)
-		d2 := (ret[j].X-0)*(ret[j].X-0) + (ret[j].Y-0)*(ret[j].Y-0)
-		return d1 < d2 || (d1 == d2 && ret[i].X < ret[j].X) || (d1 == d2 && ret[i].X == ret[j].X && ret[i].Y < ret[j].Y)
-	})
 
 	return ret
 }
 
-func getDist(p, o *Point) int {
-	return (p.X-o.X)*(p.X-o.X) + (p.Y-o.Y)*(p.Y-o.Y)
+func build(a []int) *segNode {
+	root := helper(a, 0, len(a)-1)
+	return root
+}
+
+func helper(a []int, start, end int) *segNode {
+	if start > end {
+		return nil
+	}
+	if start == end {
+		return &segNode{
+			Start: start,
+			End:   end,
+			Min:   a[start],
+		}
+	}
+	node := &segNode{
+		Start: start,
+		End:   end,
+	}
+	mid := (start + end) / 2
+	node.Left = helper(a, start, mid)
+	node.Right = helper(a, mid+1, end)
+	if node.Left != nil && node.Right != nil {
+		node.Min = min(node.Left.Min, node.Right.Min)
+	}
+	fmt.Println(node, node.Left, node.Right)
+
+	return node
+}
+
+func query(root *segNode, start, end int) int {
+	if root.Start == start && root.End == end {
+		return root.Min
+	}
+
+	mid := (root.Start + root.End) / 2
+	left := MaxInt
+	right := MaxInt
+	if start <= mid {
+		if mid < end {
+			left = query(root.Left, start, mid)
+		} else {
+			left = query(root.Left, start, end)
+		}
+	}
+	if mid < end {
+		if start <= mid {
+			right = query(root.Right, mid+1, end)
+		} else {
+			right = query(root.Right, start, end)
+		}
+	}
+
+	return min(left, right)
+}
+
+func min(a, b int) int {
+	if a < b {
+		return a
+	}
+	return b
 }
 
 func main() {
-	r := []int{10, 20, 30, 40}
-	g := [][]int{
-		[]int{1, 3},
-		[]int{0, 2},
-		[]int{1},
-		[]int{0},
+	a := []int{1, 2, 7, 8, 5}
+	q := []*Interval{
+		&Interval{Start: 1, End: 2},
+		&Interval{Start: 0, End: 4},
+		&Interval{Start: 2, End: 4},
 	}
-	s := 0
-	k := 2
-
-	fmt.Println(topKMovie(r, g, s, k))
+	fmt.Println(intervalMinNumber(a, q))
 }

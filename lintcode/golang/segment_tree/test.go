@@ -1,5 +1,7 @@
 package main
 
+import "fmt"
+
 // segment tree
 
 /**
@@ -11,50 +13,55 @@ type SegmentTreeNode struct {
 }
 
 /**
- * @param root: The root of segment tree.
- * @param start: start value.
- * @param end: end value.
- * @return: The maximum number in the interval [start, end]
+ * Definition of SegmentTreeNode:
+ * type SegmentTreeNode struct {
+ *     Start, End, Max int
+ *     Left, Right     *SegmentTreeNode
+ * }
  */
-/*
-func query(root *SegmentTreeNode, start int, end int) int {
+
+/**
+ * @param A: a list of integer
+ * @return: The root of Segment Tree
+ */
+func build(A []int) *SegmentTreeNode {
 	// write your code here
-	if root == nil || start > end {
-		return 0
-	}
-
-	if start <= root.Start && root.End <= end {
-		return root.Max
-	}
-
-	return max(query(root.Left, start, end), query(root.Right, start, end))
+	root := helper(A, 0, len(A)-1)
+	return root
 }
-*/
-func query(root *SegmentTreeNode, start int, end int) int {
-	// write your code here
-	if root.Start == start && root.End == end {
-		return root.Max
-	}
 
-	mid := (root.Start + root.End) / 2
-	left := 0
-	right := 0
-	if start <= mid {
-		if mid < end {
-			left = query(root.Left, start, mid)
-		} else {
-			left = query(root.Left, start, end)
-		}
+func helper(a []int, start int, end int) *SegmentTreeNode {
+	if start > end {
+		return nil
 	}
-	if mid < end {
-		if start <= mid {
-			right = query(root.Right, mid+1, end)
-		} else {
-			right = query(root.Right, start, end)
+	if start == end {
+		return &SegmentTreeNode{
+			Start: start,
+			End:   end,
+			Max:   a[start],
 		}
 	}
 
-	return max(left, right)
+	node := &SegmentTreeNode{
+		Start: start,
+		End:   end,
+	}
+	mid := (start + end) / 2
+	left := helper(a, start, mid)
+	right := helper(a, mid+1, end)
+	if left != nil && right != nil {
+		node.Max = max(left.Max, right.Max)
+		node.Left = left
+		node.Right = right
+	} else if left == nil {
+		node.Max = right.Max
+		node.Right = right
+	} else if right == nil {
+		node.Max = left.Max
+		node.Left = left
+	}
+
+	return node
 }
 
 func max(a, b int) int {
@@ -65,4 +72,6 @@ func max(a, b int) int {
 }
 
 func main() {
+	a := []int{3, 2, 1, 4}
+	fmt.Println(build(a))
 }

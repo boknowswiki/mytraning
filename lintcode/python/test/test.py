@@ -1,37 +1,78 @@
 #!/usr/bin/python -t
 
-"""
-Definition of SegmentTreeNode:
-class SegmentTreeNode:
-    def __init__(self, start, end):
-        self.start, self.end = start, end
-        self.left, self.right = None, None
-"""
+# trie
 
-class SegmentTreeNode:
-    def __init__(self, start, end):
-        self.start, self.end = start, end
-        self.left, self.right = None, None
+# 解题思路
+# 运用trie的技巧记录下来当前所有数的二进制表示。对于每个数， 他在数组里的最大异或可以通过trie的查询得到。
+# 
+# 时间复杂度。
+# 建立trie O（n times 32）
+# 查询trie O（n times 32）
+
+from typing import (
+    List,
+)
+
+class trieNode:
+    def __init__(self):
+        self.one = None
+        self.zero = None
+
+class trie:
+    def __init__(self):
+        self.root = trieNode()
+
+    def insert(self, num):
+        cur = self.root
+        for i in range(32)[::-1]:
+            bit = (num>>i) & 1
+            if bit == 1:
+                if not cur.one:
+                    cur.one = trieNode()
+                cur = cur.one
+            else:
+                if not cur.zero:
+                    cur.zero = trieNode()
+                cur = cur.zero
+        return
+        
 
 class Solution:
     """
-    @param: start: start value.
-    @param: end: end value.
-    @return: The root of Segment Tree.
+    @param nums: 
+    @return: the maximum result of ai XOR aj, where 0 ≤ i, j < n
     """
-    def build(self, start, end):
-        # write your code here
-        if start > end:
-            return None
+    def findMaximumXOR(self, nums: List[int]) -> int:
+        # Write your code here
+        t = trie()
+        for num in nums:
+            t.insert(num)
 
-        if start == end:
-            return SegmentTreeNode(start, start)
-        
-        root = SegmentTreeNode(start, end)
-        root.left = self.build(start, (start+end)/2)
-        root.right = self.build((start+end)/2+1, end)
-        return root
+        ret = 0
+        for num in nums:
+            cur = t.root
+            val = 0
+            for i in range(32)[::-1]:
+                bit = (num>>i) & 1
+                val *= 2
+                if bit == 1:
+                    if cur.zero:
+                        cur = cur.zero
+                        val += 1
+                    else:
+                        cur = cur.one
+                else:
+                    if cur.one:
+                        cur = cur.one
+                        val += 1
+                    else:
+                        cur = cur.zero
+            ret = max(ret, val)
+
+        return ret
+
 
 if __name__ == '__main__':
     s = Solution()
-    print(s.build(1,4))
+    a = [3, 10, 5, 25, 2, 8]
+    print(s.findMaximumXOR(a))
