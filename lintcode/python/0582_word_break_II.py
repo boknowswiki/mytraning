@@ -41,3 +41,39 @@ if __name__ == '__main__':
     ss = Solution()
     print "answer is %s" % ss.wordBreak(s, d)
 
+
+# time limit exceeded solution, this is because no memorization, but how to do it?
+
+class Solution:
+    """
+    @param: s: A string
+    @param: wordDict: A set of words.
+    @return: All possible sentences.
+    """
+    def wordBreak(self, s, wordDict):
+        # write your code here
+        ret = []
+
+        self.dfs(s, wordDict, {}, 0, [], ret)
+
+        return ret
+
+    def dfs(self, s, d, memo, startIndex, path, ret):
+        if startIndex == len(s):
+            ret.append(path)
+            return
+
+        if s in memo:
+            return memo[s]
+
+        for i in range(startIndex, len(s)):
+            prefix = s[startIndex:i+1]
+            if prefix in d:
+                if len(path) == 0:
+                    newPath = prefix
+                else:
+                    newPath = path + " " + prefix
+                self.dfs(s, d, memo, i+1, newPath, ret)
+        
+        return
+
