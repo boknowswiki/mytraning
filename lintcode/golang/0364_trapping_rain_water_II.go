@@ -103,3 +103,99 @@ func main() {
 	}
 	fmt.Println(trapRainWater(a))
 }
+
+
+
+import (
+	"container/heap"
+	"fmt"
+)
+
+type Node struct {
+	val int
+	x   int
+	y   int
+}
+
+type MinHeap []*Node
+
+func (h MinHeap) Len() int           { return len(h) }
+func (h MinHeap) Less(i, j int) bool { return h[i].val < h[j].val }
+func (h MinHeap) Swap(i, j int)      { h[i], h[j] = h[j], h[i] }
+
+func (h *MinHeap) Push(x interface{}) {
+	*h = append(*h, x.(*Node))
+}
+
+func (h *MinHeap) Pop() interface{} {
+	cur := *h
+	n := len(cur)
+	x := cur[n-1]
+	*h = cur[:n-1]
+	return x
+}
+
+/**
+ * @param heights: a matrix of integers
+ * @return: an integer
+ */
+func trapRainWater(heights [][]int) int {
+	// write your code here
+	m := len(heights)
+	if m == 0 {
+		return 0
+	}
+	n := len(heights[0])
+	if n == 0 {
+		return 0
+	}
+	minH := &MinHeap{}
+	v := make([][]bool, m)
+	for i := range v {
+		v[i] = make([]bool, n)
+	}
+
+	for i := 0; i < m; i++ {
+		for j := 0; j < n; j++ {
+			if i == 0 || i == m-1 || j == 0 || j == n-1 {
+				heap.Push(minH, &Node{val: heights[i][j], x: i, y: j})
+				v[i][j] = true
+			}
+		}
+	}
+
+	dir := []struct {
+		dx int
+		dy int
+	}{
+		{1, 0},
+		{-1, 0},
+		{0, 1},
+		{0, -1},
+	}
+
+	ret := 0
+
+	for minH.Len() != 0 {
+		node := heap.Pop(minH).(*Node)
+		for i := 0; i < len(dir); i++ {
+			nx := dir[i].dx + node.x
+			ny := dir[i].dy + node.y
+			if nx >= 0 && nx < m && ny >= 0 && ny < n && !v[nx][ny] {
+				maxH := max(node.val, heights[nx][ny])
+				ret += maxH - heights[nx][ny]
+				heap.Push(minH, &Node{val: maxH, x: nx, y: ny})
+				v[nx][ny] = true
+			}
+		}
+	}
+
+	return ret
+}
+
+func max(a, b int) int {
+	if a > b {
+		return a
+	}
+	return b
+}
