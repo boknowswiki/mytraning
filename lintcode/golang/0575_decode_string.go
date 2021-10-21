@@ -7,6 +7,9 @@ import (
     "unicode"
 )
 
+// stack
+// time O(n)
+
 func expressionExpand(s string) string {
     var stack []rune
 	for _, ch := range s {
@@ -40,3 +43,62 @@ func expressionExpand(s string) string {
 	}
 	return string(stack)
 }
+
+
+package main
+
+// stack and dfs
+
+import (
+	"fmt"
+	"unicode"
+)
+
+/**
+ * @param s: an expression includes numbers, letters and brackets
+ * @return: a string
+ */
+func expressionExpand(s string) string {
+	// write your code here
+	n := len(s)
+	if n == 0 {
+		return ""
+	}
+
+	ret, _ := dfs(s, 0)
+
+	return ret
+}
+
+func dfs(s string, index int) (string, int) {
+	var ret string
+	var reps int
+
+	fmt.Println("enter dfs with index: ", index)
+	for index < len(s) {
+		var subString string
+		if unicode.IsNumber(rune(s[index])) {
+			reps = reps*10 + int(s[index]-'0')
+		} else if s[index] == '[' {
+			subString, index = dfs(s, index+1)
+			fmt.Println("get substring ", subString, "index: ", index)
+			for i := 0; i < reps; i++ {
+				ret += subString
+			}
+			reps = 0
+		} else if s[index] == ']' {
+			fmt.Println("return ret ", ret, "index: ", index)
+			return ret, index
+		} else {
+			ret += string(s[index])
+		}
+		index++
+	}
+	return ret, index
+}
+
+func main() {
+	a := "abc3[a]"
+	fmt.Println(expressionExpand(a))
+}
+
