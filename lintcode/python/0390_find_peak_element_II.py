@@ -56,3 +56,42 @@ class Solution:
             return self.find(A, row_mid + 1, bottom, col_mid + 1, right)
         
         return [-1, -1]
+
+
+# O(mLogN)。这道题的面试标准答案。面试时，你能写出这样，就是Hire，follow-up问题能答好，就是Strong Hire。
+# 
+# 要点是：
+# 
+# 不要用系统max函数，因为你即需要最值也需要最值下标。
+# 要lo<=hi，不要lo+1<hi。下标移动要快，lo+1<hi有维和感。
+# follow-up，当然可以说，m > n 时，可以写成 O(nLogM)
+# 
+# 追求那个O(m+n)的解法，对于准备面试是纯粹浪费时间。Erik Demaine是14岁大学毕业的神童，20岁当上麻省理工的教授，他是第一个在课堂上讲这个
+# O(m+n)解的。Erik自己要是没想过这题，面试30分钟，也不一定能写完O(m+n)解。难道面试官指望招得到比Erik Demaine还聪明的人？
+
+class Solution:
+    """
+    @param A: An integer matrix
+    @return: The index of the peak
+    """
+    def findPeakII(self, A):
+        # write your code here
+        m = len(A)
+        n = len(A[0])
+        l = 1
+        r = n-2
+        while l <= r:
+            mid = (l+r)//2
+            colMax, row = A[0][mid], 0
+            for i in range(1, m-1):
+                if A[i][mid] > colMax:
+                    colMax = A[i][mid]
+                    row = i
+
+            if A[row][mid] < A[row][mid-1]:
+                r = mid-1
+            elif A[row][mid] < A[row][mid+1]:
+                l = mid+1
+            else:
+                # print("num is ", A[row][mid])
+                return (row, mid)
