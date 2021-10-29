@@ -1,3 +1,64 @@
+package main
+
+//sweep line
+
+import (
+	"fmt"
+	"sort"
+)
+
+type Interval struct {
+	Start, End int
+}
+
+type point struct {
+	time int
+	cnt  int
+}
+
+/**
+ * Definition of Interval:
+ * type Interval struct {
+ *     Start, End int
+ * }
+ */
+
+/**
+ * @param intervals: an array of meeting time intervals
+ * @return: if a person could attend all meetings
+ */
+func canAttendMeetings(intervals []*Interval) bool {
+	// Write your code here
+	n := len(intervals)
+	if n == 0 {
+		return false
+	}
+
+	sort.Slice(intervals, func(i, j int) bool {
+		return intervals[i].Start < intervals[j].Start ||
+			(intervals[i].Start == intervals[j].Start && intervals[i].End < intervals[j].End)
+	})
+
+	for i := 1; i < n; i++ {
+		if intervals[i].Start < intervals[i-1].End {
+			return false
+		}
+	}
+
+	return true
+
+}
+
+func main() {
+	a := []*Interval{
+		&Interval{0, 30},
+		&Interval{5, 10},
+		&Interval{15, 20},
+	}
+	fmt.Println(canAttendMeetings(a))
+}
+
+
 /**
  * Definition of Interval:
  * type Interval struct {
