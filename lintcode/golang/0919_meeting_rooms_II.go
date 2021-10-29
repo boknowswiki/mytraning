@@ -78,7 +78,7 @@ func minMeetingRooms(intervals []*Interval) int {
  */
 
 
-// sort with o(n)
+// sort with o(nlogn)
 
 import "sort"
 
