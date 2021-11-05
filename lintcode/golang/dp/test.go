@@ -25,14 +25,14 @@ func houseRobber(A []int) int64 {
 		return int64(A[0])
 	}
 
-	dp := make([]int, n)
+	dp := make([]int, 2)
 	dp[0] = A[0]
 	dp[1] = max(A[0], A[1])
 	for i := 2; i < n; i++ {
-		dp[i] = max(dp[i-1], dp[i-2]+A[i])
+		dp[i%2] = max(dp[(i-1)%2], dp[(i-2)%2]+A[i])
 	}
 
-	return int64(dp[n-1])
+	return int64(dp[(n-1)%2])
 }
 
 func max(a, b int) int {

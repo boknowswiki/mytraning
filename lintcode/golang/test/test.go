@@ -1,115 +1,49 @@
 package main
 
-import "fmt"
+// dp
+// time O(n), space O(n)
 
-// segment tree
-
-const MaxUint = ^uint(0)
-const MaxInt = int(MaxUint >> 1)
-
-type segNode struct {
-	Start, End, Min int
-	Left, Right     *segNode
-}
+import (
+	"fmt"
+)
 
 /**
- * Definition of Interval:
- * type Interval struct {
- *     Start, End int
- * }
+ * @param A: An array of non-negative integers
+ * @return: The maximum amount of money you can rob tonight
  */
-type Interval struct {
-	Start, End int
-}
-
-/**
- * @param A: An integer array
- * @param queries: An query list
- * @return: The result list
- */
-func intervalMinNumber(A []int, queries []*Interval) []int {
+func houseRobber(A []int) int64 {
 	// write your code here
-	segTree := build(A)
-
-	ret := []int{}
-
-	for i := range queries {
-		ret = append(ret, query(segTree, queries[i].Start, queries[i].End))
+	// dp[i] the max amount money at ith house.
+	// dp[i] = max(dp[i-1], dp[i-2]+a[i])
+	// dp[0] = a[0], dp[1] = max(a[0], a[1])
+	// result is dp[n]
+	n := len(A)
+	if n == 0 {
+		return 0
+	}
+	if n == 1 {
+		return int64(A[0])
 	}
 
-	return ret
+	dp := make([]int, 2)
+	dp[0] = A[0]
+	dp[1] = max(A[0], A[1])
+	for i := 2; i < n; i++ {
+		dp[i%2] = max(dp[(i-1)%2], dp[(i-2)%2]+A[i])
+	}
+
+	return int64(dp[(n-1)%2])
 }
 
-func build(a []int) *segNode {
-	root := helper(a, 0, len(a)-1)
-	return root
-}
-
-func helper(a []int, start, end int) *segNode {
-	if start > end {
-		return nil
-	}
-	if start == end {
-		return &segNode{
-			Start: start,
-			End:   end,
-			Min:   a[start],
-		}
-	}
-	node := &segNode{
-		Start: start,
-		End:   end,
-	}
-	mid := (start + end) / 2
-	node.Left = helper(a, start, mid)
-	node.Right = helper(a, mid+1, end)
-	if node.Left != nil && node.Right != nil {
-		node.Min = min(node.Left.Min, node.Right.Min)
-	}
-	fmt.Println(node, node.Left, node.Right)
-
-	return node
-}
-
-func query(root *segNode, start, end int) int {
-	if root.Start == start && root.End == end {
-		return root.Min
-	}
-
-	mid := (root.Start + root.End) / 2
-	left := MaxInt
-	right := MaxInt
-	if start <= mid {
-		if mid < end {
-			left = query(root.Left, start, mid)
-		} else {
-			left = query(root.Left, start, end)
-		}
-	}
-	if mid < end {
-		if start <= mid {
-			right = query(root.Right, mid+1, end)
-		} else {
-			right = query(root.Right, start, end)
-		}
-	}
-
-	return min(left, right)
-}
-
-func min(a, b int) int {
-	if a < b {
+func max(a, b int) int {
+	if a > b {
 		return a
 	}
 	return b
 }
 
 func main() {
-	a := []int{1, 2, 7, 8, 5}
-	q := []*Interval{
-		&Interval{Start: 1, End: 2},
-		&Interval{Start: 0, End: 4},
-		&Interval{Start: 2, End: 4},
-	}
-	fmt.Println(intervalMinNumber(a, q))
+	//a := []int{3, 8, 4}
+	a := []int{5, 2, 1, 3}
+	fmt.Println(houseRobber(a))
 }
