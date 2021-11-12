@@ -1,5 +1,8 @@
 #!/usr/bin/python -t
 
+# dfs with memorization
+# time O(n^2) space O(n)
+
 class Solution:
     """
     @param: s: A string
