@@ -1,78 +1,40 @@
 #!/usr/bin/python -t
 
-# trie
-
-# 解题思路
-# 运用trie的技巧记录下来当前所有数的二进制表示。对于每个数， 他在数组里的最大异或可以通过trie的查询得到。
-# 
-# 时间复杂度。
-# 建立trie O（n times 32）
-# 查询trie O（n times 32）
-
-from typing import (
-    List,
-)
-
-class trieNode:
-    def __init__(self):
-        self.one = None
-        self.zero = None
-
-class trie:
-    def __init__(self):
-        self.root = trieNode()
-
-    def insert(self, num):
-        cur = self.root
-        for i in range(32)[::-1]:
-            bit = (num>>i) & 1
-            if bit == 1:
-                if not cur.one:
-                    cur.one = trieNode()
-                cur = cur.one
-            else:
-                if not cur.zero:
-                    cur.zero = trieNode()
-                cur = cur.zero
-        return
-        
-
 class Solution:
     """
-    @param nums: 
-    @return: the maximum result of ai XOR aj, where 0 ≤ i, j < n
+    @param s: A string
+    @param wordSet: A dictionary of words dict
+    @return: A boolean
     """
-    def findMaximumXOR(self, nums: List[int]) -> int:
-        # Write your code here
-        t = trie()
-        for num in nums:
-            t.insert(num)
+    def wordBreak(self, s, wordSet):
+        # write your code here
+        # dp[i] can break into word at ith place.
+        n = len(s)
+        if len(wordSet) == 0:
+            return n == 0
 
-        ret = 0
-        for num in nums:
-            cur = t.root
-            val = 0
-            for i in range(32)[::-1]:
-                bit = (num>>i) & 1
-                val *= 2
-                if bit == 1:
-                    if cur.zero:
-                        cur = cur.zero
-                        val += 1
-                    else:
-                        cur = cur.one
-                else:
-                    if cur.one:
-                        cur = cur.one
-                        val += 1
-                    else:
-                        cur = cur.zero
-            ret = max(ret, val)
+        mem = [None]*n
+        return self.dfs(s, 0, wordSet, mem)
 
-        return ret
+    def dfs(self, s, startIndex, wordSet, mem):
+        if startIndex == len(s):
+            return True
+        if mem[startIndex] != None:
+            return mem[startIndex]
+
+        for i in range(startIndex, len(s)):
+            if s[startIndex:i+1] in wordSet and self.dfs(s, i+1, wordSet, mem):
+                mem[startIndex] = True
+                return True
+            
+        mem[startIndex] = False
+        return False
+
+
 
 
 if __name__ == '__main__':
     s = Solution()
-    a = [3, 10, 5, 25, 2, 8]
-    print(s.findMaximumXOR(a))
+    a = "lintcode"
+    d = ["lint", "code"]
+    print(s.wordBreak(a, d))
