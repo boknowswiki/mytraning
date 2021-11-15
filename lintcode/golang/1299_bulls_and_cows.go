@@ -1,43 +1,51 @@
-//hash
+package main
+
+// hash
+// time O(n), space O(n)
+import (
+	"fmt"
+)
 
 /**
  * @param secret: An string
  * @param guess: An string
  * @return: An string
  */
+func getHint(secret string, guess string) string {
+	// write your code here
+	numberCount := make(map[uint8]int, 10)
+	for i := 0; i < len(secret); i++ {
+		numberCount[secret[i]]++
+	}
 
-import "fmt"
+	fmt.Println(numberCount)
 
-func getHint (secret string, guess string) string {
-    // write your code here
-    n := len(secret)
+	bull := 0
+	cow := 0
 
-    cnt := make(map[string]int)
+	for i := 0; i < len(guess); i++ {
+		if _, ok := numberCount[guess[i]]; !ok {
+			continue
+		}
 
-    for _, s := range secret {
-        cnt[string(s)]++
-    }
+		fmt.Println(numberCount, guess[i])
 
-    bulls := 0
-    cows := 0
+		if guess[i] == secret[i] {
+			bull++
+		} else if guess[i] != secret[i] && numberCount[guess[i]] > 0 {
+			cow++
+		}
+		numberCount[guess[i]] = numberCount[guess[i]] - 1
+	}
 
-    for i := 0; i < n; i++ {
-        gCnt, ok := cnt[string(guess[i])]
-        if !ok && guess[i] != secret[i] {
-            continue
-        }
+	ret := fmt.Sprintf("%dA%dB", bull, cow)
+	return ret
+}
 
-        if ok && gCnt == 0 {
-            continue
-        }
-
-        if guess[i] == secret[i] {
-            bulls++
-        } else if ok && gCnt > 0 {
-            cows++
-        }
-        cnt[string(guess[i])] = gCnt-1
-    }
-
-    return fmt.Sprintf("%dA%dB", bulls, cows)
+func main() {
+	//a := "1807"
+	//b := "7810"
+	a := "1123"
+	b := "0111"
+	fmt.Println(getHint(a, b))
 }
