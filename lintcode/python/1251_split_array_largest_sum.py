@@ -1,5 +1,7 @@
 #!/usr/bin/python -t
 
+# binary search
+
 class Solution:
     """
     @param nums: a list of integers
@@ -46,3 +48,56 @@ class Solution:
 
         print cnt       
         return cnt+1
+
+#!/usr/bin/python -t
+
+# binary search
+
+class Solution:
+    """
+    @param nums: a list of integers
+    @param m: an integer
+    @return: return a integer
+    """
+    def splitArray(self, nums, m):
+        # write your code here
+        n = len(nums)
+        if n < m or n == 0:
+            return 0
+
+        start = max(nums)
+        end = sum(nums)
+
+        while start + 1 < end:
+            target = (start+end)//2
+            if self.target_sum_satisfy_m(nums, m, target):
+                end = target
+            else:
+                start = target
+        if self.target_sum_satisfy_m(nums, m, start):
+            return start
+
+        return end
+
+    def target_sum_satisfy_m(self, nums, m, target):
+        cnt = 0
+        curSum = 0
+
+        for num in nums:
+            if curSum+num <= target:
+                curSum += num
+            else:
+                curSum = num
+                cnt += 1
+
+        cnt+= 1
+
+        return cnt <= m
+        
+
+
+if __name__ == '__main__':
+    s = Solution()
+    a = [7,2,5,10,8]
+    b = 2
+    print(s.splitArray(a, b))
