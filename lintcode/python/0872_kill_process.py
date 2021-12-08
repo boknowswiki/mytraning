@@ -70,3 +70,35 @@ if __name__ == '__main__':
     ss = Solution()
     print "answer is\n"
     print ss.killProcess(s, v, k)
+
+
+import collections
+
+class Solution:
+    """
+    @param pid: the process id
+    @param ppid: the parent process id
+    @param kill: a PID you want to kill
+    @return: a list of PIDs of processes that will be killed in the end
+    """
+    def killProcess(self, pid, ppid, kill):
+        # Write your code here
+        ppMap = {}
+        for i in range(len(ppid)):
+            if ppid[i] not in ppMap:
+                ppMap[ppid[i]] = list()
+            ppMap[ppid[i]].append(pid[i])
+
+        if kill not in ppMap:
+            return [kill]
+
+        ret = []
+        q = collections.deque([kill])
+        while q:
+            p = q.popleft()
+            ret.append(p)
+            if p in ppMap:
+                for cp in ppMap[p]:
+                    q.append(cp)
+
+        return ret
