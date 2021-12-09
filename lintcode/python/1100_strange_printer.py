@@ -6,6 +6,59 @@
 
 class Solution:
     """
+    @param s:
+    @return: the minimum number of turns the printer needed in order to print it
+    """
+    def strangePrinter(self, s):
+        # write your code here
+        n = len(s)
+        dp = [
+          [float('inf')] * n
+          for _ in range(n)
+        ]
+
+        for i in range(n):
+          dp[i][i] = 1
+
+        for size in range(2, n + 1):
+          for i in range(n):
+            j = i + size - 1
+            if j >= n:
+              break
+            for k in range(i, j):
+              temp = dp[i][k] + dp[k + 1][j]
+              if s[k] == s[j]:
+                temp -= 1
+              dp[i][j] = min(dp[i][j], temp)
+        return dp[0][n - 1]
+
+class Solution:
+    """
+    @param s:
+    @return: the minimum number of turns the printer needed in order to print it
+    """
+    def strangePrinter(self, s):
+        # write your code here
+        dp = [[0 for i in range(102)] for i in range(102)]
+        n = len(s)
+        if n == 0:
+            return 0
+
+        for i in range(n):
+            dp[i][i] = 1
+
+        for length in range(1, n):  #枚举区间长度
+            for j in range(0, n-length):    #枚举起点
+                dp[j][j+length] = length+1
+                for k in range(j+1, j+length+1):
+                    tmp = dp[j][k-1]+dp[k][j+length]    #小区间合并成为大区间，答案更新，判断尾部，相同减一
+                    if s[k-1] == s[j+length]:
+                        tmp -=1
+                    dp[j][j+length] = min(dp[j][j+length], tmp)
+        return dp[0][n-1]
+
+class Solution:
+    """
     @param s: 
     @return: the minimum number of turns the printer needed in order to print it
     """
