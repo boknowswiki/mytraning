@@ -1,8 +1,8 @@
 #!/usr/bin/python -t
 
+# bfs
 
-import sys
-#fromt collections import deque
+import collections
 
 class Solution:
     """
@@ -11,46 +11,47 @@ class Solution:
     """
     def slidingPuzzle(self, board):
         # write your code here
-        if not board or not board[0]:
-            return -1
-        
-        m = len(board)
-        n = len(board[0])
-        org = ""
-        for i in range(m):
-            for j in range(n):
-                org += str(board[i][j])
-                
-        dx = [1, -1, 0, 0]
-        dy = [0, 0, -1, 1]
-        
-        q = []
-        q.append(org)
+        boardStr = ""
+        for i in range(len(board)):
+            for j in range(len(board[0])):
+                boardStr += str(board[i][j])
+
+        #print(boardStr)
+        expectStr = "123450"
+        q = collections.deque([boardStr])
         v = set()
-        v.add(org)
+        v.add(boardStr)
+        dirs = [(1,0), (-1, 0), (0, 1), (0, -1)]
         ret = 0
-        
+
         while q:
-            l = len(q)
-            for _ in range(l):
-                b = q.pop(0)
-                if b == "123450":
+            qLen = len(q)
+            for _ in range(qLen):
+                curBoard = q.popleft()
+
+                if curBoard == expectStr:
                     return ret
-                
-                index = b.index("0")
-                x = index//3
-                y = index%3
-                for i in range(4):
-                    nx = x + dx[i]
-                    ny = y + dy[i]
-                    if 0 <= nx < m and 0 <= ny < n:
-                        new_index = nx*3 + ny
-                        min_index = min(new_index, index)
-                        max_index = max(new_index, index)
-                        new_b = b[:min_index] + b[max_index] + b[min_index+1:max_index] + b[min_index] + b[max_index+1:]
-                        if new_b not in v:
-                            v.add(new_b)
-                            q.append(new_b)
+                zeroIndex = curBoard.find('0')
+
+                x = zeroIndex//3
+                y = zeroIndex%3
+                for i in range(len(dirs)):
+                    nx = x + dirs[i][0]
+                    ny = y + dirs[i][1]
+                    #print(curBoard, nx, ny, zeroIndex)
+                    if 0 <= nx < 2 and 0 <= ny < 3:
+                        minIndex = min(nx*3+ny, zeroIndex)
+                        maxIndex = max(nx*3+ny, zeroIndex)
+                        nextBoard = curBoard[:minIndex] + curBoard[maxIndex] + curBoard[minIndex+1:maxIndex] + curBoard[minIndex]+ curBoard[maxIndex+1:]
+                        if nextBoard not in v:
+                            v.add(nextBoard)
+                            q.append(nextBoard)
+
             ret += 1
-            
+
         return -1
+
+if __name__ == '__main__':
+    s = Solution()
+    a= [[1,2,3],[4,0,5]]
+    print(s.slidingPuzzle(a))
