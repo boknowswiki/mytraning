@@ -95,3 +95,59 @@ class Solution:
         return True
         
             
+
+# dfs
+class Solution:
+    """
+    @param board: A list of lists of character
+    @param words: A list of string
+    @return: A list of string
+    """
+    def wordSearchII(self, board, words):
+        # write your code here
+        if len(words) == 0:
+            return []
+        maxLen = max(len(word) for word in words)
+        ret = []
+        path = ""
+        v = set()
+        prefix_set = set()
+        for word in words:
+            for i in range(len(word)):
+                prefix_set.add(word[:i + 1])
+
+        for i in range(len(board)):
+            for j in range(len(board[0])):
+                v.add((i, j))
+                self.dfs(board, words, prefix_set, maxLen, i, j, board[i][j], v, ret)
+                v.remove((i, j))
+
+        return ret
+
+    def dfs(self, board, words, prefix_set, maxLen, x, y, path, v, ret):
+        if path not in prefix_set:
+            return
+        if len(path) > maxLen:
+            return
+        if path in words:
+            if path not in ret:
+                ret.append(path)
+        
+        dirs = [(1, 0), (-1, 0), (0, 1), (0, -1)]
+
+        for i in range(len(dirs)):
+            nx = x + dirs[i][0]
+            ny = y + dirs[i][1]
+
+            if 0 <= nx < len(board) and 0 <= ny < len(board[0]) and (nx, ny) not in v:
+                v.add((nx, ny))
+                self.dfs(board, words, prefix_set, maxLen, nx, ny, path+board[nx][ny], v, ret)
+                v.remove((nx, ny))
+
+        return
+
+if __name__ == '__main__':
+    s = Solution()
+    a =["abce","sfcs","adee"]
+    b= ["see","se"]
+    print(s.wordSearchII(a,b))
