@@ -55,3 +55,31 @@ class Solution:
                     
         return dp[n][amount] if dp[n][amount] != sys.maxint else -1
 
+
+# dfs with memorization
+
+class Solution:
+
+    def coinChange(self, coins, amount):
+
+        result = self.helper(coins, amount, {}, amount+1)
+
+        return result if result != amount+1 else -1
+
+    def helper(self, coins, amount, memo, invalid_coin_number):
+
+        if amount in memo: return memo[amount]
+
+        if amount == 0:
+            memo[0] = 0
+            return memo[0]
+
+        candidates = [invalid_coin_number]
+        for deno in coins:
+            if deno == 0 or amount-deno < 0:
+                continue
+            candidates.append(1 + self.helper(coins, amount-deno, memo, invalid_coin_number))
+
+        memo[amount] = min(candidates)
+
+        return memo[amount]
