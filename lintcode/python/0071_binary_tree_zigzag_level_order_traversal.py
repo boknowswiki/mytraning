@@ -1,5 +1,51 @@
 #!/usr/bin/python -t
 
+# bfs
+
+"""
+Definition of TreeNode:
+class TreeNode:
+    def __init__(self, val):
+        self.val = val
+        self.left, self.right = None, None
+"""
+
+import collections
+
+class Solution:
+    """
+    @param root: A Tree
+    @return: A list of lists of integer include the zigzag level order traversal of its nodes' values.
+    """
+    def zigzagLevelOrder(self, root):
+        # write your code here
+        if not root:
+            return []
+
+        left_to_right = False
+
+        q = collections.deque([root])
+        ret = []
+
+        while q:
+            l = len(q)
+            level = []
+            for _ in range(l):
+                node = q.popleft()
+                level.append(node.val)
+                if node.left:
+                    q.append(node.left)
+                if node.right:
+                    q.append(node.right)
+
+            if left_to_right:
+                level = level[::-1]
+
+            left_to_right = not left_to_right
+            ret.append(level)
+
+        return ret
+
 # bfs, traversal way
 
 """
