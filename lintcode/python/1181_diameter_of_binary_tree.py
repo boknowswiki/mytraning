@@ -1,5 +1,6 @@
 #!/usr/bin/python -t
 
+# time O(n), space O(1)
 # tree traversal solution
 #最长路径有两种情况：
 #1.最长条路径经过根节点，那么只需要找出根节点的左右两棵子树的最大深度然后相加即可。
