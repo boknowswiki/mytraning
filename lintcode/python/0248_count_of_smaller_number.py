@@ -67,6 +67,44 @@ class Solution:
             
         return ret
 
+
+# binary search and sort
+
+class Solution:
+    """
+    @param A: An integer array
+    @param queries: The query list
+    @return: The number of element in the array that are smaller that the given integer
+    """
+    def countOfSmallerNumber(self, A, queries):
+        # write your code here
+        if len(A) == 0:
+            return [0] * len(queries)
+        A.sort()
+        ret = []
+        for q in queries:
+            index = self.bs(A, q)
+            ret.append(index+1)
+
+        return ret
+
+    def bs(self, a, target):
+        n = len(a)
+        l = 0
+        r = n-1
+        while l+1<r:
+            mid = (l+r)//2
+            if a[mid] >= target:
+                r = mid
+            else:
+                l = mid
+        if a[r] < target:
+            return r
+
+        if a[l] < target:
+            return l
+        return -1
+
 if __name__ == '__main__':
     s = [1,2,3,4,5,6]
     t = [1,2,3,4]
