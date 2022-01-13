@@ -1,5 +1,37 @@
 #!/usr/bin/python -t
 
+# string or array
+
+class Solution:
+    """
+    @param A: An array of Integer
+    @return: an integer
+    """
+    def longestIncreasingContinuousSubsequence(self, A):
+        # write your code here
+        n = len(A)
+        if n == 0:
+            return 0
+
+        ret = 1
+        cnt = 1
+        for i in range(1, n):
+            if A[i] > A[i-1]:
+                cnt += 1
+            else:
+                cnt = 1
+            ret = max(ret, cnt)
+
+        cnt = 1
+        for i in range(1, n):
+            if A[i] < A[i-1]:
+                cnt += 1
+            else:
+                cnt = 1
+            ret = max(ret, cnt)
+
+        return ret
+
 # dp solution time O(n), space O(n)
 
 class Solution:
