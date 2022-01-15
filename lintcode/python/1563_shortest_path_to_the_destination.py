@@ -3,6 +3,49 @@
 # bfs
 
 
+from collections import deque
+
+DIRECTIONS = [
+    (1, 0),
+    (0, -1),
+    (-1, 0),
+    (0, 1),
+]
+
+
+class Solution:
+    """
+    @param targetMap:
+    @return: nothing
+    """
+    def shortestPath(self, targetMap):
+        queue = deque([(0, 0)])
+        distance = {(0, 0): 0}
+        while queue:
+            x, y = queue.popleft()
+            for delta_x, delta_y in DIRECTIONS:
+                _x = x + delta_x
+                _y = y + delta_y
+                if not self.is_valid(_x, _y, targetMap, distance):
+                    continue
+
+                queue.append((_x, _y))
+                distance[(_x, _y)] = distance[(x, y)] + 1
+
+                if targetMap[_x][_y] == 2:
+                    return distance[(_x, _y)]
+
+        return -1
+
+    def is_valid(self, x, y, targetMap, distance):
+        if not 0 <= x < len(targetMap) or not 0 <= y < len(targetMap[0]):
+            return False
+        return targetMap[x][y] != 1 and (x, y) not in distance
+
+
+# bfs
+
+
 import collections
 
 class Solution:
