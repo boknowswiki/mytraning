@@ -1,5 +1,55 @@
 #!/usr/bin/python -t
 
+# bst and link list
+# worked, and AC
+
+
+"""
+Definition of TreeNode:
+class TreeNode:
+    def __init__(self, val):
+        self.val = val
+        self.left, self.right = None, None
+"""
+
+class Solution:
+    """
+    @param root: root of a tree
+    @return: head node of a doubly linked list
+    """
+    def treeToDoublyList(self, root):
+        # Write your code here.
+        if not root:
+            return root
+
+        self.head, self.last = None, None
+
+        self.inorder(root)
+
+        self.head.left = self.last
+        self.last.right = self.head
+
+        return self.head
+
+
+    def inorder(self, node):
+        if not node:
+            return
+
+        self.inorder(node.left)
+
+        if not self.head:
+            self.head = node
+            self.last = node
+        else:
+            self.last.right = node
+            node.left = self.last
+            self.last = node
+
+        self.inorder(node.right)
+
+        return
+
 # linked list answer, but no AC.
 
 """
