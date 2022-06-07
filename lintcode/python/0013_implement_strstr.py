@@ -1,8 +1,7 @@
-#!/usr/bin/python -t
+#!/usr/bin/python3 -t
 
-# string
-# time O(mn), space O(1)
-# another way is  KMP Algorithm
+# time O(mn)
+# space O(m+n)
 
 class Solution:
     """
@@ -10,22 +9,36 @@ class Solution:
     @param target: 
     @return: return the index
     """
-    def strStr(self, source, target):
+    def str_str(self, source: str, target: str) -> int:
         # Write your code here
-        m = len(source)
-        n = len(target)
-        
-        if n > m:
+        n = len(source)
+        m = len(target)
+
+        if m == n == 0:
+            return 0
+
+        if m > n:
             return -1
-            
-        for i in range(m-n+1):
-            offset = 0
-            while offset < n and source[i+offset] == target[offset]:
-                offset += 1
-                #print offset
-                
-            if offset == n:
+
+        if m == n and source != target:
+            return -1
+
+        for i in range(n-m+1):
+            j = 0
+            while i+j < n and j < m and source[i+j] == target[j]:
+                j += 1
+            if j == m:
                 return i
-                
+            else:
+                continue
+
         return -1
-            
+
+        
+if __name__ == '__main__':
+    s = Solution()
+    a = "source"
+    b = "target"
+    a = "abcdabcdefg"
+    b = "bcd"
+    print(s.str_str(a,b))
