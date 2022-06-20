@@ -1,5 +1,41 @@
 #!/usr/bin/python -t
 
+
+# binary search
+# time O(logn)
+# space O(1)
+
+
+from typing import (
+    List,
+)
+
+class Solution:
+    """
+    @param nums: a rotated sorted array
+    @return: the minimum number in the array
+    """
+    def find_min(self, nums: List[int]) -> int:
+        # write your code here
+        n = len(nums)
+        if n == 0:
+            return -1
+
+        start = 0
+        end = n-1
+
+        while start + 1 < end:
+            if nums[start] < nums[end]:
+                return nums[start]
+            mid = start + (end-start)//2
+            if nums[mid] > nums[end]:
+                start = mid
+            else:
+                end = mid
+
+        return min(nums[start], nums[end])
+
+
 # binary search solution
 
 class Solution:
