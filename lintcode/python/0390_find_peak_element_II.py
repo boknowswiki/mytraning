@@ -1,4 +1,61 @@
-#!/usr/bin/python -t
+#!/usr/bin/python3 -t
+
+# binary search
+# time O(mlogn)
+# space O(1)
+
+from typing import (
+    List,
+)
+
+class Solution:
+    """
+    @param a: An integer matrix
+    @return: The index of the peak
+    """
+    def find_peak_i_i(self, a: List[List[int]]) -> List[int]:
+        # write your code here
+        m, n = len(a), len(a[0])
+
+        for i in range(1, m-1):
+            col = self.find_peak(a[i])
+            if a[i][col] > a[i-1][col] and a[i][col] > a[i+1][col] \
+                and a[i][col] > a[i][col-1] and a[i][col+1]:
+                return [i, col]
+
+        return [-1, -1]
+
+
+    def find_peak(self, a: List[int]) -> int:
+        n = len(a)
+        if n == 0:
+            return 0
+
+        start = 0
+        end = n-1
+
+        while start + 1 < end:
+            mid = start + (end-start)//2
+            if a[mid] > a[mid+1]:
+                end = mid
+            else:
+                start = mid
+
+        return start if a[start] > a[end] else end
+
+
+if __name__ == '__main__':
+    s = Solution()
+    a = [
+      [1, 2, 3, 6,  5],
+      [16,41,23,22, 6],
+      [15,17,24,21, 7],
+      [14,18,19,20,10],
+      [13,14,11,10, 9]
+    ]
+
+    print(s.find_peak_i_i(a))
+
 
 # 正确的算法请参考: http://courses.csail.mit.edu/6.006/spring11/lectures/lec02.pdf
 
