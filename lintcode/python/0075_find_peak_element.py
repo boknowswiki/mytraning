@@ -1,4 +1,42 @@
-#!/usr/bin/python -t
+#!/usr/bin/python3 -t
+
+# binary search
+# time O(logn)
+# space O(1)
+
+from typing import (
+    List,
+)
+
+class Solution:
+    """
+    @param a: An integers array.
+    @return: return any of peek positions.
+    """
+    def find_peak(self, a: List[int]) -> int:
+        # write your code here
+        n = len(a)
+        if n == 0:
+            return 0
+
+        start = 0
+        end = n-1
+
+        while start + 1 < end:
+            mid = start + (end-start)//2
+            if a[mid] > a[mid+1]:
+                end = mid
+            else:
+                start = mid
+
+        return start if a[start] > a[end] else end
+
+
+if __name__ == '__main__':
+    s = Solution()
+    a = [1,2,4,8,6,3]
+
+    print(s.find_peak(a))
 
 # binary search solution
 # better and cleaner
