@@ -33,13 +33,22 @@ class Solution:
             mid = start + (end-start)//2
             if a[mid] == target:
                 return mid
+<<<<<<< HEAD
             if a[start] <= a[mid]:
                 if a[start] <= target <= a[mid]:
+=======
+            if a[start] < a[mid]:
+                if a[start] < target < a[mid]:
+>>>>>>> f51984138baf092e83cddd0cd500c3216643625b
                     end = mid
                 else:
                     start = mid
             else:
+<<<<<<< HEAD
                 if a[mid] <= target <= a[end]:
+=======
+                if a[mid] < target < a[end]:
+>>>>>>> f51984138baf092e83cddd0cd500c3216643625b
                     start = mid
                 else:
                     end = mid
