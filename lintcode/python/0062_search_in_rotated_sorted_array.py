@@ -1,4 +1,67 @@
-#!/usr/bin/python -t
+#!/usr/bin/python3 -t
+
+# binary search
+# time O(logn)
+# space O(1)
+
+from typing import (
+    List,
+)
+
+class Solution:
+    """
+    @param a: an integer rotated sorted array
+    @param target: an integer to be searched
+    @return: an integer
+    """
+    def search(self, a: List[int], target: int) -> int:
+        # write your code here
+        n = len(a)
+        if n == 0:
+            return -1
+        if n == 1:
+            return 0 if a[0] == target else -1
+
+        start = 0
+        end = n - 1
+        while start + 1 < end:
+            if a[start] == target:
+                return start
+            if a[end] == target:
+                return end
+
+            mid = start + (end-start)//2
+            if a[mid] == target:
+                return mid
+            if a[start] <= a[mid]:
+                if a[start] <= target <= a[mid]:
+                    end = mid
+                else:
+                    start = mid
+            else:
+                if a[mid] <= target <= a[end]:
+                    start = mid
+                else:
+                    end = mid
+
+        if a[start] == target:
+            return start
+        if a[end] == target:
+            return end
+        return -1
+
+
+
+if __name__ == '__main__':
+    s = Solution()
+    a = [4, 5, 1, 2, 3]
+    b = 1
+    a = [0,1,2,-10,-9,-8,-7,-6,-5,-4,-3,-2,-1]
+    b = -9
+    a = [1001, 10001, 10007, 1, 10, 101, 201]
+    b= 10001
+
+    print(s.search(a, b))
 
 # binary search solution
 
