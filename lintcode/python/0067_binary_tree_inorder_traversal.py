@@ -1,5 +1,70 @@
 #!/usr/bin/python -t
 
+
+# binary tree, iteration way
+# time O(n)
+# space O(1)
+
+import collections
+
+class Solution:
+    """
+    @param root: A Tree
+    @return: Inorder in ArrayList which contains node values.
+    """
+    def inorder_traversal(self, root: TreeNode) -> List[int]:
+        # write your code here
+        if not root:
+            return []
+
+        queue = collections.deque()
+        ret = []
+
+        node = root
+        while node is not None:
+            queue.append(node)
+            node = node.left
+
+        while len(queue) > 0:
+            node = queue.pop()
+            ret.append(node.val)
+            if node.right:
+                node = node.right
+                while node is not None:
+                    queue.append(node)
+                    node = node.left
+
+        return ret
+
+# binary tree, divid and conquer way
+# time O(n)
+# space O(1)
+
+
+class Solution:
+    """
+    @param root: A Tree
+    @return: Inorder in ArrayList which contains node values.
+    """
+    def inorder_traversal(self, root: TreeNode) -> List[int]:
+        # write your code here
+        if not root:
+            return []
+
+        ret = self.helper(root)
+
+        return ret
+
+    def helper(self, node):
+        if not node:
+            return []
+
+        ret = self.helper(node.left)
+        ret.append(node.val)
+        ret.extend(self.helper(node.right))
+
+        return ret
+
 # binary tree traversal inoder, iteration way
 
 """
