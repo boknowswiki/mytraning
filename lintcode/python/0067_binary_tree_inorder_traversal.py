@@ -3,7 +3,7 @@
 
 # binary tree, iteration way
 # time O(n)
-# space O(1)
+# space O(n)
 
 import collections
 

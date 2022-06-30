@@ -1,5 +1,78 @@
 #!/usr/bin/python -t
 
+
+# iteration way
+# time O(n)
+# space O(n)
+
+import collections
+
+class Solution:
+    """
+    @param root: A Tree
+    @return: Postorder in ArrayList which contains node values.
+    """
+    def postorder_traversal(self, root: TreeNode) -> List[int]:
+        # write your code here
+        if not root:
+            return []
+
+        queue = collections.deque()
+        ret = []
+
+        node = root
+        while node is not None:
+            queue.append(node)
+            if node.left:
+                node = node.left
+            else:
+                node = node.right
+
+        while len(queue) > 0:
+            node = queue.pop()
+            ret.append(node.val)
+            if queue and queue[-1].left == node:
+                node = queue[-1].right
+                while node is not None:
+                    queue.append(node)
+                    if node.left:
+                        node = node.left
+                    else:
+                        node = node.right
+
+        return ret
+
+
+
+# divid and conquer way
+# time O(n)
+# space O(1)
+
+
+class Solution:
+    """
+    @param root: A Tree
+    @return: Postorder in ArrayList which contains node values.
+    """
+    def postorder_traversal(self, root: TreeNode) -> List[int]:
+        # write your code here
+        if not root:
+            return []
+
+        ret = self.helper(root)
+
+        return ret
+
+    def helper(self, node):
+        if not node:
+            return []
+
+        ret = self.helper(node.left)
+        ret.extend(self.helper(node.right))
+        ret.append(node.val)
+
+        return ret
+
 # binary tree postorder, iteration way
 
 
