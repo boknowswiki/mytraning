@@ -36,6 +36,49 @@ class Solution:
         return ret
 
 
+# binary tree
+# traverse way
+# time O(n)
+# space O(1)
+
+class Solution:
+    """
+    @param root: the root of binary tree
+    @param target: An integer
+    @return: all valid paths
+             we will sort your return value in output
+    """
+    def binary_tree_path_sum(self, root: TreeNode, target: int) -> List[List[int]]:
+        # write your code here
+        if not root:
+            return []
+
+        ret = []
+        path = []
+
+        self.helper(root, target, path, ret)
+
+        return ret
+
+    def helper(self, node, target, path, ret):
+        if not node:
+            return
+        
+        path.append(node.val)
+
+        if node.left is None and node.right is None and target == node.val:
+            ret.append(list(path))
+            path.pop()
+            return
+
+        self.helper(node.left, target-node.val, path, ret)
+        self.helper(node.right, target-node.val, path, ret)
+
+        path.pop()
+        
+        return
+
+
 # traversal way
 
 """
