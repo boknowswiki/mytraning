@@ -1,5 +1,22 @@
 #!/usr/bin/python -t
 
+
+# dfs, divid and conquer way
+# time O(n)
+# space O(1)
+
+class Solution:
+    """
+    @param root: The root of binary tree.
+    @return: An integer
+    """
+    def max_depth(self, root: TreeNode) -> int:
+        # write your code here
+        if not root:
+            return 0
+
+        return max(self.max_depth(root.left), self.max_depth(root.right)) + 1
+
 # dfs, traversal solution
 
 """
