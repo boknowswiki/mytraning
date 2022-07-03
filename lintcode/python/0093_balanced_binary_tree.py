@@ -1,5 +1,37 @@
 #!/usr/bin/python -t
 
+# binary tree
+# divid and conquer way
+# time O(n)
+# space O(1)
+
+
+class Solution:
+    """
+    @param root: The root of binary tree.
+    @return: True if this Binary tree is Balanced, or false.
+    """
+    def is_balanced(self, root: TreeNode) -> bool:
+        # write your code here
+        if not root:
+            return True
+
+        balanced, _ = self.helper(root)
+
+        return balanced
+
+    def helper(self, node):
+        if not node:
+            return True, 0
+
+        l_b, l_d = self.helper(node.left)
+        r_b, r_d = self.helper(node.right)
+
+        balanced = l_b and r_b and abs(l_d -r_d) < 2
+        depth = max(l_d, r_d) + 1
+
+        return balanced, depth
+
 # dfs, divid and conquer solution
 
 """
