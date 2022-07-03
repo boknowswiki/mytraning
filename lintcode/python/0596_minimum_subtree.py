@@ -1,5 +1,43 @@
 #!/usr/bin/python -t
 
+# binary tree
+# divid and conquer way
+# time O(n)
+# space O(1)
+
+import sys
+
+class Solution:
+    """
+    @param root: the root of binary tree
+    @return: the root of the minimum subtree
+    """
+    def find_subtree(self, root: TreeNode) -> TreeNode:
+        # write your code here
+        if not root:
+            return root
+
+        min_node, _, _ = self.helper(root)
+
+        return min_node
+
+    def helper(self, node):
+        if not node:
+            return None, sys.maxsize, 0
+
+        left_node, left_min, left_total = self.helper(node.left)
+        right_node, right_min, right_total = self.helper(node.right)
+
+        total = left_total+right_total+node.val
+
+        if left_min < right_min and left_min < total:
+            return left_node, left_min, total
+        if right_min < left_min and right_min < total:
+            return right_node, right_min, total
+
+        return node, total, total
+
+
 # pure divid and conquer solution
 
 """
