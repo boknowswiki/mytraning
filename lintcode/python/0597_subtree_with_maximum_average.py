@@ -1,5 +1,42 @@
 #!/usr/bin/python -t
 
+# binary tree
+# divid and conquer way
+# time O(n)
+# space O(1)
+
+class Solution:
+    """
+    @param root: the root of binary tree
+    @return: the root of the maximum average of subtree
+    """
+    def find_subtree2(self, root: TreeNode) -> TreeNode:
+        # write your code here
+        if not root:
+            return root
+
+        node, max_avg, total, cnt = self.helper(root)
+
+        return node
+
+    def helper(self, node):
+        if not node:
+            return None, 0, 0, 0
+
+        left_node, l_max_avg, l_total, l_cnt = self.helper(node.left)
+        right_node, r_max_avg, r_total, r_cnt = self.helper(node.right)
+
+        total = node.val + l_total + r_total
+        cnt = 1 + l_cnt + r_cnt
+        max_avg = total / cnt
+
+        if left_node is not None and l_max_avg >= r_max_avg and l_max_avg > max_avg:
+            return left_node, l_max_avg, total, cnt
+        if right_node is not None and r_max_avg >= l_max_avg and r_max_avg > max_avg:
+            return right_node, r_max_avg, total, cnt
+
+        return node, max_avg, total, cnt
+
 # dfs, divid and conquer solution
 
 """
