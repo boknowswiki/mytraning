@@ -1,5 +1,85 @@
 #!/usr/bin/python -t
 
+# binary tree
+# divid and conquer way
+# time O(n)
+# space O(n)
+
+
+class Solution:
+    """
+    @param root: the root of binary tree
+    @return: the length of the longest consecutive sequence path
+    """
+    def longest_consecutive(self, root: TreeNode) -> int:
+        # write your code here
+        if not root:
+            return 0
+
+        ret, _ = self.helper(root)
+
+        return ret
+
+    def helper(self, node):
+        if not node:
+            return 0, 0
+
+        left, left_ret = self.helper(node.left)
+        right, right_ret = self.helper(node.right)
+
+        cur_ret = 1
+        if node.left and node.val == node.left.val - 1:
+            cur_ret = max(left_ret+1, cur_ret)
+
+        if node.right and node.val == node.right.val - 1:
+            cur_ret = max(right_ret+1, cur_ret)
+
+        ret = max(cur_ret, left, right)
+
+        return ret, cur_ret
+
+
+
+# binary tree
+# traversal and divid and conquer way
+# time O(n)
+# space O(n)
+
+class Solution:
+    def __init__(self):
+        self.ret = 0
+
+    """
+    @param root: the root of binary tree
+    @return: the length of the longest consecutive sequence path
+    """
+    def longest_consecutive(self, root: TreeNode) -> int:
+        # write your code here
+        if not root:
+            return 0
+
+        self.helper(root)
+
+        return self.ret
+
+    def helper(self, node):
+        if not node:
+            return 0
+
+        left = self.helper(node.left)
+        right = self.helper(node.right)
+
+        ret = 1
+        if node.left and node.val == node.left.val - 1:
+            ret = max(left+1, ret)
+
+        if node.right and node.val == node.right.val - 1:
+            ret = max(right+1, ret)
+
+        self.ret = max(self.ret, ret)
+
+        return ret
+
 # dfs, traversal and divid and conquer solution
 
 """
