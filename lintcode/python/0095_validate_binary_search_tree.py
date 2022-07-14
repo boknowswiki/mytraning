@@ -1,5 +1,46 @@
 #!/usr/bin/python -t
 
+# binary search tree
+# divid and conquer way
+# time O(n)
+# space O(n)
+
+
+import sys
+
+max_int = sys.maxsize
+min_int = -sys.maxsize-1
+
+class Solution:
+    """
+    @param root: The root of binary tree.
+    @return: True if the binary tree is BST, or false
+    """
+    def is_valid_b_s_t(self, root: TreeNode) -> bool:
+        # write your code here
+        if not root:
+            return True
+
+        is_bst, _, _ = self.helper(root)
+
+        return is_bst
+
+    def helper(self, node):
+        if not node:
+            return True, max_int, min_int
+
+        l_is_bst, l_min, l_max = self.helper(node.left)
+        r_is_bst, r_min, r_max = self.helper(node.right)
+
+        if not l_is_bst or not r_is_bst:
+            return False, 0, 0
+
+        if (node.left and l_max >= node.val) or \
+            (node.right and r_min <= node.val):
+            return False, 0, 0
+
+        return True, min(l_min, node.val), max(node.val, r_max)
+
 # iteration way
 
 """
