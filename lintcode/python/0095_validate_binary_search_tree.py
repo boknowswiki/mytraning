@@ -1,5 +1,38 @@
 #!/usr/bin/python -t
 
+
+# binary search tree
+# iteration way
+# time O(n)
+# space O(n)
+
+
+class Solution:
+    """
+    @param root: The root of binary tree.
+    @return: True if the binary tree is BST, or false
+    """
+    def is_valid_b_s_t(self, root: TreeNode) -> bool:
+        # write your code here
+        cur = root
+        stk = []
+
+        last_min = None
+
+        while cur or len(stk) > 0:
+            if cur:
+                stk.append(cur)
+                cur = cur.left
+            else:
+                node = stk.pop()
+                if last_min and node.val <= last_min:
+                    return False
+
+                last_min = node.val
+                cur = node.right
+
+        return True
+
 # binary search tree
 # divid and conquer way
 # time O(n)
