@@ -1,5 +1,73 @@
 #!/usr/bin/python -t
 
+# bfs
+# time O(n)
+# space O(n)
+
+
+import collections
+
+class Solution:
+    """
+    @param root: An object of TreeNode, denote the root of the binary tree.
+    This method will be invoked first, you should design your own algorithm
+    to serialize a binary tree which denote by a root node to a string which
+    can be easily deserialized by your own "deserialize" method later.
+    """
+    def serialize(self, root):
+        # write your code here
+        if not root:
+            return ""
+
+        q = collections.deque([root])
+        ret = []
+
+        while len(q) > 0:
+            for _ in range(len(q)):
+                node = q.popleft()
+                if node:
+                    ret.append(str(node.val))
+                    q.append(node.left)
+                    q.append(node.right)
+                else:
+                    ret.append("#")
+
+        return ret
+
+    """
+    @param data: A string serialized by your serialize method.
+    This method will be invoked second, the argument data is what exactly
+    you serialized at method "serialize", that means the data is not given by
+    system, it's given by your own serialize method. So the format of data is
+    designed by yourself, and deserialize it here as you serialize it in
+    "serialize" method.
+    """
+    def deserialize(self, data):
+        # write your code here
+        if not data:
+            return None
+
+        nodes_list = [TreeNode(int(val)) if val != "#" else None for val in data]
+
+        root = nodes_list[0]
+        index = 0
+        fast = 0
+
+        while fast+2 < len(data):
+            node = nodes_list[index]
+            left = nodes_list[fast+1]
+            right = nodes_list[fast+2]
+
+            if node:
+                node.left = left
+                node.right = right
+                fast += 2
+            index += 1
+
+        return nodes_list[0]
+
+
+
 # bfs serial and de-serial
 
 """
