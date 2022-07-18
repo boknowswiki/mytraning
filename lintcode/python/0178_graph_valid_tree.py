@@ -1,4 +1,57 @@
-#!/usr/bin/python -t
+#!/usr/bin/python3 -t
+
+# bfs
+# time O(n)
+# space O(n)
+
+
+from typing import (
+    List,
+)
+
+class Solution:
+    """
+    @param n: An integer
+    @param edges: a list of undirected edges
+    @return: true if it's a valid tree, or false
+    """
+    def valid_tree(self, n: int, edges: List[List[int]]) -> bool:
+        # write your code here
+        if n != len(edges) + 1:
+            return False
+
+        graph = dict()
+
+        for x, y in edges:
+            if x not in graph:
+                graph[x] = list()
+            if y not in graph:
+                graph[y] = list()
+
+            graph[x].append(y)
+            graph[y].append(x)
+
+        q = [0]
+        v = set()
+        v.add(0)
+
+        while len(q) > 0:
+            cur = q[0]
+            q = q[1:]
+            if cur in graph:
+                for node in graph[cur]:
+                    if node not in v:
+                        v.add(node)
+                        q.append(node)
+
+        return len(v) == n
+
+
+if __name__ == '__main__':
+    s = Solution()
+    a = 5
+    b = [[0, 1], [0, 2], [0, 3], [1, 4]]
+    print(s.valid_tree(a, b))
 
 # union find set
 
