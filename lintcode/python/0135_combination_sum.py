@@ -1,4 +1,53 @@
-#!/usr/bin/python -t
+#!/usr/bin/python3 -t
+
+# dfs
+# time O(n^(target/min)), n is the conut of numbers, min is the minimal value.
+# space O(n^(target/min))
+
+from typing import (
+    List,
+)
+
+class Solution:
+    """
+    @param candidates: A list of integers
+    @param target: An integer
+    @return: A list of lists of integers
+             we will sort your return value in output
+    """
+    def combination_sum(self, candidates: List[int], target: int) -> List[List[int]]:
+        # write your code here
+
+        ret = []
+        if not candidates:
+            return ret
+
+        c = sorted(set(candidates))
+
+        self.dfs(c, 0, target, [], ret)
+
+        return ret
+    
+    def dfs(self, c, start, target, path, ret):
+        if target < 0:
+            return
+
+        if target == 0:
+            ret.append(list(path))
+
+        for i in range(start, len(c)):
+            path.append(c[i])
+            self.dfs(c, i, target-c[i], path, ret)
+            path.pop()
+
+        return
+
+if __name__ == '__main__':
+    s = Solution()
+    a = [2, 3, 6, 7]
+    b = 7
+    print(s.combination_sum(a, b))
+
 
 # dfs, better
 # 时间复杂度
