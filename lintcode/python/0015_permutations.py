@@ -30,7 +30,8 @@ class Solution:
         
 
 # dfs
-# time O(n!)
+# time O(n*n!)
+# space O(n!)
 
 class Solution:
     """
