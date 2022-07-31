@@ -1,4 +1,68 @@
-#!/usr/bin/python -t
+#!/usr/bin/python3 -t
+
+# bfs
+# time O(n*L^2), n is number words in dict, L is the length of each word.
+# space O(n)
+
+from typing import (
+    Set,
+)
+
+import collections
+
+class Solution:
+    """
+    @param start: a string
+    @param end: a string
+    @param dict: a set of string
+    @return: An integer
+    """
+    def ladder_length(self, start: str, end: str, dict: Set[str]) -> int:
+        # write your code here
+        if start == end:
+            return 1
+
+        if len(start) != len(end):
+            return 0
+
+        dict.add(end)
+        word_dict = self.build_word_dict(dict)
+
+        q = collections.deque([start])
+        dist = 1
+        v = set()
+        v.add(start)
+
+        while len(q) > 0:
+            for _ in range(len(q)):
+                w = q.popleft()
+                if w == end:
+                    return dist
+
+                for i in range(len(w)):
+                    pattern = w[:i]+"*"+w[i+1:]
+                    for nei in word_dict[pattern]:
+                        if nei not in v:
+                            v.add(nei)
+                            q.append(nei)
+
+            dist += 1
+        return dist
+
+    def build_word_dict(self, dict):
+        word_dict = collections.defaultdict(list)
+        for word in dict:
+            for i in range(len(word)):
+                pattern = word[:i] + "*" + word[i+1:]
+                word_dict[pattern].append(word)
+        return word_dict
+
+if __name__ == '__main__':
+    s = Solution()
+    a = "hit"
+    b = "cog"
+    c = ["hot","dot","dog","lot","log"]
+    print(s.ladder_length(a, b, c))
 
 # bfs
 
