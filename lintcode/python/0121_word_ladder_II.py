@@ -1,4 +1,75 @@
-#!/usr/bin/python -t
+#!/usr/bin/python3 -t
+
+# bfs and dfs
+# time O(n*L^2)
+# space O(n*nei) n is the numbers of words, nei is how many neighbor for this word.
+
+from types import new_class
+from typing import (
+    List,
+    Set,
+)
+
+import collections
+
+class Solution:
+    """
+    @param start: a string
+    @param end: a string
+    @param dict: a set of string
+    @return: a list of lists of string
+             we will sort your return value in output
+    """
+    def find_ladders(self, start: str, end: str, dict: Set[str]) -> List[List[str]]:
+        # write your code here
+        dict.add(start)
+        dict.add(end)
+        word_dict = self.get_word_dict(dict)
+
+        q = collections.deque()
+        q.append(end)
+        visited = collections.defaultdict(int)
+        visited[end] = 1
+        while q:
+            word = q.popleft()
+            for i in range(len(word)):
+                pattern = word[:i] + "*" + word[i+1:]
+                for nei in word_dict[pattern]:
+                    if nei in visited:
+                        continue
+                    q.append(nei)
+                    visited[nei] = visited[word] + 1
+        self.res = []
+        self.dfs(word_dict, start, end, visited, [start])
+        return self.res
+
+    def dfs(self, word_dict, word, end, visited, path):
+        if word == end:
+            self.res.append(path[:])
+            return
+        
+        for i in range(len(word)):
+            pattern = word[:i] + "*" + word[i+1:]
+            for nei in word_dict[pattern]:
+                if visited[nei] == visited[word] - 1:
+                    path.append(nei)
+                    self.dfs(word_dict, nei, end, visited, path)
+                    path.pop()
+
+    def get_word_dict(self, dict):
+        word_dict = collections.defaultdict(list)
+        for word in dict:
+            for i in range(len(word)):
+                pattern = word[:i] + "*" + word[i+1:]
+                word_dict[pattern].append(word)
+        return word_dict
+
+if __name__ == '__main__':
+    s = Solution()
+    a = "hit"
+    b = "cog"
+    c = ["hot","dot","dog","lot","log"]
+    print(s.find_ladders(a, b, c))
 
 # dfs and bfs
 
