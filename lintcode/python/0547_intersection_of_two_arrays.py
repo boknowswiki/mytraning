@@ -1,4 +1,46 @@
-#!/usr/bin/python -t
+#!/usr/bin/python3 -t
+
+# sort and two pointers
+# time O(max(nlogn, mlogm))
+# space O(1)
+
+class Solution:
+    """
+    @param nums1: an integer array
+    @param nums2: an integer array
+    @return: an integer array
+    """
+    def intersection(self, nums1, nums2):
+        # write your code here
+        m = len(nums1)
+        n = len(nums2)
+        if n == 0 or m == 0:
+            return []
+
+        nums1.sort()
+        nums2.sort()
+
+        ret = set()
+        i, j = 0, 0
+
+        while i < m and j < n:
+            if nums1[i] == nums2[j]:
+                ret.add(nums1[i])
+                i += 1
+                j += 1
+            elif nums1[i] < nums2[j]:
+                i += 1
+            else:
+                j  += 1
+
+        return list(ret)
+
+
+if __name__ == '__main__':
+    s = Solution()
+    a = [1,2,2,1]
+    b = [2,2]
+    print(s.intersection(a, b))
 
 # sort and binary search solution
 
