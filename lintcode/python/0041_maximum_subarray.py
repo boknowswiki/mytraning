@@ -1,5 +1,38 @@
 #!/usr/bin/python -t
 
+
+# array
+# presum
+# time O(n)
+# space O(1)
+
+from typing import (
+    List,
+)
+
+class Solution:
+    """
+    @param nums: A list of integers
+    @return: A integer indicate the sum of max subarray
+    """
+    def max_sub_array(self, nums: List[int]) -> int:
+        # write your code here
+        pre_sum = 0
+        max_sum = -sys.maxsize-1
+        min_sum = 0
+
+        for num in nums:
+            pre_sum += num
+            max_sum = max(max_sum, pre_sum-min_sum)
+            min_sum = min(min_sum, pre_sum)
+
+        return max_sum
+
+
+# greedy
+# time O(n)
+# space O(1)
+
 class Solution:
     """
     @param nums: A list of integers
