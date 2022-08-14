@@ -1,6 +1,45 @@
 #!/usr/bin/python -t
 
 # two pointers
+# time O(n^2)
+# space O(1)
+
+
+from typing import (
+    List,
+)
+
+class Solution:
+    """
+    @param nums: an array of Integer
+    @param target: an integer
+    @return: [num1, num2] (index1 < index2)
+    """
+    def two_sum7(self, nums: List[int], target: int) -> List[int]:
+        # write your code here
+        n = len(nums)
+        if n < 2:
+            return [-1, -1]
+
+        ret = [-1, -1]
+
+        nums.sort()
+
+        for i in range(n-1):
+            r = n-1
+
+            while i < r:
+                if abs(nums[r] - nums[i]) == abs(target):
+                    ret = [nums[i], nums[r]]
+                    return ret
+                elif nums[r] - nums[i] > abs(target):
+                    r -= 1
+                else:
+                    break
+
+        return ret
+
+# two pointers
 
 class Solution:
     """
