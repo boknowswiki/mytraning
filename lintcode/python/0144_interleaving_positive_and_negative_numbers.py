@@ -1,6 +1,53 @@
 #!/usr/bin/python -t
 
 # two pointers
+# time O(n)
+# space O(1)
+
+from typing import (
+    List,
+)
+
+class Solution:
+    """
+    @param a: An integer array.
+    @return: nothing
+    """
+    def rerange(self, a: List[int]):
+        # write your code here
+        pos, neg = 0, 0
+        for num in a:
+            if num > 0:
+                pos += 1
+            else:
+                neg += 1
+
+        self.partition(a, pos > neg)
+        self.interleave(a, pos == neg)
+
+    def partition(self, A, start_positive):
+        flag = 1 if start_positive else -1
+        left, right = 0, len(A) - 1
+        while left <= right:
+            while left <= right and A[left] * flag > 0:
+                left += 1
+            while left <= right and A[right] * flag < 0:
+                right -= 1
+            if left <= right:
+                A[left], A[right] = A[right], A[left]
+                left += 1
+                right -= 1
+
+    def interleave(self, A, has_same_length):
+        left, right = 1, len(A) - 1
+        if has_same_length:
+            right = len(A) - 2
+
+        while left < right:
+            A[left], A[right] = A[right], A[left]
+            left, right = left + 2, right - 2
+
+# two pointers
 
 # better
 class Solution:
