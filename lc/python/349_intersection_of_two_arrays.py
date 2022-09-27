@@ -47,6 +47,47 @@ def intersection(self, nums1, nums2):
     
     return res
 
+# binary search
+
+class Solution:
+    def intersection(self, nums1: List[int], nums2: List[int]) -> List[int]:
+        nums1.sort()
+        nums2.sort()
+        
+        m = len(nums1)
+        n = len(nums2)
+        if m == 0 or n == 0:
+            return []
+        
+        ret = []
+        
+        for i in range(m):
+            if i != 0 and nums1[i] == nums1[i-1]:
+                continue
+                
+            if self.find_num(nums2, nums1[i]):
+                ret.append(nums1[i])
+                
+        return ret
+                
+            
+    def find_num(self, nums, target):
+        l = 0
+        r = len(nums)-1
+        
+        while l + 1 < r:
+            mid = l + (r-l)//2
+            if nums[mid] == target:
+                return True
+            if nums[mid] < target:
+                l = mid
+            else:
+                r = mid
+                
+        if nums[l] == target or nums[r] == target:
+            return True
+        return False
+
 #time O(nlogn) space O(1)
 
 class Solution(object):
