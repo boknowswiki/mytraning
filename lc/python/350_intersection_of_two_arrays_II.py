@@ -25,6 +25,31 @@ class Solution(object):
                 j = j + 1
                 
         return ret
+    
+# hash map
+# time O(m+n)
+# space min(m, n)
+
+class Solution:
+    def intersect(self, nums1: List[int], nums2: List[int]) -> List[int]:
+        if len(nums1) > len(nums2):
+            return self.intersect(nums2, nums1)
+    
+        dic = {}
+        ret = []
+        
+        for num in nums1:
+            dic[num] = dic.get(num, 0) + 1
+            
+        for num in nums2:
+            if num in dic:
+                ret.append(num)
+                dic[num] -= 1
+                if dic[num] == 0:
+                    del dic[num]
+                    
+        return ret
+        
 
 #binary search
 #time max(O(mlogm), O(nlogn), O(mlogn) or max(O(mlogm), O(nlogn), O(nlogm)) space max(O(m), O(n))
