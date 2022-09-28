@@ -1,5 +1,30 @@
 #!/usr/bin/python -t
 
+# binary search
+# time O(logn)
+# space O(1)
+
+class Solution:
+    def nextGreatestLetter(self, letters: List[str], target: str) -> str:
+        n = len(letters)
+        if n == 0:
+            return ""
+        
+        if target >= letters[n-1] or target < letters[0]:
+            return letters[0]
+        
+        l = 0
+        r = len(letters)-1
+        
+        while l + 1 < r:
+            mid = l + (r-l)//2
+            if letters[mid] > target:
+                r = mid
+            else:
+                l = mid
+                
+        return letters[r]
+
 #time O(logn) space O(1)
 
 '''
