@@ -1,0 +1,34 @@
+# binary search and pre sum
+# time O(n)
+# space O(n)
+
+class Solution:
+    def answerQueries(self, nums: List[int], queries: List[int]) -> List[int]:
+        nums.sort()
+        n = len(nums)
+        pre_sum = [0] * (n+1)
+        
+        for i in range(n):
+            pre_sum[i+1] = pre_sum[i] + nums[i]
+            
+        ret = []
+        for q in queries:
+            index = self.find(pre_sum, q)
+            ret.append(index)
+            
+        return ret
+    
+    def find(self, nums, target):
+        l = 0
+        r = len(nums)-1
+        
+        while l + 1 < r:
+            mid = l + (r-l)//2
+            if nums[mid] > target:
+                r = mid-1
+            else:
+                l = mid
+                
+        if nums[r] <= target:
+            return r
+        return l
