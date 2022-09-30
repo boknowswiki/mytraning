@@ -1,5 +1,41 @@
 #!/usr/bin/python -t
 
+# binary search
+# time O(logn)
+# space O(1)
+
+class Solution:
+    def search(self, nums: List[int], target: int) -> bool:
+        n = len(nums)
+        l = 0
+        r = n-1
+        
+        while l + 1 < r:
+            if nums[l] == nums[l+1]:
+                l += 1
+                continue
+            if nums[r] == nums[r-1]:
+                r -= 1
+                continue
+                
+            mid = l + (r-l)//2
+            if nums[mid] == target:
+                return True
+            elif nums[l] < nums[mid]:
+                if nums[l] <= target <= nums[mid]:
+                    r = mid
+                else:
+                    l = mid
+            else:
+                if nums[mid] <= target <= nums[r]:
+                    l = mid
+                else:
+                    r = mid
+                    
+        if nums[r] == target or nums[l] == target:
+            return True
+        return False
+
 #time O(logn) space O(1)
 
 
