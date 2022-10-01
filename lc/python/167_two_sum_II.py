@@ -1,5 +1,41 @@
 #!/usr/bin/python -t
 
+# binary search
+# time O(n)
+# space O(1)
+
+class Solution:
+    def twoSum(self, numbers: List[int], target: int) -> List[int]:
+        n = len(numbers)
+        if n < 2:
+            return [-1, -1]
+    
+        for i in range(n):
+            need = target - numbers[i]
+            index = self.find(numbers, need)
+            if index >= 0 and index != i:
+                return [min(i+1, index+1), max(i+1, index+1)]
+            
+        return [-1, -1]
+    
+    def find(self, nums, target):
+        l = 0
+        r = len(nums)-1
+        while l + 1 < r:
+            mid = l + (r-l)//2
+            if nums[mid] == target:
+                return mid
+            elif nums[mid] < target:
+                l = mid
+            else:
+                r = mid
+                
+        if nums[l] == target:
+            return l
+        if nums[r] == target:
+            return r
+        return -1
+
 class Solution(object):
     def twoSum(self, numbers, target):
         """
