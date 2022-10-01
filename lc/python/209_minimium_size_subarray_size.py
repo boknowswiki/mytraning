@@ -1,5 +1,64 @@
 #!/usr/bin/python -t
 
+# binary search
+# time O(nlogn)
+# space O(n)
+
+class Solution:
+    def minSubArrayLen(self, target: int, nums: List[int]) -> int:
+        ret = sys.maxsize
+        n = len(nums)
+        left = 0
+        pre_sum = [0] * (n+1)
+        
+        for i in range(1, n+1):
+            pre_sum[i] = pre_sum[i-1] + nums[i-1]
+        
+        for i in range(1, n+1):
+            need = pre_sum[i-1] + target
+            left = self.find_lower(pre_sum, need)
+            if left != len(pre_sum):
+                ret = min(ret, left-i+1)
+                
+        return ret if ret != sys.maxsize else 0
+    
+    def find_lower(self, nums, target):
+        l = 0
+        r = len(nums)
+        while l + 1 < r:
+            mid = l + (r-l)//2
+            if nums[mid] < target:
+                l = mid
+            else:
+                r = mid
+                
+        if nums[l] >= target:
+            return l
+
+        return r
+
+# two pointers
+# time O(n)
+# space O(1)
+
+class Solution:
+    def minSubArrayLen(self, target: int, nums: List[int]) -> int:
+        ret = sys.maxsize
+        n = len(nums)
+        total = 0
+        left = 0
+        
+        for i in range(n):
+            total += nums[i]
+            while total >= target:
+                ret = min(i-left+1, ret)
+                total -= nums[left]
+                left += 1
+        
+        return ret if ret != sys.maxsize else 0
+    
+    
+
 class Solution(object):
     def minSubArrayLen(self, s, nums):
         """
