@@ -1,5 +1,34 @@
 #!/usr/bin/python -t
 
+# dp
+# time O(n)
+# space O(n)
+
+class Solution:
+    def numDecodings(self, s: str) -> int:
+        # dp[i] is number of way to decode it at ith index.
+        # dp[i] = dp[i-1] if 0 < s[i] <= 9, and dp[i] += dp[i-2] if 10 < int(s[i-2:i]) <= 26
+        # dp[0] = 1
+        # dp[n]
+        n = len(s)
+        if n == 0:
+            return 0
+        
+        dp = [0] * (n+1)
+        if s[0] == "0":
+            return 0
+        dp[0] = 1
+        
+        for i in range(1, n+1):
+            if 0 < int(s[i-1]) <= 9:
+                dp[i] += dp[i-1]
+            if i >= 2:
+                if 10 <= int(s[i-2:i]) <= 26:
+                    dp[i] += dp[i-2]
+                
+        return dp[n]
+    
+
 #dp solution, time O(n)
 
 class Solution(object):
