@@ -1,5 +1,39 @@
 #!/usr/bin/python -t 
 
+# binary search
+# time O(nlogn)
+# space O(1)
+
+class Solution:
+    def findRadius(self, houses: List[int], heaters: List[int]) -> int:
+        heaters.sort()
+        ret = 0
+        
+        for house in houses:
+            index = self.find_lower(heaters, house)
+            diff = abs(house-heaters[index])
+            ret = max(ret, diff)
+            
+        return ret
+    
+    def find_lower(self, arr, target):
+        l = 0
+        r = len(arr)-1
+        
+        while l + 1 < r:
+            mid = l + (r-l)//2
+            if arr[mid] == target:
+                return mid
+            elif arr[mid] < target:
+                l = mid
+            else:
+                r = mid
+                
+        if abs(target-arr[r]) < abs(target-arr[l]):
+            return r
+        return l
+            
+
 class Solution(object):
     def findRadius(self, houses, heaters):
         """
