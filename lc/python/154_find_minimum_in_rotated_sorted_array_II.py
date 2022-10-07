@@ -1,5 +1,29 @@
 #!/usr/bin/python -t
 
+# binary search
+# time worst O(n), normal O(logn)
+# space O(1)
+
+class Solution:
+    def findMin(self, nums: List[int]) -> int:
+        n = len(nums)
+        l = 0
+        r = n-1
+        
+        while l + 1 < r:
+            mid = l + (r-l)//2
+            if nums[r] == nums[mid]:
+                r -= 1
+            elif nums[r] < nums[mid]:
+                l = mid
+            else:
+                r = mid
+                
+        if nums[l] <= nums[r]:
+            return nums[l]
+        return nums[r]
+    
+
 class Solution(object):
     def findMin(self, nums):
         """
