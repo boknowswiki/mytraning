@@ -1,5 +1,42 @@
 #!/usr/bin/python -t
 
+# binary tree and bfs
+# time O(n)
+# space O(n)
+
+# Definition for a binary tree node.
+# class TreeNode:
+#     def __init__(self, val=0, left=None, right=None):
+#         self.val = val
+#         self.left = left
+#         self.right = right
+class Solution:
+    def isSameTree(self, p: Optional[TreeNode], q: Optional[TreeNode]) -> bool:
+        if not p:
+            return q is None
+        if not q:
+            return p is None
+        
+        p_list = self.get_list(p)
+        q_list = self.get_list(q)
+        
+        return p_list == q_list
+    
+    def get_list(self, node):
+        ret = []
+        q = collections.deque([node])
+        while q:
+            for _ in range(len(q)):
+                cur = q.popleft()
+                if cur:
+                    ret.append(cur.val)
+                    q.append(cur.left)
+                    q.append(cur.right)
+                else:
+                    ret.append("null")
+  
+        return ret
+
 #time O(n) space O(1)
 
 # Definition for a binary tree node.
