@@ -1,5 +1,9 @@
 #!/usr/bin/python -t
 
+# binary tree
+# time O(n)
+# space O(n) or O(1)
+
     def inorderTraversal(self, root):
         if root is None:
             return []
