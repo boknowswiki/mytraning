@@ -1,5 +1,45 @@
 #!/usr/bin/python -t
 
+# binary tree and bfs
+# time O(n)
+# space O(n)
+
+# Definition for a binary tree node.
+# class TreeNode:
+#     def __init__(self, val=0, left=None, right=None):
+#         self.val = val
+#         self.left = left
+#         self.right = right
+class Solution:
+    def isSymmetric(self, root: Optional[TreeNode]) -> bool:
+        if not root:
+            return True
+        
+        q = collections.deque([root])
+        
+        while q:
+            level = []
+            for _ in range(len(q)):
+                cur = q.popleft()
+                level.append(cur)
+                if cur:
+                    q.append(cur.left)
+                    q.append(cur.right)
+                    
+            l = 0
+            r = len(level)-1
+            while l < r:
+                if level[l] != None and level[r] != None and (level[l].val != level[r].val):
+                    return False
+                if level[l] == None and level[r] != None:
+                    return False
+                if level[l] != None and level[r] == None:
+                    return False
+                l += 1
+                r -= 1
+                
+        return True
+
 #time O(n) space O(n)
 
 # Definition for a binary tree node.
