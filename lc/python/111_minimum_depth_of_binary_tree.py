@@ -1,5 +1,37 @@
 #!/usr/bin/python -t
 
+# binary tree and dfs
+# time O(n)
+# space O(1)
+
+# Definition for a binary tree node.
+# class TreeNode:
+#     def __init__(self, val=0, left=None, right=None):
+#         self.val = val
+#         self.left = left
+#         self.right = right
+class Solution:
+    def minDepth(self, root: Optional[TreeNode]) -> int:
+        if not root:
+            return 0
+        
+        self.ret = sys.maxsize
+        self.helper(root, 1)
+        
+        return self.ret
+    
+    def helper(self, node, depth):
+        if node.left == None and node.right == None:
+            self.ret = min(self.ret, depth)
+            return
+        
+        if node.left:
+            self.helper(node.left, depth+1)
+        if node.right:
+            self.helper(node.right, depth+1)
+            
+        return
+
 # Definition for a binary tree node.
 # class TreeNode(object):
 #     def __init__(self, x):
