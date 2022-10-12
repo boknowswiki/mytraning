@@ -1,5 +1,39 @@
 #!/usr/bin/python -t
 
+# binary tree and dfs
+# time O(n)
+# space O(1)
+
+# Definition for a binary tree node.
+# class TreeNode:
+#     def __init__(self, val=0, left=None, right=None):
+#         self.val = val
+#         self.left = left
+#         self.right = right
+class Solution:
+    def binaryTreePaths(self, root: Optional[TreeNode]) -> List[str]:
+        if not root:
+            return []
+        
+        ret = []
+
+        self.helper(root, str(root.val), ret)
+        
+        return ret
+    
+    def helper(self, node, path, ret):
+        if node.left == None and node.right == None:
+            ret.append(path)
+            return
+        
+        if node.left:
+            self.helper(node.left, path+"->"+str(node.left.val), ret)
+
+        if node.right:
+            self.helper(node.right, path+"->"+str(node.right.val), ret)
+            
+        return
+
 #time O(n) space O(n)
 
 # Definition for a binary tree node.
