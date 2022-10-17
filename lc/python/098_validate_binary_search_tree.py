@@ -1,5 +1,64 @@
 #!/usr/bin/python -t
 
+# binary tree and dfs
+# time O(n)
+# space O(n)
+
+# Definition for a binary tree node.
+# class TreeNode:
+#     def __init__(self, val=0, left=None, right=None):
+#         self.val = val
+#         self.left = left
+#         self.right = right
+class Solution:
+    def isValidBST(self, root: Optional[TreeNode]) -> bool:
+        if not root:
+            return True
+        
+        return self.helper(root, -sys.maxsize-1, sys.maxsize)
+    
+    def helper(self, node, low, high):
+        if not node:
+            return True
+        
+        if node.val <= low or node.val >= high:
+            return False
+        return self.helper(node.left, low, node.val) and \
+        self.helper(node.right, node.val, high)
+
+# Definition for a binary tree node.
+# class TreeNode:
+#     def __init__(self, val=0, left=None, right=None):
+#         self.val = val
+#         self.left = left
+#         self.right = right
+class Solution:
+    def isValidBST(self, root: Optional[TreeNode]) -> bool:
+        if not root:
+            return False
+        
+        ret = []
+        self.helper(root, ret)
+        
+        return self.increase(ret)
+    
+    def helper(self, node, ret):
+        if not node:
+            return
+        
+        self.helper(node.left, ret)
+        ret.append(node.val)
+        self.helper(node.right, ret)
+        
+        return
+    
+    def increase(self, ret):
+        for i in range(1, len(ret)):
+            if ret[i] <= ret[i-1]:
+                return False
+            
+        return True
+
 # Definition for a binary tree node.
 # class TreeNode(object):
 #     def __init__(self, x):
