@@ -22,3 +22,22 @@ class Solution:
             if node.val < prev.val: drops.append((prev, node))
             prev, cur = node, node.right
         drops[0][0].val, drops[-1][1].val = drops[-1][1].val, drops[0][0].val
+
+# binary tree and dfs
+
+    def recoverTree1(self, root): # O(n+lg(n)) space  
+        res = []
+        self.dfs(root, res)
+        first, second = None, None
+        for i in range(len(res)-1):
+            if res[i].val > res[i+1].val and not first:
+                first = res[i]
+            if res[i].val > res[i+1].val and first:
+                second = res[i+1]
+        first.val, second.val = second.val, first.val
+        
+    def dfs(self, root, res):
+        if root:
+            self.dfs(root.left, res)
+            res.append(root)
+            self.dfs(root.right, res)
