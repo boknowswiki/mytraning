@@ -1,0 +1,19 @@
+# string
+# time O(n)
+# space O(1)
+
+class Solution:
+    def countAndSay(self, n: int) -> str:
+        s = "1"
+        for _ in range(n-1):
+            let, temp, count = s[0], "", 0
+            for l in s:
+                if let == l:
+                    count += 1
+                else:
+                    temp += str(count)+let
+                    let = l
+                    count = 1
+            temp += str(count)+let
+            s = temp
+        return s
