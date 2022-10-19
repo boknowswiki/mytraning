@@ -1,5 +1,10 @@
 #!/usr/bin/python -t
 
+# binary tree and dfs
+# time O(n)
+# space O(1)
+
+
 # Definition for a binary tree node.
 # class TreeNode(object):
 #     def __init__(self, x):
