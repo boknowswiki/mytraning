@@ -1,5 +1,57 @@
 #!/usr/bin/python -t
 
+# binary tree and dfs
+# time O(n)
+# space O(1)
+
+# Definition for a binary tree node.
+# class TreeNode:
+#     def __init__(self, val=0, left=None, right=None):
+#         self.val = val
+#         self.left = left
+#         self.right = right
+class Solution:
+    def flatten(self, root: Optional[TreeNode]) -> None:
+        """
+        Do not return anything, modify root in-place instead.
+        """
+        if not root:
+            return
+        
+        if root.left == None and root.right == None:
+            return
+        
+        self.helper(root)
+        
+        return root
+    
+    def helper(self, node):
+        #print(f"node {node.val}")
+        if node.left == None and node.right == None:
+            return node
+        
+        left = right = None
+        
+        if node.left:
+            #print(f"left {node.left.val}")
+            left = self.helper(node.left)
+            
+        rr = node.right
+        if left:
+            left.right = node.right
+            node.right = node.left
+            node.left = None
+            
+        if rr:
+            #print(f"right {node.right.val}")
+            right = self.helper(rr)
+            
+
+        if right is not None:
+            return right
+            
+        return left
+
 class Solution:
     def flatten(self, root):
         if not root:
