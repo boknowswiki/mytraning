@@ -1,5 +1,57 @@
 #!/usr/bin/python -t
 
+# binary tree and dfs
+# time O(n)
+# space O(n)
+
+# Definition for a binary tree node.
+# class TreeNode:
+#     def __init__(self, x):
+#         self.val = x
+#         self.left = None
+#         self.right = None
+
+class Solution:
+    def lowestCommonAncestor(self, root: 'TreeNode', p: 'TreeNode', q: 'TreeNode') -> 'TreeNode':
+        p_path = []
+        self.get_path(root, p, [], p_path)
+        q_path = []
+        self.get_path(root, q, [], q_path)
+        
+        #print(f"p_path {p_path}, q_path {q_path}")
+        
+        return self.get_lca(p_path, q_path)
+    
+    def get_path(self, node, target, path, ret):
+        if not node:
+            return
+        path.append(node)
+        
+        if node == target:
+            ret.extend(list(path))
+            return
+        
+        self.get_path(node.left, target, path, ret)
+        self.get_path(node.right, target, path, ret)
+        path.pop()
+        
+        return
+    
+    def get_lca(self, p1, p2):
+        l1 = 0
+        l2 = 0
+        ret = None
+        
+        while l1 < len(p1) and l2 < len(p2):
+            if p1[l1] == p2[l2]:
+                ret = p1[l1]
+                l1 += 1
+                l2 += 1
+            else:
+                break
+                
+        return ret
+
 #LCA Beizeng passed on lintcode, memory limit exceed in leetcode
 
 # Definition for a binary tree node.
