@@ -1,5 +1,23 @@
 #!/usr/bin/python -t
 
+# two pointers and hashmap
+# time O(n)
+# space O(k)
+
+class Solution:
+    def containsNearbyDuplicate(self, nums: List[int], k: int) -> bool:
+        d = {}
+        l = 0
+        for r in range(len(nums)):
+            if nums[r] in d:
+                return True
+            d[nums[r]] = r
+            if r-l >= k:
+                del d[nums[l]]
+                l += 1
+                
+        return False
+
 #Time O(n) space O(n)
 
 class Solution(object):
