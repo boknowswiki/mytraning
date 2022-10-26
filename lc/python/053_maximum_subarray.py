@@ -17,6 +17,32 @@ class Solution(object):
             max_ret = max(max_ret, max_sofar)
             
         return max_ret
+    
+# divide and conquer
+# time O(nlogn)
+# space O(nlogn)
+
+class Solution:
+    def maxSubArray(self, nums: List[int]) -> int:
+        def helper(arr, start, end):
+            if start > end:
+                return -sys.maxsize-1
+            
+            mid = (start+end)//2
+            total = 0
+            left_total = right_total = 0
+            for i in range(mid-1, start-1, -1):
+                total += arr[i]
+                left_total = max(left_total, total)
+                
+            total = 0
+            for i in range(mid+1, end+1):
+                total += arr[i]
+                right_total = max(right_total, total)
+                
+            return max(helper(arr, start, mid-1), helper(arr, mid+1, end), left_total+arr[mid]+right_total)
+            
+        return helper(nums, 0, len(nums)-1)
 
 #DF time O(n) space O(1)
 
