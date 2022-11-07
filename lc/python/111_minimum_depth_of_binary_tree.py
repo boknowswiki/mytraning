@@ -1,5 +1,36 @@
 #!/usr/bin/python -t
 
+# binary tree and bfs
+# time O(n)
+# space O(n)
+
+# Definition for a binary tree node.
+# class TreeNode:
+#     def __init__(self, val=0, left=None, right=None):
+#         self.val = val
+#         self.left = left
+#         self.right = right
+class Solution:
+    def minDepth(self, root: Optional[TreeNode]) -> int:
+        if not root:
+            return 0
+        
+        q = collections.deque([root])
+        ret = 0
+        
+        while q:
+            ret += 1
+            for _ in range(len(q)):
+                cur = q.popleft()
+                if cur.left is None and cur.right is None:
+                    return ret
+                if cur.left:
+                    q.append(cur.left)
+                if cur.right:
+                    q.append(cur.right)
+                    
+        return -1
+
 # binary tree and dfs
 # time O(n)
 # space O(1)
