@@ -1,5 +1,42 @@
 #!/usr/bin/python -t
 
+# bfs
+# time O(m*n)
+# space O(m*n)
+
+class Solution:
+    def solve(self, board: List[List[str]]) -> None:
+        """
+        Do not return anything, modify board in-place instead.
+        """
+        m, n = len(board), len(board[0])
+        
+        dirs = [(1, 0), (-1, 0), (0, 1), (0, -1)]
+        q = collections.deque([])
+        
+        for i in range(m):
+            for j in range(n):
+                if (i == 0 or i == m-1 or j == 0 or j == n-1) and board[i][j] == "O":
+                    q.append((i, j))
+                    board[i][j] = "."
+
+                    
+        while q:
+            x, y = q.popleft()
+            for i in range(len(dirs)):
+                dx = dirs[i][0] + x
+                dy = dirs[i][1] + y
+                if 0 <= dx < m and 0 <= dy < n and board[dx][dy] == "O":
+                    board[dx][dy] = "."
+                    q.append((dx, dy))
+                    
+        for i in range(m):
+            for j in range(n):
+                if board[i][j] == "O":
+                    board[i][j] = "X"
+                if board[i][j] == ".":
+                    board[i][j] = "O"
+
 #union find solution
 
 class uf(object):
