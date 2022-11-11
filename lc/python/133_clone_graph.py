@@ -1,5 +1,37 @@
 #!/usr/bin/python -t
 
+# bfs and graph
+# time O(n)
+# space O(n)
+
+"""
+# Definition for a Node.
+class Node:
+    def __init__(self, val = 0, neighbors = None):
+        self.val = val
+        self.neighbors = neighbors if neighbors is not None else []
+"""
+
+class Solution:
+    def cloneGraph(self, node: 'Node') -> 'Node':
+        if not node:
+            return None
+        
+        new_node = Node(node.val, [])
+        q = collections.deque([(node, new_node)])
+        v = {node: new_node}
+        
+        while q:
+            old, new = q.popleft()
+            for nei in old.neighbors:
+                if nei not in v:
+                    new_nei = Node(nei.val, [])
+                    v[nei] = new_nei
+                    q.append((nei, new_nei))
+                new.neighbors.append(v[nei])
+                
+        return new_node
+
 # Definition for a undirected graph node
 # class UndirectedGraphNode:
 #     def __init__(self, x):
