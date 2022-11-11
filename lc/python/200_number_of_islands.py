@@ -1,5 +1,43 @@
 #!/usr/bin/python -t
 
+# bfs
+# time O(m*n)
+# space O(m*n)
+
+class Solution:
+    def numIslands(self, grid: List[List[str]]) -> int:
+        m, n = len(grid), len(grid[0])
+        cnt = 0
+        
+        #print(f"m {m}, n {n}")
+        for i in range(m):
+            for j in range(n):
+                if grid[i][j] == "1":
+                    #print(f"get i {i}, j {j}")
+                    cnt += 1
+                    self.bfs(grid, m, n, i, j)
+                    
+        return cnt
+    
+    def bfs(self, grid, m, n, i, j):
+        dirs = [(1, 0), (-1, 0), (0, 1), (0, -1)]
+        v = set()
+        v.add((i, j))
+        q = collections.deque([(i, j)])
+        grid[i][j] = 0
+        
+        while q:
+            x, y = q.popleft()
+            for i in range(len(dirs)):
+                dx = x + dirs[i][0]
+                dy = y + dirs[i][1]
+                if 0 <= dx < m and 0 <= dy < n and (dx, dy) not in v and grid[dx][dy] == "1":
+                    v.add((dx, dy))
+                    q.append((dx, dy))
+                    grid[dx][dy] = "0"
+                    
+        return
+
 # union find solution
 #time O(n) for initial union, find O(logn), total O(mn)
 #space O(mn)
