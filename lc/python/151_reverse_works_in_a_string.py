@@ -1,5 +1,32 @@
 #!/usr/bin/python -t
 
+# two pointers and string
+# time O(n)
+# space O(n)
+
+class Solution:
+    def reverseWords(self, s: str) -> str:
+        if not s:
+            return ""
+        
+        new_s = ""
+        
+        i = len(s)-1
+        while i >= 0:
+            if s[i] == " ":
+                i -= 1
+                continue
+            start = i
+            while i >= 0 and s[i] != " ":
+                i -= 1
+            end = i+1
+            word = s[end:start+1]
+            if new_s == "":
+                new_s += word
+            else:
+                new_s += " " + word
+                
+        return new_s
 
 class Solution(object):
     def reverseWords(self, s):
