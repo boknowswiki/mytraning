@@ -1,5 +1,37 @@
 #!/usr/bin/python -t
 
+# union find
+# time O(n)
+# space O(n)
+
+class Solution:
+    def removeStones(self, stones: List[List[int]]) -> int:
+        parent = {}
+        
+        def find(x):
+            while x != parent.setdefault(x, x):
+                x = find(parent[x])
+            #print(f"find x {x}")
+            return x
+        
+        def union(x, y):
+            root_x = find(x)
+            root_y = find(y)
+            #print(f"union x {x}, {root_x}, y {y}, {root_y}")
+            if root_x != root_y:
+                parent[root_x] = root_y
+        
+        # a stone's row and col is connected by default
+        # use ~ to make negative value to distinguish col with row number
+        for i, j in stones:
+            #print(f" i {i}, j {j}")
+            union(i, ~j)
+        
+        #print(parent)
+        #print(set(find(x) for x in parent))
+        return len(stones) - len(set(find(x) for x in parent))
+        
+
 class uf(object):
     def __init__(self, n):
         self.father = range(n)
