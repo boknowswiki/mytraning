@@ -1,5 +1,36 @@
 #!/usr/bin/python -t
 
+# bfs
+class Solution:
+    def numSquares(self, n: int) -> int:
+        if n < 2:
+            return n
+        lst = []
+        i = 1
+        while i * i <= n:
+            lst.append( i * i )
+            i += 1
+        cnt = 0
+        toCheck = {n}
+        #print(f"lst {lst}, tocheck {toCheck}")
+        while toCheck:
+            cnt += 1
+            temp = set()
+            for x in toCheck:
+                for y in lst:
+                    #print(f"x {x}, y {y}")
+                    if x == y:
+                        return cnt
+                    if x < y:
+                        break
+                    temp.add(x-y)
+            toCheck = temp
+            #print(f"toCheck {toCheck}")
+
+        return cnt
+
+# dp
+
 #dp[n] indicates that the perfect squares count of the given n, and we have:
 #dp[0] = 0 
 #dp[1] = dp[0]+1 = 1
