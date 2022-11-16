@@ -1,5 +1,35 @@
 #!/usr/bin/python -t
 
+# bfs
+# time O(mn)
+# space O(mn)
+
+class Solution:
+    def coinChange(self, coins: List[int], amount: int) -> int:
+        if not amount:
+            return 0
+        
+        q = collections.deque([0])
+        v = set()
+        v.add(0)
+        cnt = 0
+        
+        while q:
+            cnt += 1
+            
+            for _ in range(len(q)):
+                val = q.popleft()
+                for coin in coins:
+                    if val + coin == amount:
+                        return cnt
+                    elif val + coin > amount:
+                        continue
+                    elif val + coin not in v:
+                        v.add(val+coin)
+                        q.append(val+coin)
+                        
+        return -1
+
 # dp solution time O(mn), space O(n)
 
 # state: dp[i], with i the minimum coin we need
