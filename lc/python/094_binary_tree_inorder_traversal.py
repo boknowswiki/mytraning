@@ -1,5 +1,27 @@
 #!/usr/bin/python -t
 
+# binary tree and dfs
+
+# Definition for a binary tree node.
+# class TreeNode:
+#     def __init__(self, val=0, left=None, right=None):
+#         self.val = val
+#         self.left = left
+#         self.right = right
+class Solution:
+    def inorderTraversal(self, root: Optional[TreeNode]) -> List[int]:
+        self.ret = []
+        self.helper(root)
+        return self.ret
+    
+    def helper(self, node):
+        if not node:
+            return
+        self.helper(node.left)
+        self.ret.append(node.val)
+        self.helper(node.right)
+        return
+
 # binary tree
 # time O(n)
 # space O(n) or O(1)
