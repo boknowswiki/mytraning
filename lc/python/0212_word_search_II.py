@@ -1,3 +1,67 @@
+# trie and dfs
+
+class trie:
+    def __init__(self):
+        self.children = {}
+        self.is_word = False
+        self.ref = 0
+        
+    def add(self, word):
+        cur = self
+        cur.ref += 1
+        for w in word:
+            if w not in cur.children:
+                cur.children[w] = trie()
+            cur = cur.children[w]
+            cur.ref += 1
+        cur.is_word = True
+    
+    def remove(self, word):
+        cur = self
+        cur.ref -= 1
+        for w in word:
+            if w in cur.children:
+                cur = cur.children[w]
+                cur.ref -= 1   
+        cur.is_word = False
+
+class Solution:
+    def findWords(self, board: List[List[str]], words: List[str]) -> List[str]:
+        root = trie()
+        for word in words:
+            root.add(word)
+        m, n = len(board), len(board[0])
+        ret = []
+        v = set()
+        
+        def dfs(x, y, node, path):
+            if (
+                x not in range(m) or
+                y not in range(n) or
+                board[x][y] not in node.children or
+                node.children[board[x][y]].ref < 1 or
+                (x, y) in v
+            ):
+                return
+            
+            v.add((x, y))
+            path += board[x][y]
+            node = node.children[board[x][y]]
+            if node.is_word:
+                ret.append(path)
+                root.remove(path)
+
+            dfs(x+1, y, node, path)
+            dfs(x-1, y, node, path)
+            dfs(x, y+1, node, path)
+            dfs(x, y-1, node, path)
+            v.remove((x, y))
+            
+        for i in range(m):
+            for j in range(n):
+                dfs(i, j, root, "")
+                
+        return ret
 
 # trie and dfs
 # reference: https://github.com/neetcode-gh/leetcode/blob/main/python/212-Word-Search-II.py
