@@ -1,4 +1,44 @@
 
+# dfs
+
+class Solution:
+    def islandPerimeter(self, grid: List[List[int]]) -> int:
+        if not grid:
+            return 0
+        
+        m, n = len(grid), len(grid[0])
+        self.ret = 0
+        
+        for i in range(m):
+            for j in range(n):
+                if grid[i][j]:
+                    self.dfs(grid, m, n, i, j)
+                    return self.ret
+                
+        return 0
+        
+    def dfs(self, grid, m, n, x, y):
+        if x < 0 or x >= m or y < 0 or y >= n or grid[x][y] != 1:
+            return
+        
+        grid[x][y] = -1
+        if x + 1 >= m or grid[x+1][y] == 0:
+            self.ret += 1
+        if x-1 < 0 or grid[x-1][y] == 0:
+            self.ret += 1
+        if y + 1 >= n or grid[x][y+1] == 0:
+            self.ret += 1
+        if y - 1 < 0 or grid[x][y-1] == 0:
+            self.ret += 1
+            
+        self.dfs(grid, m, n, x+1, y)
+        self.dfs(grid, m, n, x-1, y)
+        self.dfs(grid, m, n, x, y+1)
+        self.dfs(grid, m, n, x, y-1)
+        
+        return
+
+    
 # bfs
 # time O(m*n)
 # space O(k)
