@@ -13,6 +13,37 @@ class Solution:
         if not root:
             return []
         
+        self.ret = []
+        
+        self.dfs(root, targetSum, [])
+        
+        return self.ret
+    
+    def dfs(self, node, target, path):
+        if node.left == None and node.right == None:
+            if node.val == target:
+                path.append(node.val)
+                self.ret.append(list(path))
+            return
+        if node.left:
+            self.dfs(node.left, target-node.val, path+[node.val])
+            
+        if node.right:
+            self.dfs(node.right, target-node.val, path+[node.val])
+            
+        return
+
+# Definition for a binary tree node.
+# class TreeNode:
+#     def __init__(self, val=0, left=None, right=None):
+#         self.val = val
+#         self.left = left
+#         self.right = right
+class Solution:
+    def pathSum(self, root: Optional[TreeNode], targetSum: int) -> List[List[int]]:
+        if not root:
+            return []
+        
         ret = []
         
         self.helper(root, targetSum, [], ret)
