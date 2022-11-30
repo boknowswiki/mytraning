@@ -1,5 +1,41 @@
 #!/usr/bin/python -t
 
+# dfs
+
+class Solution:
+    def solve(self, board: List[List[str]]) -> None:
+        """
+        Do not return anything, modify board in-place instead.
+        """
+        if not board:
+            return
+        m, n = len(board), len(board[0])
+        
+        for i in range(m):
+            for j in range(n):
+                if (i == 0 or i == m-1 or j == 0 or j == n-1) and board[i][j] == "O":
+                    self.dfs(board, m, n, i, j)
+                    
+        for i in range(m):
+            for j in range(n):
+                if board[i][j] == "O":
+                    board[i][j] = "X"
+                if board[i][j] == ".":
+                    board[i][j] = "O"
+                    
+        return
+    
+    def dfs(self, board, m, n, x, y):
+        board[x][y] = "."
+        dirs = [(1, 0), (-1, 0), (0, 1), (0, -1)]
+        for i in range(len(dirs)):
+            dx = x + dirs[i][0]
+            dy = y + dirs[i][1]
+            if 0 <= dx < m and 0 <= dy < n and board[dx][dy] == "O":
+                self.dfs(board, m, n, dx, dy)
+                
+        return
+
 # bfs
 # time O(m*n)
 # space O(m*n)
