@@ -1,7 +1,38 @@
+
+
 # binary tree and dfs
 # time O(n)
 # space O(1)
 
+# Definition for a binary tree node.
+# class TreeNode:
+#     def __init__(self, val=0, left=None, right=None):
+#         self.val = val
+#         self.left = left
+#         self.right = right
+class Solution:
+    def sumNumbers(self, root: Optional[TreeNode]) -> int:
+        if not root:
+            return 0
+        
+        self.ret = 0
+        self.dfs(root, 0)
+        return self.ret
+    
+    def dfs(self, node, val):
+        if not node.left and not node.right:
+            val = val * 10 + node.val
+            self.ret += val
+            return
+        
+        val = val*10 + node.val
+        if node.left:
+            self.dfs(node.left, val)
+        if node.right:
+            self.dfs(node.right, val)
+            
+        return
+    
 # Definition for a binary tree node.
 # class TreeNode:
 #     def __init__(self, val=0, left=None, right=None):
