@@ -1,4 +1,42 @@
 
+# dfs
+
+class Solution:
+    def canFinish(self, numCourses: int, prerequisites: List[List[int]]) -> bool:
+        if not numCourses:
+            return True
+        
+        graph = collections.defaultdict(list)
+        
+        for prereq in prerequisites:
+            graph[prereq[1]].append(prereq[0])
+            
+        path = [False] * numCourses
+        checked = [False] * numCourses
+        for cur in range(numCourses):
+            if self.dfs(cur, graph, path, checked):
+                return False
+            
+        return True
+    
+    def dfs(self, cur, graph, path, checked):
+        if checked[cur]:
+            return False
+        
+        if path[cur]:
+            return True
+        
+        path[cur] = True
+        
+        for next in graph[cur]:
+            if self.dfs(next, graph, path, checked):
+                return True
+            
+        path[cur] = False
+        checked[cur] = True
+        
+        return False
+
 # bfs and topological sort
 # time O(n)
 # space O(n)
