@@ -1,5 +1,34 @@
 #!/usr/bin/python -t
 
+# dfs
+
+class Solution:
+    def numIslands(self, grid: List[List[str]]) -> int:
+        if not grid:
+            return 0
+        m, n = len(grid), len(grid[0])
+        cnt = 0
+        
+        for i in range(m):
+            for j in range(n):
+                if grid[i][j] == "1":
+                    cnt += 1
+                    self.dfs(grid, m, n, i, j)
+                    
+        return cnt
+    
+    def dfs(self, grid, m, n, x, y):
+        grid[x][y] = "0"
+        dirs = [(0, 1), (0, -1), (1, 0), (-1, 0)]
+        for i in range(len(dirs)):
+            dx = x + dirs[i][0]
+            dy = y + dirs[i][1]
+            
+            if 0 <= dx < m and 0 <= dy < n and grid[dx][dy] == "1":
+                self.dfs(grid, m, n, dx, dy)
+                
+        return
+
 # bfs
 # time O(m*n)
 # space O(m*n)
