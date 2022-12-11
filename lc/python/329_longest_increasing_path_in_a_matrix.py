@@ -1,5 +1,36 @@
 #!/usr/bin/python -t
 
+# dfs and memorization
+
+class Solution:
+    def longestIncreasingPath(self, matrix: List[List[int]]) -> int:
+        if not matrix:
+            return 0
+        m, n = len(matrix), len(matrix[0])
+        ret = 0
+        memo = {}
+
+        def dfs(x, y):
+            if (x, y) in memo:
+                return memo[(x, y)]
+            
+            dirs = [(0, 1), (0, -1), (1, 0), (-1, 0)]
+            memo[(x, y)] = 0
+            for i in range(len(dirs)):
+                dx = x + dirs[i][0]
+                dy = y + dirs[i][1]
+                if 0 <= dx < m and 0 <= dy < n and matrix[dx][dy] > matrix[x][y]:
+                    memo[(x, y)] = max(memo[(x, y)], dfs(dx, dy))
+
+            memo[(x, y)] += 1
+            return memo[(x, y)]
+
+        for i in range(m):
+            for j in range(n):
+                ret = max(ret, dfs(i, j))
+
+        return ret
+
 # bfs and topology sort
 
 class Solution:
