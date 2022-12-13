@@ -1,5 +1,26 @@
 #!/usr/bin/python -t
 
+# dp
+# time O(mn)
+# space O(mn)
+
+class Solution:
+    def minFallingPathSum(self, matrix: List[List[int]]) -> int:
+        # dp[i][j] the min sum at (i, j)
+        # dp[i][j] = min(dp[i-1][j-1], dp[i-1][j], dp[i-1][j+1]) + matrix[i][j]
+        # dp[i][j] = matrix[i][j]
+        # return min(matrix[m-1])
+        if not matrix:
+            return 0
+
+        m, n = len(matrix), len(matrix[0])
+
+        for i in range(1, m):
+            for j in range(n):
+                matrix[i][j] += min(matrix[i-1][j], matrix[i-1][j-1] if j > 0 else sys.maxsize, matrix[i-1][j+1] if j < n-1 else sys.maxsize )
+
+        return min(matrix[m-1])
+
 # dp time O(m*n) space O(1), modified on A.
 
 class Solution(object):
