@@ -1,5 +1,53 @@
 #!/usr/bin/python -t
 
+# dp
+
+class Solution:
+    
+    def rob(self, nums: List[int]) -> int:
+        
+        # Special handling for empty case.
+        if not nums:
+            return 0
+        
+        N = len(nums)
+        
+        rob_next_plus_one = 0
+        rob_next = nums[N - 1]
+        
+        # DP table calculations.
+        for i in range(N - 2, -1, -1):
+            
+            # Same as recursive solution.
+            current = max(rob_next, rob_next_plus_one + nums[i])
+            
+            # Update the variables
+            rob_next_plus_one = rob_next
+            rob_next = current
+            
+        return rob_next
+
+class Solution:
+    def rob(self, nums: List[int]) -> int:
+        # dp[i] is the total at ith house
+        # dp[i] = max(dp[:i-2]) + nums[i]
+        # dp[0] = nums[0], dp[1] = nums[1]
+        # max(dp[n-1], dp[n-2])
+        if not nums:
+            return 0
+
+        n = len(nums)
+        if n == 1:
+            return nums[0]
+
+        dp = [0] * (n)
+        dp[0] = nums[0]
+        dp[1] = nums[1]
+        for i in range(2, n):
+            dp[i] = max(dp[:i-1]) + nums[i]
+
+        return max(dp[n-1], dp[n-2])
+
 #dp solution
 
 class Solution(object):
