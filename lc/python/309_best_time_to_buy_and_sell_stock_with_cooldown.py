@@ -1,5 +1,25 @@
 #!/usr/bin/python -t
 
+# dp
+# time O(n)
+# space O(1)
+
+class Solution:
+    def maxProfit(self, prices: List[int]) -> int:
+        sold, held, reset = float('-inf'), float('-inf'), 0
+
+        for price in prices:
+            # Alternative: the calculation is done in parallel.
+            # Therefore no need to keep temporary variables
+            #sold, held, reset = held + price, max(held, reset-price), max(reset, sold)
+
+            pre_sold = sold
+            sold = held + price
+            held = max(held, reset - price)
+            reset = max(reset, pre_sold)
+
+        return max(sold, reset)
+
 #The series of problems are typical dp. The key for dp is to find the variables to represent the states and deduce the transition function.
 #Of course one may come up with a O(1) space solution directly, but I think it is better to be generous when you think and be greedy when you implement.
 #The natural states for this problem is the 3 possible transactions : buy, sell, rest. Here rest means no transaction on that day (aka cooldown).
