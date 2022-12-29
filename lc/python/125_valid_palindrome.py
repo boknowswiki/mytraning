@@ -1,5 +1,35 @@
 #!/usr/bin/python -t
 
+# two pointers
+# time O(n)
+# space O(1)
+
+class Solution:
+    def isPalindrome(self, s: str) -> bool:
+        if not s:
+            return True
+
+        n = len(s)
+        l = 0
+        r = n-1
+
+        while l < r:
+            while l < r and not s[l].isalnum():
+                l += 1
+
+            while l < r and not s[r].isalnum():
+                r -= 1
+
+            if l == r:
+                break
+            if s[l].lower() != s[r].lower():
+                #print(f"{s[l]}, {s[r]}")
+                return False
+            l += 1
+            r -= 1
+
+        return True
+
 class Solution(object):
     def isPalindrome(self, s):
         """
