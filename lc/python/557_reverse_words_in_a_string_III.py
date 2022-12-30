@@ -1,5 +1,27 @@
 #!/usr/bin/python -t
 
+# two pointers
+
+class Solution:
+    def reverseWords(self, s: str) -> str:
+        n = len(s)
+        if n < 2:
+            return s
+
+        l = 0
+        ret = ""
+        
+        for r in range(n):
+            if s[r] == " ":
+                ret += s[l:r][::-1]
+                #print (f"ret {ret}")
+                ret += " "
+                l = r+1
+            elif r == n-1:
+                ret += s[l:r+1][::-1]
+
+        return ret
+
 class Solution(object):
     def reverseWords(self, s):
         """
