@@ -1,5 +1,28 @@
 #!/usr/bin/python -t
 
+# two pointers
+# time O(n)
+# space O(1)
+
+class Solution:
+    def maxArea(self, height: List[int]) -> int:
+        if not height:
+            return 0
+
+        l = 0
+        r = len(height)-1
+        ret = 0
+
+        while l < r:
+            width = r-l
+            ret = max(ret, min(height[l], height[r]) * width)
+            if height[l] <= height[r]:
+                l += 1
+            else:
+                r -= 1
+
+        return ret
+
 #time O(n) space O(1)
 
 class Solution(object):
