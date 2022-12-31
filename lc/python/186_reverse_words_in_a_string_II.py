@@ -1,5 +1,43 @@
 #!/usr/bin/python -t
 
+# two pointers
+
+class Solution:
+    def reverseWords(self, s: List[str]) -> None:
+        """
+        Do not return anything, modify s in-place instead.
+        """
+        n = len(s)
+        if n < 2:
+            return
+
+        start = end = 0
+
+        while end < n:
+            while end < n and s[end] != " ":
+                end += 1
+
+            l = start
+            r = end-1
+            while l < r:
+                s[l], s[r] = s[r], s[l]
+                l += 1
+                r -= 1
+
+            while end < n and s[end] == " ":
+                end += 1
+
+            start = end
+
+        l = 0
+        r = n-1
+        while l < r:
+            s[l], s[r] = s[r], s[l]
+            l += 1
+            r -= 1
+
+        return
+
 class Solution(object):
     def reverseWords(self, s):
         """
