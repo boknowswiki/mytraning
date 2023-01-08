@@ -1,5 +1,35 @@
 #!/usr/bin/python -t
 
+# hash map
+# time O(mn)
+# space O(m+n)
+
+class Solution:
+    def setZeroes(self, matrix: List[List[int]]) -> None:
+        """
+        Do not return anything, modify matrix in-place instead.
+        """
+        if not matrix:
+            return
+        
+        m, n = len(matrix), len(matrix[0])
+
+        r_set = set()
+        c_set = set()
+
+        for i in range(m):
+            for j in range(n):
+                if matrix[i][j] == 0:
+                    r_set.add(i)
+                    c_set.add(j)
+
+        for i in range(m):
+            for j in range(n):
+                if i in r_set or j in c_set:
+                    matrix[i][j] = 0
+
+        return
+
 #time O(mn) space O(1)
 
 class Solution(object):
