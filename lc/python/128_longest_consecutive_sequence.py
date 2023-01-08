@@ -1,5 +1,56 @@
 #!/usr/bin/python -t
 
+class Solution:
+    def longestConsecutive(self, nums):
+        longest_streak = 0
+        num_set = set(nums)
+
+        for num in num_set:
+            if num - 1 not in num_set:
+                current_num = num
+                current_streak = 1
+
+                while current_num + 1 in num_set:
+                    current_num += 1
+                    current_streak += 1
+
+                longest_streak = max(longest_streak, current_streak)
+
+        return longest_streak
+
+# hash map
+# time O(n)
+# space O(n)
+
+
+class Solution:
+    def longestConsecutive(self, nums: List[int]) -> int:
+        if not nums:
+            return 0
+
+        num_set = set()
+        v = set()
+
+        for num in nums:
+            num_set.add(num)
+
+        start = end = 0
+        ret = 0
+
+        for num in num_set:
+            if num not in v:
+                v.add(num)
+                start = end = num
+                while start in num_set:
+                    v.add(start)
+                    start -= 1
+                while end in num_set:
+                    v.add(end)
+                    end += 1
+                ret = max(ret, end-start-1)
+
+        return ret
+
 class uf(object):
     def __init__(self, n):
         self.father = {i:i for i in range(n)}
