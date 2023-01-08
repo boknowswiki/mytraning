@@ -1,5 +1,53 @@
 #!/usr/bin/python -t
 
+# hash map
+# time O(n)
+# space O(1) if char set is small and can be instant
+
+class Solution:
+    def lengthOfLongestSubstring(self, s: str) -> int:
+        chars = [None] * 128
+
+        left = right = 0
+
+        res = 0
+        while right < len(s):
+            r = s[right]
+
+            index = chars[ord(r)]
+            if index is not None and left <= index < right:
+                left = index + 1
+
+            res = max(res, right - left + 1)
+
+            chars[ord(r)] = right
+            right += 1
+        return res
+
+# hash map
+# time O(n)
+# space O(n)
+
+class Solution:
+    def lengthOfLongestSubstring(self, s: str) -> int:
+        n = len(s)
+        if n < 2:
+            return n
+        
+        window = dict()
+        ret = 0
+        l = 0
+
+        for r in range(n):
+            if s[r] in window:
+                while l < r and s[r] in window:
+                    del window[s[l]]
+                    l += 1
+            window[s[r]] = r
+            ret = max(ret, r-l+1)
+
+        return ret
+
 #time O(n) space O(n)
 
 class Solution(object):
