@@ -1,5 +1,31 @@
 #!/usr/bin/python -t
 
+# hash map and two pointers
+# time O(n)
+# space O(n)
+
+class Solution:
+    def lengthOfLongestSubstringTwoDistinct(self, s: str) -> int:
+        if not s:
+            return 0
+
+        n = len(s)
+        l = 0
+        d = dict()
+        ret = 0
+
+        for r in range(n):
+            d[s[r]] = d.get(s[r], 0)+1
+            while len(d) > 2:
+                d[s[l]] -= 1
+                if d[s[l]] == 0:
+                    del d[s[l]]
+                l += 1
+
+            ret = max(ret, r-l+1)
+
+        return ret
+
 class Solution(object):
     def lengthOfLongestSubstringTwoDistinct(self, s):
         """
