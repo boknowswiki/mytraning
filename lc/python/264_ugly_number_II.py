@@ -1,5 +1,47 @@
 #!/usr/bin/python -t
 
+# heap
+
+import heapq
+
+class Solution:
+    def nthUglyNumber(self, n: int) -> int:
+        if n < 2:
+            return n
+
+        hq = [1]
+        factors = {2,3,5}
+        v = {1}
+
+        for i in range(n-1):
+            cur = heapq.heappop(hq)
+            for f in factors:
+                new = f*cur
+                if new not in v:
+                    v.add(new)
+                    heapq.heappush(hq, new)
+
+        return hq[0]
+
+class Solution:
+    def nthUglyNumber(self, n: int) -> int:
+        if n < 2:
+            return n
+        
+        num_2 = num_3 = num_5 = 0
+        ret = [1]*n
+
+        for i in range(1, n):
+            ret[i] = min(ret[num_2]*2, min(ret[num_3]*3, ret[num_5]*5))
+            if ret[i] == ret[num_2]*2:
+                num_2 += 1
+            if ret[i] == ret[num_3]*3:
+                num_3 += 1
+            if ret[i] == ret[num_5]*5:
+                num_5 += 1
+
+        return ret[n-1]
+
 #We have an array k of first n ugly number. We only know, at the beginning, the first one, which is 1. Then
 #k[1] = min( k[0]x2, k[0]x3, k[0]x5). The answer is k[0]x2. So we move 2's pointer to 1. Then we test:
 #k[2] = min( k[1]x2, k[0]x3, k[0]x5). And so on. Be careful about the cases such as 6, in which we need to forward both pointers of 2 and 3.
