@@ -2,6 +2,35 @@
 
 class Solution:
     def generatePalindromes(self, s: str) -> List[str]:
+        counts = collections.Counter(s)
+        ret = []
+
+        def dfs(cur="", counts=counts):
+            nonlocal ret
+            if len(cur) == len(s):
+                ret.append(cur)
+                return
+            
+            if not cur and len(s) % 2:
+                for key in counts:
+                    counts[key] -= 1
+                    dfs(key, counts)
+                    counts[key] += 1
+            else:
+                for key, cnt in counts.items():
+                    if cnt >= 2:
+                        counts[key] -= 2
+                        dfs(key+cur+key, counts)
+                        counts[key] += 2
+
+            return
+
+        dfs()
+
+        return ret
+
+class Solution:
+    def generatePalindromes(self, s: str) -> List[str]:
         counter = Counter(s)
         output = []
         
