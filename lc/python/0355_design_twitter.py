@@ -47,6 +47,46 @@ class Twitter:
 
 # other people's answer:
 
+class Twitter:
+    
+    def __init__(self):
+        self.followers_dict = defaultdict(set)
+        self.tweets_dict = defaultdict(set)
+
+    def postTweet(self, userId: int, tweetId: int) -> None:
+        import time
+        time.sleep(0.01)
+        self.tweets_dict[userId].add( (time.time(), tweetId) )
+
+    def getNewsFeed(self, userId: int) -> List[int]:
+        import time
+        list_of_users = set(self.followers_dict[userId])
+        list_of_users.add(userId)
+        posts_heap = []
+        
+        for user in list_of_users:
+            for post in self.tweets_dict[user]:
+                diff = time.time() - post[0]
+                heapq.heappush(posts_heap, [diff, post[1]])
+
+        count = 0
+        tweet_ids = []
+        while posts_heap and count < 10:
+            temp_post = heapq.heappop(posts_heap)
+            tweet_ids.append(temp_post[1])
+            count += 1
+        
+        return tweet_ids
+
+
+    def follow(self, followerId: int, followeeId: int) -> None:
+        self.followers_dict[followerId].add(followeeId)
+
+    def unfollow(self, followerId: int, followeeId: int) -> None:
+        if followeeId in self.followers_dict[followerId]:
+            self.followers_dict[followerId].remove(followeeId)
+
+
 import heapq
 
 class Twitter(object):
