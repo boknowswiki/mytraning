@@ -25,7 +25,38 @@ class PhoneDirectory:
 
         return
         
+# other's better one
 
+class PhoneDirectory(object):
+
+    def __init__(self, maxNumbers):
+        """
+        :type maxNumbers: int
+        """
+        self.dic = [i for i in range(maxNumbers)]
+
+    def get(self):
+        """
+        :rtype: int
+        """
+        if self.dic: return self.dic.pop(0)
+        else: return -1 
+
+    def check(self, number):
+        """
+        :type number: int
+        :rtype: bool
+        """
+        if number in self.dic: return True 
+        else: return False 
+
+    def release(self, number):
+        """
+        :type number: int
+        :rtype: None
+        """
+        if number not in self.dic:
+            self.dic.insert(number, number)
 
 # Your PhoneDirectory object will be instantiated and called as such:
 # obj = PhoneDirectory(maxNumbers)
