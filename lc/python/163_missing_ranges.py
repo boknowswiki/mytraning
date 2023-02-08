@@ -1,5 +1,30 @@
 #!/usr/bin/python -t
 
+# array
+# time O(n)
+# space O(1)
+
+class Solution:
+    def findMissingRanges(self, nums: List[int], lower: int, upper: int) -> List[str]:
+        start = lower
+        ranges = []
+
+        def addRange(l, r):
+            if l == r - 1:
+                ranges.append(str(l))
+            else:
+                ranges.append("{}->{}".format(l, r-1))
+        
+        for n in nums:
+            if start < n:
+                addRange(start, n)
+            start = n + 1
+            
+        if start <= upper:
+            addRange(start, upper + 1)
+        
+        return ranges
+
 class Solution(object):
     def findMissingRanges(self, nums, lower, upper):
         """
