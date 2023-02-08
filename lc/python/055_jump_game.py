@@ -1,5 +1,21 @@
 #!/usr/bin/python -t
 
+# dp, greedy
+
+class Solution:
+    def canJump(self, nums: List[int]) -> bool:
+        n = len(nums)
+        if n == 0:
+            return False
+        last_pos = 0
+        i = 0
+
+        while i < n and i <= last_pos:
+            last_pos = max(last_pos, i + nums[i])
+            i += 1
+
+        return i == n
+
 #time O(n) space O(1)
 
 class Solution(object):
