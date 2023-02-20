@@ -1,5 +1,35 @@
 #!/usr/bin/python -t
 
+# binary search
+# time O(logn)
+# space O(1)
+
+class Solution:
+    def searchInsert(self, nums: List[int], target: int) -> int:
+        n = len(nums)
+        if n == 0:
+            return 0
+
+        if target > nums[-1]:
+            return n
+
+        l = 0
+        r = n-1
+
+        while l + 1 < r:
+            mid = l + (r-l)//2
+            if target == nums[mid]:
+                return mid
+            elif target < nums[mid]:
+                r = mid
+            else:
+                l = mid
+
+        if target <= nums[l]:
+            return l
+
+        return r
+
 class Solution(object):
     def searchInsert(self, nums, target):
         """
