@@ -1,5 +1,36 @@
 #!/usr/bin/python -t
 
+# binary search
+
+# time O(nlogn)
+# space O(1)
+
+class Solution:
+    def shipWithinDays(self, weights: List[int], days: int) -> int:
+        l = max(weights)
+        r = sum(weights)
+
+        def get_days(target):
+            cnt = 1
+            cur = 0
+            for w in weights:
+                cur += w
+                if cur > target:
+                    cnt += 1
+                    cur = w
+
+            return cnt
+
+        while l < r:
+            mid = l + (r-l)//2
+            need = get_days(mid)
+            if need > days:
+                l = mid+1
+            else:
+                r = mid
+
+        return l
+
 class Solution(object):
     def shipWithinDays(self, weights, D):
         """
