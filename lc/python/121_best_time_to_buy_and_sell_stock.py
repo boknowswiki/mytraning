@@ -1,5 +1,23 @@
 #!/usr/bin/python -t 
 
+# time O(n)
+# space O(1)
+
+class Solution:
+    def maxProfit(self, prices: List[int]) -> int:
+        n = len(prices)
+        if n < 2:
+            return 0
+
+        cur_min = prices[0]
+        max_profit = 0
+
+        for i in range(n):
+            max_profit = max(max_profit, prices[i]-cur_min)
+            cur_min = min(cur_min, prices[i])
+
+        return max_profit
+
 # dp solution
 
 class Solution(object):
