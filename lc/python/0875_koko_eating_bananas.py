@@ -3,6 +3,34 @@
 # time O(nlogn)
 # space O(1)
 
+class Solution:
+    def minEatingSpeed(self, piles: List[int], h: int) -> int:
+        def get_time(val):
+            t = 0
+
+            for p in piles:
+                t += p // val
+
+                if p % val:
+                    t += 1
+
+            return t
+                
+        l = 1
+        r = max(piles)
+
+        while l + 1 < r:
+            mid = (l+r)//2
+            t = get_time(mid)
+            if t > h:
+                l = mid+1
+            else:
+                r = mid
+
+        if get_time(l) <= h:
+            return l
+        return r
+
 from typing import List
 
 class Solution:
