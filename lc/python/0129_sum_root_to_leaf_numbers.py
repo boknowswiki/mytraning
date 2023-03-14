@@ -12,6 +12,36 @@
 #         self.right = right
 class Solution:
     def sumNumbers(self, root: Optional[TreeNode]) -> int:
+        ret = 0
+        if not root:
+            return ret
+
+        def dfs(node, val):
+            nonlocal ret
+            cur_val = 10*val + node.val
+            if not node.left and not node.right:
+                ret += cur_val
+                return
+
+            if node.left:
+                dfs(node.left, cur_val)
+            if node.right:
+                dfs(node.right, cur_val)
+
+            return
+
+        dfs(root, 0)
+
+        return ret
+
+# Definition for a binary tree node.
+# class TreeNode:
+#     def __init__(self, val=0, left=None, right=None):
+#         self.val = val
+#         self.left = left
+#         self.right = right
+class Solution:
+    def sumNumbers(self, root: Optional[TreeNode]) -> int:
         if not root:
             return 0
         
