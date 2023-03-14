@@ -1,4 +1,58 @@
 
+# quick select or quick sort
+# time O(n) worst case O(n^2)
+# space O(n)
+
+class Solution:
+    def topKFrequent(self, nums: List[int], k: int) -> List[int]:
+
+        counter = dict()
+        unique_nums = []
+
+        for num in nums:
+            if num not in counter:
+                counter[num] = 1
+                unique_nums.append(num)
+            else:
+                counter[num] += 1
+        
+        n = len(unique_nums)
+
+        def quicksort(start, end, target):
+            nonlocal unique_nums
+
+            def part(low, high):
+                nonlocal unique_nums
+                point = unique_nums[high]
+                index = low
+                i = low
+                while i < high:
+                    if counter[unique_nums[i]] < counter[point]:
+                        unique_nums[i], unique_nums[index] = unique_nums[index], unique_nums[i]
+                        index += 1
+                    i += 1
+
+                unique_nums[index], unique_nums[high] = unique_nums[high], unique_nums[index]
+
+                return index
+
+            if start == end:
+                return
+            if start < end:
+                pivot = part(start, end)
+                if pivot == target:
+                    return
+                elif pivot > target:
+                    quicksort(start, pivot-1, target)
+                else:
+                    quicksort(pivot+1, end, target)
+
+            return
+        quicksort(0, n-1, n-k)
+        #print(f"unique_nums {unique_nums}")
+
+        return unique_nums[n-k:]
+    
 # quick select
 # time O(n)
 # space O(n)
