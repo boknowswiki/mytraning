@@ -1,5 +1,33 @@
 #!/usr/bin/python -t
 
+# heap
+
+import heapq
+
+class Solution:
+    def kthSmallest(self, matrix: List[List[int]], k: int) -> int:
+        m, n = len(matrix), len(matrix[0])
+        v = set()
+        if m == 0 or n == 0:
+            return 0
+
+        hq = [(matrix[0][0], 0, 0)]
+        v.add((0, 0))
+
+        while hq and k > 1:
+            _, i, j = heapq.heappop(hq)
+            if i + 1 < m and (i+1, j) not in v:
+                v.add((i+1, j))
+                heapq.heappush(hq, (matrix[i+1][j], i+1, j))
+            if j + 1 < n and (i, j+1) not in v:
+                v.add((i, j+1))
+                heapq.heappush(hq, (matrix[i][j+1], i, j+1))
+
+            k -= 1
+
+        return hq[0][0]
+
+# binary search
 #time O(nlogn) space O(1)
 '''
 
