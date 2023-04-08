@@ -1,5 +1,40 @@
 #!/usr/bin/python -t
 
+# bfs
+# time O(n)
+# space O(n)
+
+"""
+# Definition for a Node.
+class Node:
+    def __init__(self, val = 0, neighbors = None):
+        self.val = val
+        self.neighbors = neighbors if neighbors is not None else []
+"""
+
+import collections
+
+class Solution:
+    def cloneGraph(self, node: 'Node') -> 'Node':
+        if not node:
+            return None
+
+        v = dict()
+        q = collections.deque([node])
+        v[node] = Node(node.val, [])
+
+        while q:
+            cur = q.popleft()
+            for nei in cur.neighbors:
+                if nei not in v:
+                    v[nei] = Node(nei.val, [])
+                    q.append(nei)
+
+                v[cur].neighbors.append(v[nei])
+
+        return v[node]
+        
+
 # dfs
 
 """
