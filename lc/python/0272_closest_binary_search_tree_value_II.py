@@ -1,3 +1,17 @@
+
+# binary tree, BST, dfs, sort
+# time O(nlogn)
+# space O(n)
+
+class Solution:
+    def closestKValues(self, root: TreeNode, target: float, k: int) -> List[int]:
+        def inorder(r: TreeNode):
+            return inorder(r.left) + [r.val] + inorder(r.right) if r else []
+        
+        nums = inorder(root)
+        nums.sort(key = lambda x: abs(x - target))
+        return nums[:k]
+
 # binary tree, BST, dfs, heap
 # time O(nlogn)
 # space O(n)
@@ -36,6 +50,8 @@ class Solution:
       
       
 # binary tree, inorder, quickselect
+# time O(n) on average, O(n^2) on worst case.
+# space O(n)
 
 class Solution:
     def closestKValues(self, root: TreeNode, target: float, k: int) -> List[int]:
