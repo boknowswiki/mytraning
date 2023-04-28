@@ -1,5 +1,56 @@
 #!/usr/bin/python -t
 
+# bfs
+# time O(n^2*m)
+# space O(n^2)
+
+import collections
+
+class Solution:
+    def numSimilarGroups(self, strs: List[str]) -> int:
+        graph = collections.defaultdict(list)
+
+        def is_similar(a, b):
+            diff = 0
+            for i, j in zip(a, b):
+                if i != j:
+                    diff += 1
+
+            return diff == 0 or diff == 2
+
+        for i in range(len(strs)):
+            for j in range(i+1, len(strs)):
+                if is_similar(strs[i], strs[j]):
+                    graph[i].append(j)
+                    graph[j].append(i)
+
+        v = set()
+        cnt = 0
+
+        def bfs(idx):
+            nonlocal graph, v, strs
+            q = collections.deque([idx])
+            v.add(idx)
+
+            while q:
+                cur = q.popleft()
+                if cur not in graph:
+                    continue
+                
+                for nei in graph[cur]:
+                    if nei not in v:
+                        v.add(nei)
+                        q.append(nei)
+
+            return
+
+        for i in range(len(strs)):
+            if i not in v:
+                bfs(i)
+                cnt += 1
+
+        return cnt
+
 #union find solution, but time limit exceeded, but it's right.
 
 class uf(object):
