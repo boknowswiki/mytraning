@@ -5,6 +5,30 @@
 
 class Solution:
     def trap(self, height: List[int]) -> int:
+        n = len(height)
+        l = 0
+        r = n-1
+        l_max = r_max = 0
+
+        ret = 0
+        while l < r:
+            l_max = max(l_max, height[l])
+            r_max = max(r_max, height[r])
+            if height[l] > height[r]:
+                diff = min(l_max, r_max) - height[r]
+                if diff > 0:
+                    ret += diff
+                r -= 1
+            else:
+                diff = min(l_max, r_max) - height[l]
+                if diff > 0:
+                    ret += diff
+                l += 1
+
+        return ret
+
+class Solution:
+    def trap(self, height: List[int]) -> int:
         l = 0
         r = len(height)-1
         ret = l_max = r_max = 0
