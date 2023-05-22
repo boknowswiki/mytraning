@@ -171,6 +171,33 @@ class Solution:
             bucketIdx -= 1
         return ans
 
+# heap
+
+import collections, heapq
+
+class Solution:
+    def topKFrequent(self, nums: List[int], k: int) -> List[int]:
+        counter = collections.defaultdict(int)
+        for num in nums:
+            counter[num] += 1
+
+        #print(f"counter is {counter}")
+        hq = []
+
+        for key, v in counter.items():
+            hq.append((-v, key))
+
+        heapq.heapify(hq)
+
+        #print(f"hq {hq}")
+        ret = []
+
+        for i in range(k):
+            #print(f"pop once {i}")
+            ret.append(heapq.heappop(hq)[1])
+
+        return ret
+    
 # hash map and heap
 # time O(nlogn)
 # space O(n)
