@@ -3,6 +3,44 @@
 # time O(mlogn)
 # space O(1)
 
+class Solution:
+    def countNegatives(self, grid: List[List[int]]) -> int:
+        m, n = len(grid), len(grid[0])
+        if m == 0 or n == 0:
+            return 0
+
+        ret = 0
+
+        def get_negative_count(arr):
+            nonlocal n
+
+            l = 0
+            r = len(arr) -1
+
+            while l + 1 < r:
+                mid = (l+r)//2
+                if arr[mid] >= 0:
+                    l = mid + 1
+                else:
+                    r = mid
+
+            #print(f"arr {arr}, l {l}, r {r}")
+            if arr[l] < 0:
+                return n-l
+            if arr[r] < 0:
+                return n - r
+            
+            return 0
+
+
+        for i in range(m):
+            if grid[i][0] >= 0:
+                ret += get_negative_count(grid[i])
+            else:
+                ret += n
+
+        return ret
+
 from typing import List
 
 class Solution:
