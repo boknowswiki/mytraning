@@ -1,6 +1,44 @@
 
 # binary tree and dfs
 
+# time O(n)
+# space O(n)
+
+# Definition for a binary tree node.
+# class TreeNode:
+#     def __init__(self, val=0, left=None, right=None):
+#         self.val = val
+#         self.left = left
+#         self.right = right
+class Solution:
+    def getMinimumDifference(self, root: Optional[TreeNode]) -> int:
+        if not root:
+            return 0
+
+        ret = sys.maxsize
+        prev = None
+
+        def helper(node):
+            nonlocal ret, prev
+
+            if not node:
+                return
+
+            helper(node.left)
+            if prev == None:
+                prev = node
+            else:
+                ret = min(ret, abs(prev.val-node.val))
+                prev = node
+
+            helper(node.right)
+
+            return
+
+        helper(root)
+
+        return ret
+
 # Definition for a binary tree node.
 # class TreeNode:
 #     def __init__(self, val=0, left=None, right=None):
