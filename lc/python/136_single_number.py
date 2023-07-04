@@ -1,5 +1,18 @@
 #!/usr/bin/python -t
 
+# array, bit manipulations
+# time O(n)
+# space O(1)
+
+class Solution:
+    def singleNumber(self, nums: List[int]) -> int:
+        ret = 0
+
+        for num in nums:
+            ret ^= num
+
+        return ret
+
 class Solution(object):
     def singleNumber(self, nums):
         """
