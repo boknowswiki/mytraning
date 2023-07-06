@@ -1,5 +1,26 @@
 #!/usr/bin/python -t
 
+# two pointers, sliding window
+# time O(n)
+# space O(1)
+
+class Solution:
+    def minSubArrayLen(self, target: int, nums: List[int]) -> int:
+        n = len(nums)
+        ret = sys.maxsize
+        total = 0
+        left = 0
+
+        for right in range(n):
+            total += nums[right]
+
+            while left <= right and total >= target:
+                ret = min(ret, right-left+1)
+                total -= nums[left]
+                left += 1
+        
+        return 0 if ret == sys.maxsize else ret
+
 # binary search
 # time O(nlogn)
 # space O(n)
