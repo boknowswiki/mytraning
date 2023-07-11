@@ -1,5 +1,27 @@
 #!/usr/bin/python -t
 
+# dp
+# time O(mn)
+# space O(mn)
+
+class Solution:
+    def maximalSquare(self, matrix: List[List[str]]) -> int:
+        # dp[i][j] is the max square at row i, col j
+        # dp[i][j] = min(dp[i-1][j], dp[i-1][j-1], dp[i][j-1]) + 1 if matrix[i][j] == "1"
+        # ret = max(ret, dp[i][j])
+
+        row, col = len(matrix), len(matrix[0])
+        dp = [[0] * (col+1) for _ in range(row+1)]
+        ret = 0
+
+        for i in range(1, row+1):
+            for j in range(1, col+1):
+                if matrix[i-1][j-1] == "1":
+                    dp[i][j] = min(dp[i-1][j], dp[i-1][j-1], dp[i][j-1]) + 1
+                    ret = max(ret, dp[i][j])
+
+        return ret * ret
+
 #my dp solution
 
 class Solution(object):
