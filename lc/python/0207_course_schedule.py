@@ -1,4 +1,38 @@
 
+# topology sort
+# time O(n)
+# space O(n)
+
+import collections
+
+class Solution:
+    def canFinish(self, numCourses: int, prerequisites: List[List[int]]) -> bool:
+        graph = collections.defaultdict(list)
+        deps = [0] * numCourses
+        
+        for a, b in prerequisites:
+            graph[a].append(b)
+            deps[b] += 1
+
+        q = collections.deque()
+        for i in range(numCourses):
+            if deps[i] == 0:
+                q.append(i)
+
+        ret = set()
+
+        while q:
+            cur = q.popleft()
+            ret.add(cur)
+            if cur in graph:
+                for nei in graph[cur]:
+                    deps[nei] -= 1
+                    if deps[nei] == 0:
+                        q.append(nei)
+
+        return len(ret) == numCourses
+
+
 # dfs
 
 class Solution:
