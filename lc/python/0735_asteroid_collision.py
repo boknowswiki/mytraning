@@ -23,6 +23,8 @@ class Solution:
 
 # my solution
 # failed on case [-2, -1, 1, 2], expected [-2, -1, 1, 2], i think should be []
+# explaination: Direction matters: negative means moving left, positive means moving right. If negative is to the left of positive which means left is moving left and right is moving right, they will be further and further from each other and never meet.
+# for -2, -1 are moving left, and 1, 2 are moving right, they are moving away from each other.
 
 class Solution:
     def asteroidCollision(self, asteroids: List[int]) -> List[int]:
