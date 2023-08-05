@@ -1,5 +1,48 @@
 #!/usr/bin/python -t
 
+# dp, binary search tree
+# reference https://leetcode.com/problems/unique-binary-search-trees-ii/editorial/
+
+# Definition for a binary tree node.
+# class TreeNode:
+#     def __init__(self, val=0, left=None, right=None):
+#         self.val = val
+#         self.left = left
+#         self.right = right
+class Solution:
+    def generateTrees(self, n: int) -> List[Optional[TreeNode]]:
+        if not n:
+            return [None]
+
+        memo = dict()
+
+        def dfs(start, end):
+            nonlocal memo
+            ret = []
+
+            if start > end:
+                ret.append(None)
+                return ret
+
+            if (start, end) in memo:
+                return memo[(start, end)]
+
+            for i in range(start, end+1):
+                left = dfs(start, i-1)
+                right = dfs(i+1, end)
+
+                for l in left:
+                    for r in right:
+                        root = TreeNode(i, left=l, right=r)
+                        ret.append(root)
+
+            memo[(start, end)] = ret
+
+            return ret
+
+        return dfs(1, n)
+
+
 class Solution(object):
     def generateTrees(self, n):
         if n == 0:
