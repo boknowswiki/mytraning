@@ -1,5 +1,107 @@
 # linked list
 
+class Node:
+    def __init__(self, val):
+        self.val = val
+        self.prev = None
+        self.next = None
+
+class MyLinkedList:
+
+    def __init__(self):
+        self.size = 0
+        self.head = Node(0)
+        self.tail = Node(0)
+        self.head.next = self.tail
+        self.tail.prev = self.head
+
+    def get(self, index: int) -> int:
+        if index < 0 or index >= self.size:
+            return -1
+        if index + 1 < self.size-index:
+            cur = self.head
+            for _ in range(index+1):
+                cur = cur.next
+        else:
+            cur = self.tail
+            for _ in range(self.size-index):
+                cur = cur.prev
+
+        return cur.val
+
+    def addAtHead(self, val: int) -> None:
+        self.size += 1
+        prev, post = self.head, self.head.next
+        to_add = Node(val)
+        to_add.prev = prev
+        to_add.next = post
+        prev.next = to_add
+        post.prev = to_add
+
+    def addAtTail(self, val: int) -> None:
+        self.size += 1
+        prev, post = self.tail.prev, self.tail
+        to_add = Node(val)
+        to_add.prev = prev
+        to_add.next = post
+        prev.next = to_add
+        post.prev = to_add
+
+    def addAtIndex(self, index: int, val: int) -> None:
+        if index > self.size:
+            return
+
+        if index < 0:
+            index = 0
+
+        if index < self.size-index:
+            prev = self.head
+            for _ in range(index):
+                prev = prev.next
+
+            post = prev.next
+        else:
+            post = self.tail
+            for _ in range(self.size-index):
+                post = post.prev
+
+            prev = post.prev
+
+        self.size += 1
+        to_add = Node(val)
+        to_add.prev = prev
+        to_add.next = post
+        prev.next = to_add
+        post.prev = to_add
+
+    def deleteAtIndex(self, index: int) -> None:
+        if index < 0 or index >= self.size:
+            return
+
+        if index < self.size-index:
+            prev = self.head
+            for _ in range(index):
+                prev = prev.next
+
+            post = prev.next.next
+        else:
+            post = self.tail
+            for _ in range(self.size-index-1):
+                post = post.prev
+            prev = post.prev.prev
+
+        self.size -= 1
+        prev.next = post
+        post.prev = prev
+
+# Your MyLinkedList object will be instantiated and called as such:
+# obj = MyLinkedList()
+# param_1 = obj.get(index)
+# obj.addAtHead(val)
+# obj.addAtTail(val)
+# obj.addAtIndex(index,val)
+# obj.deleteAtIndex(index)
+
 class ListNode:
     def __init__(self, x):
         self.val = x
