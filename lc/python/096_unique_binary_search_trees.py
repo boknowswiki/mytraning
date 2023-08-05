@@ -1,5 +1,26 @@
 #!/usr/bin/python -t
 
+# dp
+# time O(n^2)
+# space O(n)
+
+class Solution:
+    def numTrees(self, n: int) -> int:
+        # dp[i] is the cnt at ith number
+        # dp[i] = sum(dp[j-1] * dp[i-j]) if 1 <= j <= i
+        # dp[0] = dp[1] = 1
+        # dp[n]
+
+        dp = [0] * (n+1)
+        dp[0] = dp[1] = 1
+
+        for i in range(2, n+1):
+            for j in range(1, i+1):
+                dp[i] += dp[j-1]*dp[i-j]
+
+        return dp[n]
+        
+
 #The problem can be solved in a dynamic programming way. I’ll explain the intuition and formulas in the following.
 #Given a sequence 1…n, to construct a Binary Search Tree (BST) out of the sequence, we could enumerate each number i in the sequence, and use the number as the root, naturally, the subsequence 1…(i-1) on its left side would lay on the left branch of the root, and similarly the right subsequence (i+1)…n lay on the right branch of the root. We then can construct the subtree from the subsequence recursively. Through the above approach, we could ensure that the BST that we construct are all unique, since they have unique roots.
 #The problem is to calculate the number of unique BST. To do so, we need to define two functions:
