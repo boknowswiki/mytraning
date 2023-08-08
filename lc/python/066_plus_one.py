@@ -1,5 +1,60 @@
 #!/usr/bin/python -t
 
+# array
+# time O(n)
+# space O(n)
+
+class Solution:
+    def plusOne(self, digits: List[int]) -> List[int]:
+        n = len(digits)
+
+        # move along the input array starting from the end
+        for i in range(n):
+            idx = n - 1 - i
+            # set all the nines at the end of array to zeros
+            if digits[idx] == 9:
+                digits[idx] = 0
+            # here we have the rightmost not-nine
+            else:
+                # increase this rightmost not-nine by 1
+                digits[idx] += 1
+                # and the job is done
+                return digits
+
+        # we're here because all the digits are nines
+        return [1] + digits
+
+class Solution:
+    def plusOne(self, digits: List[int]) -> List[int]:
+        n = len(digits)
+        if n == 0:
+            return [1]
+
+        def reverse(arr):
+            l = 0
+            r = len(arr) - 1
+            while l <= r:
+                arr[l], arr[r] = arr[r], arr[l]
+                l += 1
+                r -= 1
+
+            return arr
+
+        nums = reverse(digits)
+        ret = []
+        c = 1
+        index = 0
+
+        while index < n or c:
+            val = nums[index] if index < n else 0
+            val += c
+            ret.append(val%10)
+            c = val//10
+
+            index += 1
+
+        return reverse(ret)
+
 #best solution
 
 class Solution(object):
