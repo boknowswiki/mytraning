@@ -1,5 +1,22 @@
 #!/usr/bin/python -t
 
+# array
+# time O(n^2)
+# space O(n)
+
+class Solution:
+    def getRow(self, rowIndex: int) -> List[int]:
+        prev = [1]
+        for row in range(rowIndex+1):
+            level = [0] * (row+1)
+            level[0] =level[-1] = 1
+
+            for i in range(1, row):
+                level[i] = prev[i-1] + prev[i]
+
+            prev = level
+
+        return level
 
 #Time O(n), space O(k)
 #from jiuzhang
