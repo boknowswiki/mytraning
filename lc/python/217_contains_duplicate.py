@@ -1,5 +1,21 @@
 #!/usr/bin/python -t
 
+# hash table
+
+class Solution:
+    def containsDuplicate(self, nums: List[int]) -> bool:
+        n = len(nums)
+        if n < 2:
+            return False
+
+        s = set()
+
+        for num in nums:
+            if num in s:
+                return True
+            s.add(num)
+
+        return False
 
 #Time: O(nlogn), space O(1)
 
