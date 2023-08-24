@@ -1,5 +1,22 @@
 #!/usr/bin/python -t
 
+# hash table
+
+class Solution:
+    def intersection(self, nums1: List[int], nums2: List[int]) -> List[int]:
+        s = set()
+        ret = set()
+
+        for num in nums1:
+            if num not in s:
+                s.add(num)
+
+        for num in nums2:
+            if num in s:
+                ret.add(num)
+
+        return list(ret)
+
 #time O(m+n) space O(m+n)
 
 class Solution(object):
