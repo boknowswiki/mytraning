@@ -1,5 +1,23 @@
 #!/usr/bin/python -t
 
+# hash table
+# time O(n)
+# space O(n)
+
+class Solution:
+    def twoSum(self, nums: List[int], target: int) -> List[int]:
+        ht = dict()
+        ret = []
+
+        for i in range(len(nums)):
+            if target-nums[i] in ht:
+                ret.append(i)
+                ret.append(ht[target-nums[i]])
+                return ret
+            ht[nums[i]] = i
+
+        return ret
+
 class Solution(object):
     def twoSum(self, nums, target):
         """
