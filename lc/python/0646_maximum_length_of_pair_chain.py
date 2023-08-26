@@ -1,4 +1,21 @@
-# dp, sort, greedy
+# greedy, sort
+# time O(nlogn)
+# space O(1)
+
+class Solution:
+    def findLongestChain(self, pairs: List[List[int]]) -> int:
+        # Sort pairs in ascending order based on the second element.
+        pairs.sort(key=lambda x: x[1])
+        curr = float('-inf')
+        ans = 0
+
+        for pair in pairs:
+            if pair[0] > curr:
+                ans += 1
+                curr = pair[1]
+        return ans
+
+# dp, sort
 # time O(n^2)
 # space O(n)
 
