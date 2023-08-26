@@ -1,5 +1,22 @@
 #!/usr/bin/python -t
 
+class Solution:
+    def fourSumCount(self, nums1: List[int], nums2: List[int], nums3: List[int], nums4: List[int]) -> int:
+        def sum_count(lsts: List[List[int]]) -> Counter:
+            res = Counter({0: 1})
+            for lst in lsts:
+                temp = Counter()
+                for a in lst:
+                    for total in res:
+                        temp[total + a] += res[total]
+                res = temp
+            return res
+
+        lsts = [nums1, nums2, nums3, nums4]
+        k = len(lsts)
+        left, right = sum_count(lsts[:k//2]), sum_count(lsts[k//2:])
+        return sum(left[s]*right[-s] for s in left)
+        
 # hash table
 # time O(n^2)
 # space O(n)
