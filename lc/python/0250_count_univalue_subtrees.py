@@ -1,4 +1,34 @@
 # dfs
+
+class Solution:
+    def countUnivalSubtrees(self, root: Optional[TreeNode]) -> int:
+        ret = 0
+        if not root:
+            return ret
+
+        def dfs(node):
+            nonlocal ret
+            if not node:
+                return True
+            
+            leftUni = dfs(node.left)
+            rightUni = dfs(node.right)
+            if leftUni and rightUni:
+                if node.left and node.left.val != node.val:
+                    return False
+                if node.right and node.right.val != node.val:
+                    return False
+
+                ret += 1
+                return True
+
+            return False
+            
+
+        dfs(root)
+        
+        return ret
+        
 # time O(n)
 # space O(1)
 
