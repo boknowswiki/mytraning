@@ -1,5 +1,30 @@
 #!/usr/bin/python -t
 
+# Definition for a binary tree node.
+# class TreeNode:
+#     def __init__(self, val=0, left=None, right=None):
+#         self.val = val
+#         self.left = left
+#         self.right = right
+class Solution:
+    def isValidBST(self, root: Optional[TreeNode]) -> bool:
+        if not root:
+            return True
+
+        st = [(root, -sys.maxsize-1, sys.maxsize)]
+
+        while st:
+            cur, low, high = st.pop()
+            if not cur:
+                continue
+            if cur.val <= low or cur.val >= high:
+                return False
+
+            st.append((cur.left, low, cur.val))
+            st.append((cur.right, cur.val, high))
+
+        return True
+
 # binary tree and dfs
 # time O(n)
 # space O(n)
