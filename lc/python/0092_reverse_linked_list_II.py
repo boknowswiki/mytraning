@@ -7,6 +7,37 @@
 #         self.next = next
 class Solution:
     def reverseBetween(self, head: Optional[ListNode], left: int, right: int) -> Optional[ListNode]:
+        if not head:
+            return head
+
+        dummy = ListNode()
+        dummy.next = head
+        prev = dummy
+
+        for _ in range(left-1):
+            prev = prev.next
+
+        empty_node = None
+        cur = end = prev.next
+        for _ in range(right-left+1):
+            nxt = cur.next
+            cur.next = empty_node
+            empty_node = cur
+            cur = nxt
+
+        prev.next = empty_node
+        end.next = cur
+
+        return dummy.next
+
+
+# Definition for singly-linked list.
+# class ListNode:
+#     def __init__(self, val=0, next=None):
+#         self.val = val
+#         self.next = next
+class Solution:
+    def reverseBetween(self, head: Optional[ListNode], left: int, right: int) -> Optional[ListNode]:
         # Empty list
         if not head:
             return None
