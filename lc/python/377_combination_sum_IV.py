@@ -1,5 +1,35 @@
 #!/usr/bin/python -t
 
+# array dp
+
+class Solution:
+    def combinationSum4(self, nums: List[int], target: int) -> int:
+        n = len(nums)
+        if n == 0:
+            return 0
+
+        memo = dict()
+        
+        def dfs(need):
+            nonlocal n, nums, memo
+            if need == 0:
+                return 1
+            
+            if need in memo:
+                #print(f"need {need}, memo need {memo[need]}")
+                return memo[need]
+            
+            cnt = 0
+            for i in range(n):
+                if nums[i] <= need:
+                    cnt += dfs(need-nums[i])
+
+            memo[need] = cnt
+            #print(f"add memo[need] {memo[need]}, need {need}")
+            return cnt
+
+        return dfs(target)
+
 #Think about the recurrence relation first. How does the # of combinations of the target related to the # of combinations of numbers that are smaller than the target?
 #So we know that target is the sum of numbers in the array. Imagine we only need one more number to reach target, this number can be any one in the array, right? So the # of combinations of target, comb[target] = sum(comb[target - nums[i]]), where 0 <= i < nums.length, and target >= nums[i].
 #In the example given, we can actually find the # of combinations of 4 with the # of combinations of 3(4 - 1), 2(4- 2) and 1(4 - 3). As a result, comb[4] = comb[4-1] + comb[4-2] + comb[4-3] = comb[3] + comb[2] + comb[1].
