@@ -58,13 +58,18 @@ class Solution:
                 elif op == "*":
                     st.append(st.pop()*cur)
                 elif op == "/":
-                    st.append(st.pop()//cur)
-                
+                    val = st.pop()
+                    if val < 0:
+                        st.append(-(-val//cur))
+                    else:
+                        st.append(val//cur)
+
                 op = cur_c
                 cur = 0
+
+            #print(f"op {op}, st {st}")
 
         while st:
             ret += st.pop()
 
         return ret
-        
