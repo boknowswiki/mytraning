@@ -1,3 +1,38 @@
+# heapq
+
+import heapq
+
+class Solution:
+    def kWeakestRows(self, mat: List[List[int]], k: int) -> List[int]:
+        m, n = len(mat), len(mat[0])
+        #print(f"m {m}, n {n}")
+        hq = []
+
+        def get_cnt(l):
+            cnt = 0
+            for i in l:
+                if i != 1:
+                    break
+                cnt += 1
+            
+            return cnt
+
+        for i in range(m):
+            soldiers_cnt = get_cnt(mat[i])
+            put_num = (soldiers_cnt << m) | i
+            #print(f"s {soldiers_cnt}, put_num {put_num}")
+            heapq.heappush(hq, (soldiers_cnt << m) | i)
+
+        ret = []
+
+        for _ in range(k):
+            cur = heapq.heappop(hq)
+            get_num = cur&((1<<m)-1)
+            #print(f"cur {cur}, get_num {get_num}, musk {1<<m-1}")
+            ret.append(get_num)
+
+        return ret
+
 from typing import List
 
 # vertical search
