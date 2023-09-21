@@ -4,6 +4,35 @@
 
 class Solution:
     def findMedianSortedArrays(self, nums1: List[int], nums2: List[int]) -> float:
+        m, n = len(nums1), len(nums2)
+
+        def find_mid(n1, n2, index):
+            if not n1:
+                return n2[index]
+            if not n2:
+                return n1[index]
+
+            m1, m2 = len(n1)//2, len(n2)//2
+            v1, v2 = n1[m1], n2[m2]
+
+            if m1+m2 < index:
+                if v1 > v2:
+                    return find_mid(n1, n2[m2+1:], index-m2-1)
+                else:
+                    return find_mid(n1[m1+1:], n2, index-m1-1)
+            else:
+                if v1 > v2:
+                    return find_mid(n1[:m1], n2, index)
+                else:
+                    return find_mid(n1, n2[:m2], index)
+
+        if (m+n) % 2 == 1:
+            return find_mid(nums1, nums2, (m+n)//2)
+        else:
+            return (find_mid(nums1, nums2, (m+n)//2) + find_mid(nums1, nums2, (m+n)//2-1)) /2
+
+class Solution:
+    def findMedianSortedArrays(self, nums1: List[int], nums2: List[int]) -> float:
         l = len(nums1) + len(nums2)
         if l % 2 == 1:
             return self.find_kth(nums1, nums2, l//2)
