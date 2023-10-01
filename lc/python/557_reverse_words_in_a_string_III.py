@@ -1,5 +1,60 @@
 #!/usr/bin/python -t
 
+
+class Solution {
+
+    public String reverseWords(String s) {
+        int lastSpaceIndex = -1;
+        char[] chArray = s.toCharArray();
+        int len = s.length();
+        for (int strIndex = 0; strIndex <= len; strIndex++) {
+            if (strIndex == len || chArray[strIndex] == ' ') {
+                int startIndex = lastSpaceIndex + 1;
+                int endIndex = strIndex - 1;
+                while (startIndex < endIndex) {
+                    char temp = chArray[startIndex];
+                    chArray[startIndex] = chArray[endIndex];
+                    chArray[endIndex] = temp;
+                    startIndex++;
+                    endIndex--;
+                }
+                lastSpaceIndex = strIndex;
+            }
+        }
+        return new String(chArray);
+    }
+
+}
+
+class Solution:
+    def reverseWords(self, s: str) -> str:
+        n = len(s)
+        if n == 0:
+            return ""
+
+        ret = ""
+        pos = 0
+        index = 0
+
+        while index < n:
+            while index < n and s[index] == " ":
+                index += 1
+
+            start = index
+
+            while index < n and s[index] != " ":
+                index += 1
+        
+            ret += s[start:index][::-1]
+            if index < n:
+                ret += " "
+
+        if ret[-1] == " ":
+            ret = ret[:len(ret)-1]
+
+
+        return ret
+
 # two pointers
 
 class Solution:
