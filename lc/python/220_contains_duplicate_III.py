@@ -1,5 +1,29 @@
 #!/usr/bin/python -t
 
+# binary search
+# time O(nlogk)
+# space O(1)
+
+from sortedcontainers import SortedList
+
+class Solution:
+    def containsNearbyAlmostDuplicate(self, nums: List[int], indexDiff: int, valueDiff: int) -> bool:
+        sorted_list = SortedList()
+        n = len(nums)
+
+        for i in range(n):
+            if i > indexDiff:
+                sorted_list.remove(nums[i-indexDiff-1])
+            pos1 = SortedList.bisect_left(sorted_list, nums[i]-valueDiff)
+            pos2 = SortedList.bisect_right(sorted_list, nums[i]+valueDiff)
+            if pos1 != pos2 and pos1 != len(sorted_list):
+                return True
+
+            sorted_list.add(nums[i])
+
+        return False
+        
+
 class Solution(object):
     def containsNearbyAlmostDuplicate(self, nums, k, t):
         if t < 0: return False
