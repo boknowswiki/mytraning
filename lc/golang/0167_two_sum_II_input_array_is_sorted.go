@@ -1,4 +1,4 @@
-// time O(nlogn)
+// time O(n)
 // space O(1)
 
 func twoSum(numbers []int, target int) []int {
